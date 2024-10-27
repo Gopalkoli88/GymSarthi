@@ -25,7 +25,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { purchasePlan } from "@/redux/userSlice";
 import "../../App.css";
 import Header from "@/pages/Header";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // Spinner component
 // const Spinner = () => (
 //   <div className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full border-t-transparent border-white"></div>
@@ -136,6 +137,7 @@ export function PurchasePlanPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+   try {
     if (validateForm()) {
       setLoading(true);
 
@@ -148,7 +150,7 @@ export function PurchasePlanPage() {
             setShowThankYou(true);
             setTimeout(() => {
               navigate("/member-dashboard");
-            }, 2000);
+            }, 1000);
           } else {
             setErrorMessage("Payment failed. Please try again.");
           }
@@ -157,7 +159,12 @@ export function PurchasePlanPage() {
           setErrorMessage("An error occurred. Please try again.");
         }
       }, 3000);
+    }else{
+      toast.error("Plan Info. Not Validate");
     }
+   } catch (error) {
+    toast.error(error.message || "Plan not purchse something went wrong...");
+   }
   };
 
   if (!selectedPlan) {
@@ -258,7 +265,7 @@ export function PurchasePlanPage() {
                   </div>
 
                   <div className="grid gap-2">
-                    <Label htmlFor="cardNumber">Card Number</Label>
+                    <Label htmlFor="cardNumber">Card Number </Label>
                     <Input
                       id="cardNumber"
                       name="cardNumber"
@@ -269,7 +276,7 @@ export function PurchasePlanPage() {
                       onChange={handleInputChange}
                     />
                     {errors.cardNumber && (
-                      <p className="text-red-500 text-sm">
+                      <p className="text-red-600 text-sm">
                         {errors.cardNumber}
                       </p>
                     )}

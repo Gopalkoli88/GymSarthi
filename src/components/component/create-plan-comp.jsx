@@ -14,6 +14,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { createPlan, getAllPlans } from "@/redux/adminSlice";
 
+// toast for sending message for action
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export function CreatePlanComp() {
   const { trainers } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
@@ -33,19 +37,25 @@ export function CreatePlanComp() {
     e.preventDefault();
     console.log("Plan information:", plan);
     const success = await dispatch(createPlan(plan));
+try {
+  
+  if (success) {
+    dispatch(getAllPlans());
+  }
 
-    if (success) {
-      dispatch(getAllPlans());
-    }
-
-    setPlan({
-      name: "",
-      price: "", // Set initial value to an empty string
-      duration: "",
-      description: "",
-      trainerId: "",
-    });
-    // Add the logic to handle the created plan
+  setPlan({
+    name: "",
+    price: "", // Set initial value to an empty string
+    duration: "",
+    description: "",
+    trainerId: "",
+  });
+  // Add the logic to handle the created plan
+  toast.success("Plan created successfully.");
+} catch (error) {
+  
+  toast.error(error.message || "Plan not created something wrong");
+}
   };
 
   return (
@@ -141,6 +151,7 @@ export function CreatePlanComp() {
         </Card>
         <Card>{/* Add plan list component here if needed */}</Card>
       </div>
+      <ToastContainer/>
     </main>
   );
 }

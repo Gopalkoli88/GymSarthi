@@ -293,7 +293,7 @@ export default function ContactUs() {
   return (
     <>
       {" "}
-      <div className="min-w-[80dvw] flex mt-5 flex-col min-h-[100dvh]">
+      <div className="min-w-[80dvw] flex mt-4 flex-col min-h-[100dvh]">
         <Header user={user} />
         <div className="relative">
           {/* Background image */}

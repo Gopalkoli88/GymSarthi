@@ -427,7 +427,7 @@ import bg1 from "../assets/bg-1.png";
 export default function AboutAs() {
   const { user } = useSelector((state) => state.user);
   return (
-    <div className="min-w-[80dvw] flex mt-5 flex-col min-h-[100dvh]">
+    <div className="min-w-[80dvw] flex mt-4 flex-col min-h-[100dvh]">
       <Header user={user} />
      
       <section

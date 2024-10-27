@@ -142,6 +142,7 @@ const MemberProfile = () => {
           </div>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

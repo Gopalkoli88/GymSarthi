@@ -74,7 +74,7 @@ export function PlanDetailsComp() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="mb-2">{planInfo.name}</CardTitle>
+                <CardTitle>{planInfo.name}</CardTitle>
                 <CardDescription>{planInfo.description}</CardDescription>
               </div>
               <div className="flex items-center space-x-4">

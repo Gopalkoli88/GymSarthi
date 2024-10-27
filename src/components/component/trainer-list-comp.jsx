@@ -22,6 +22,9 @@ import {
   getAllTrainers,
   updatePlan,
 } from "@/redux/adminSlice";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export function TrainerListComp() {
   const dispatch = useDispatch();
@@ -36,9 +39,14 @@ export function TrainerListComp() {
   const handleDeleteTrainer = async (trainerId) => {
     setTrainerList(trainerList.filter((p) => p._id !== trainerId));
     const success = await dispatch(deleteTrainer(trainerId));
+  try {
     if (success) {
       dispatch(getAllTrainers());
-    }
+      toast.success("Trainer Deleted Successfully");
+    } 
+  } catch (error) {
+    toast.error(error.message || "An error occurred");
+  }
   };
   return (
     <main className="flex flex-1 flex-col gap-10  md:gap-8 md:p-6">
@@ -90,6 +98,7 @@ export function TrainerListComp() {
           </CardContent>
         </Card>
       </div>
+      <ToastContainer/>
     </main>
   );
 }

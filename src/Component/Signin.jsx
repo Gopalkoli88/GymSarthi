@@ -381,6 +381,7 @@ import { loginUser } from "@/redux/userSlice";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import Header from "@/pages/Header";
 
 export const Signin = () => {
   const dispatch = useDispatch();
@@ -411,6 +412,11 @@ export const Signin = () => {
   };
 
   return (
+    <>
+    <div className="mt-5">
+    <Header />
+    </div>
+   
     <section className="flex justify-center items-center mt-12 flex-wrap overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* ---------------------------------------------- */}
@@ -495,7 +501,7 @@ export const Signin = () => {
                   >
                     {status === "loading" ? "Logging in..." : "Login"}
                   </Button>
-                  {error && <p className="mt-2 text-red-500">{error}</p>}
+                  {error && <p className="mt-2 text-red-500">{"Invalid User Info..."}</p>}
                 </div>
               </div>
             </form>
@@ -508,8 +514,8 @@ export const Signin = () => {
                 className="mt-4 inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-blue-500 px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-blue-600 focus:outline-none"
               >
                 Reset Password
-              </Button>
-            </div> */}
+              </Button> */}
+            {/* </div> */}
           </div>
         </div>
 
@@ -525,9 +531,9 @@ export const Signin = () => {
         {/* ------------------------------------------------------ */}
       </div>
     </section>
+    </>
   );
 };
 
 export default Signin;
-
 

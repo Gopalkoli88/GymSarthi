@@ -9,8 +9,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-     port: process.env.PORT || 3000, // Use PORT environment variable or default to 3000
-     host: '0.0.0.0', // Bind to all network interfaces
-   },
+  // server: {
+  //    port: process.env.PORT || 3000, // Use PORT environment variable or default to 3000
+  //    host: '0.0.0.0', // Bind to all network interfaces
+  //  },
 });

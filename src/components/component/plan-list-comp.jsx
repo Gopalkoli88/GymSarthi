@@ -24,6 +24,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { useDispatch, useSelector } from "react-redux";
 import { deletePlan, getAllPlans, updatePlan } from "@/redux/adminSlice";
 
+// toast for sending message for action
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export function  PlanListComp() {
   const dispatch = useDispatch();
   const { plans } = useSelector((state) => state.admin);
@@ -53,23 +57,36 @@ export function  PlanListComp() {
     const success = await dispatch(
       updatePlan({ planId: editingPlan._id, planData })
     );
-    setPlanList(
-      planList.map((p) => (p._id === editingPlan._id ? editingPlan : p))
-    );
+   
     
-
-    if (success) {
-      dispatch(getAllPlans());
+    try {
+      
+      if (success) {
+        setPlanList(
+          planList.map((p) => (p._id === editingPlan._id ? editingPlan : p))
+        );
+        dispatch(getAllPlans());
+        toast.success("Plan updated Successfully");
+  
+      }
+      setEditingPlan(null);
+    } catch (error) {
+      toast.error(error.message || "an error occured");
     }
-    setEditingPlan(null);
+   
   };
 
   // working Mode :
   const handleDeletePlan = async (planId) => {
     setPlanList(planList.filter((p) => p._id !== planId));
     const success = await dispatch(deletePlan(planId));
-    if (success) {
-      dispatch(getAllPlans());
+    try {
+      if (success) {
+        dispatch(getAllPlans());
+        toast.success("Plan Deleted Successfully");
+      }
+    } catch (error) {
+      toast.error(error.message || "an error occured");
     }
   };
   return (
@@ -197,6 +214,7 @@ export function  PlanListComp() {
           </CardContent>
         </Card>
       </div>
+      <ToastContainer/>
     </main>
   );
 }

@@ -1,315 +1,4 @@
-// import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import profileImage from "../assets/michael-dam-mEZ3PoFGs_k-unsplash (1).jpg";
-// import { useDispatch, useSelector } from "react-redux";
-// import { useEffect } from "react";
-// import { PDFDownloadLink } from "@react-pdf/renderer";
-// import PaymentHistoryPDF from "../components/component/PaymentHistoryPDF";
-
-// import {
-//   fetchUserPaymentInfo,
-//   fetchUserPlanInfo,
-//   fetchUserTasksInfo,
-//   fetchUserTrainerInfo,
-// } from "@/redux/userSlice";
-// import { toast } from "react-toastify";
-// import { Button } from "@/components/ui/button";
-// import Header from "./Header";
-// import MemberSidePanel from "./MemberSidePanel";
-// import { Label } from "@/components/ui/label";
-// import { Input } from "@/components/ui/input";
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table";
-// import { Badge } from "@/components/ui/badge";
-
-// const MemberPaymentHistory = () => {
-//   const { user, trainer,  error, plan, payments, tasks } = useSelector(
-//     (state) => state.user
-//   );
-//   // const [transactions, setTransactions] = useState(payments);
-//   const [transactions, setTransactions] = useState([]);
-
-//   // const [filteredTransactions, setFilteredTransactions] =
-//   //   useState(transactions);
-//   const [filteredTransactions, setFilteredTransactions] = useState([]);
-//   const [dateRange, setDateRange] = useState({ start: "", end: "" });
-//   const [status, setStatus] = useState("all");
-
-
  
-//   const navigate = useNavigate();
-//   const dispatch = useDispatch();
-
-//   useEffect(() => {
-//     if (!user) {
-//       navigate("/signin");
-//     } else {
-//       dispatch(fetchUserPaymentInfo());
-//     }
-//   }, [dispatch, navigate, user]);
-
-//   useEffect(() => {
-//     const fetchUserAndPlanDetails = async () => {
-//       const updatedTransactions = await Promise.all(
-//         payments.map(async (tx) => {
-//           // Fetch user details
-//           let userName = "N/A";
-
-//           try {
-//             if (tx.userId) {
-//               userName = tx.userId.name;
-//             }
-//           } catch (error) {
-//             console.error("Failed to fetch user details", error);
-//           }
-
-//           let planName = "N/A";
-//           try {
-//             if (tx.planId) {
-//               planName = tx.planId.name;
-//             }
-//           } catch (error) {
-//             console.error("Failed to fetch plan details", error);
-//           }
-
-//           return {
-//             ...tx,
-//             userName,
-//             planName,
-//           };
-//         })
-//       );
-//       setTransactions(updatedTransactions);
-//       setFilteredTransactions(updatedTransactions);
-//     };
-
-//     fetchUserAndPlanDetails();
-//   }, [payments]);
-
-//   const handleFilterChange = () => {
-//     let filtered = transactions;
-//     if (dateRange.start && dateRange.end) {
-//       filtered = filtered.filter(
-//         (tx) =>
-//           new Date(tx.paymentDate) >= new Date(dateRange.start) &&
-//           new Date(tx.paymentDate) <= new Date(dateRange.end)
-//       );
-//     }
-//     if (status !== "all") {
-//       filtered = filtered.filter((tx) => tx.status.toLowerCase() === status);
-//     }
-//     setFilteredTransactions(filtered);
-//   };
-
-//   const handleExport = (format) => {
-//     console.log(`Exporting transactions in ${format} format`);
-//   };
-
-//   const handleReset = () => {
-//     setDateRange({ start: "", end: "" });
-//     setStatus("all");
-
-//      setFilteredTransactions(transactions);
-//   };
-
-//   function generateCustomTransactionId(originalId) {
-//     // Extract parts of the original ID
-//     const part1 = originalId.substring(0, 4); // First 4 characters
-//     const part2 = originalId.substring(4, 8); // Next 4 characters
-//     const part3 = originalId.substring(originalId.length - 4); // Last 4 characters
-
-//     // Add custom characters or logic
-//     const prefix = "TXN"; // Custom prefix
-//     const sequenceNumber = "001"; // Example sequence number or could be dynamically generated
-
-//     // Combine to form the custom transaction ID
-//     const customTransactionId = `${prefix}-${part1}${part2}-${sequenceNumber}-${part3}`;
-
-//     return customTransactionId;
-//   }
-
-//   function formatDate(dateString) {
-//     // Convert the date string to a Date object
-//     const [month, day, year] = dateString.split("/").map(Number);
-//     const date = new Date(year, month - 1, day);
-
-//     // Define the array of month names
-//     const monthNames = [
-//       "January",
-//       "February",
-//       "March",
-//       "April",
-//       "May",
-//       "June",
-//       "July",
-//       "August",
-//       "September",
-//       "October",
-//       "November",
-//       "December",
-//     ];
-
-//     // Get the ordinal suffix for the day
-//     const daySuffix = (d) => {
-//       if (d > 3 && d < 21) return "th"; // special case for 11th-13th
-//       switch (d % 10) {
-//         case 1:
-//           return "st";
-//         case 2:
-//           return "nd";
-//         case 3:
-//           return "rd";
-//         default:
-//           return "th";
-//       }
-//     };
-
-//     // Format the date
-//     const formattedDate = `${day}${daySuffix(day)} ${
-//       monthNames[month - 1]
-//     } ${year}`;
-
-//     return formattedDate;
-//   }
-
-//   if (status == "failed") {
-//     toast.error(error);
-//   }
-//   return (
-//     <div>
-//       <MemberSidePanel>
-//         <div className="container px-4 py-8 mx-auto md:px-6">
-//           <div className="flex items-center justify-between mb-6">
-//             <h1 className="text-2xl font-bold">Payment History</h1>
-//             <div className="flex items-center gap-4">
-//               <div className="flex items-center gap-2">
-//                 <Label htmlFor="date-range" className="whitespace-nowrap">
-//                   Date range:
-//                 </Label>
-//                 <div className="flex items-center gap-2">
-//                   <Input
-//                     id="date-range-start"
-//                     variant={true}
-//                     type="date"
-//                     value={dateRange.start}
-//                     onChange={(e) =>
-//                       setDateRange({ ...dateRange, start: e.target.value })
-//                     }
-//                   />
-//                   <span>-</span>
-//                   <Input
-//                     id="date-range-end"
-//                     variant={true}
-//                     type="date"
-//                     value={dateRange.end}
-//                     onChange={(e) =>
-//                       setDateRange({ ...dateRange, end: e.target.value })
-//                     }
-//                   />
-//                 </div>
-//               </div>
-//               <div className="flex items-center gap-2">
-//             <Label htmlFor="status">Status:</Label>
-//             <Select
-//               id="status"
-//               value={status}
-//               onValueChange={(value) => setStatus(value)}
-//             >
-//               <SelectTrigger>
-//                 <SelectValue placeholder="All" />
-//               </SelectTrigger>
-//               <SelectContent>
-//                 <SelectItem value="all">All</SelectItem>
-//                 <SelectItem value="completed">Completed</SelectItem>
-//                 <SelectItem value="pending">Pending</SelectItem>
-//                 <SelectItem value="failed">Failed</SelectItem>
-//               </SelectContent>
-//             </Select>
-//           </div>
-//               <Button className="w-1/2" onClick={handleFilterChange}>
-//                 Filter
-//               </Button>
-//               <Button className="w-1/2" onClick={handleReset}>
-//                 Reset
-//               </Button>
-//             </div>
-//           </div>
-//           <div className="overflow-x-auto">
-//             <Table>
-//               <TableHeader>
-//                 <TableRow>
-//                   <TableHead>Transaction ID</TableHead>
-//                   <TableHead>Date</TableHead>
-//                   <TableHead>Amount</TableHead>
-//                   <TableHead>Payment Method</TableHead>
-//                   <TableHead>Status</TableHead>
-
-//                   {/* <TableHead>Plan Name</TableHead> */}
-//                 </TableRow>
-//               </TableHeader>
-//               <TableBody>
-//                 {filteredTransactions.map((tx) => (
-//                   <TableRow key={tx._id}>
-//                     <TableCell>{generateCustomTransactionId(tx._id)}</TableCell>
-//                     <TableCell>
-//                       {formatDate(
-//                         new Date(tx.paymentDate).toLocaleDateString()
-//                       )}
-//                     </TableCell>
-//                     <TableCell>${tx.amount.toFixed(2)}</TableCell>
-//                     <TableCell>{tx.paymentMethod}</TableCell>
-//                     <TableCell>
-//                       <Badge
-//                         className="px-5 py-2"
-//                         variant={
-//                           tx.status.toLowerCase() === "completed"
-//                             ? "secondary"
-//                             : tx.status.toLowerCase() === "pending"
-//                             ? "outline"
-//                             : "danger"
-//                         }
-//                       >
-//                         {tx.status.toUpperCase()}
-//                       </Badge>
-//                     </TableCell>
-
-                    
-//                   </TableRow>
-//                 ))}
-//               </TableBody>
-//             </Table>
-//           </div>
-//           <div className="flex justify-end gap-2 mt-6">
-//             {/* <Button  onClick={() => handleExport("pdf")}>
-//               Export to PDF
-//             </Button> */}
-//             <Button>
-//               <PDFDownloadLink
-//                 document={
-//                   <PaymentHistoryPDF transactions={filteredTransactions} />
-//                 }
-//                 fileName="payment_history.pdf"
-//               >
-//                 {({ loading }) =>
-//                   loading ? "Preparing document..." : "Export to PDF"
-//                 }
-//               </PDFDownloadLink>
-//             </Button>
-//           </div>
-//         </div>
-//       </MemberSidePanel>
-//     </div>
-//   );
-// };
-
-// export default MemberPaymentHistory;
 
 
 import React, { useState } from "react";
@@ -346,7 +35,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-
 const MemberPaymentHistory = () => {
   const { user, trainer, error, plan, payments, tasks } = useSelector(
     (state) => state.user
@@ -574,6 +262,9 @@ const MemberPaymentHistory = () => {
                   <TableHead>Date</TableHead>
                   <TableHead>Amount</TableHead>
                   <TableHead>Payment Method</TableHead>
+                  <TableHead>User</TableHead>
+                  <TableHead>Plan</TableHead>
+
                   <TableHead>Status</TableHead>
 
                   {/* <TableHead>Plan Name</TableHead> */}
@@ -591,6 +282,8 @@ const MemberPaymentHistory = () => {
                     </TableCell>
                     <TableCell>${tx.amount.toFixed(2)}</TableCell>
                     <TableCell>{tx.paymentMethod}</TableCell>
+                    <TableCell>{tx.userId.name}</TableCell>
+                    <TableCell>{tx.planId.name}</TableCell>
                     <TableCell>
                       <Badge
                         className="px-5 py-2"
@@ -614,9 +307,9 @@ const MemberPaymentHistory = () => {
                     {/* <p>{tx.planName}</p> */}
                   </TableRow>
                 )) : (
-                  <div className="m-2">
-                    No Payments
-                  </div>
+                
+
+                  <Button className="m-2">No Payments</Button>
                 )}
               </TableBody>
             </Table>

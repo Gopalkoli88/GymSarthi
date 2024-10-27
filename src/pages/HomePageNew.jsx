@@ -43,7 +43,7 @@ export function HomePageComp() {
   };
 
   return (
-    <div className="min-w-[80dvw] flex mt-5 flex-col min-h-[100dvh]">
+    <div className="min-w-[80dvw] flex mt-4 flex-col min-h-[100dvh]">
       <Header user={user} />
       <main className="flex-1">
         <section className="w-full bg-black py-12 md:py-24 lg:py-10 ">

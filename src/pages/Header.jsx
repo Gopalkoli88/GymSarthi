@@ -436,11 +436,11 @@ const Header = ({ user }) => {
           <Link
             key={index}
             to={path}
-            className="relative text-lg font-semibold transition duration-300 group"
+            className="relative text-lg  transition duration-300 group"
             prefetch={false}
           >
             <span className="block">{path === '/' ? 'HOME' : path.slice(1).toUpperCase()}</span>
-            <span className="absolute left-0 right-0 h-1 transition-transform duration-300 scale-x-0 bg-blue-600 group-hover:scale-x-100" />
+            <span className="absolute left-0 right-0 h-0.5 transition-transform duration-300 scale-x-0 bg-blue-600 group-hover:scale-x-100" />
           </Link>
         ))}
 
@@ -448,11 +448,11 @@ const Header = ({ user }) => {
         {user && (
           <Link
             to={`/${user.role}-dashboard`}
-            className="relative text-lg font-semibold transition duration-300 group"
+            className="relative text-lg   transition duration-300 group"
             prefetch={false}
           >
             <span className="block">DASHBOARD</span>
-            <span className="absolute left-0 right-0 h-1 transition-transform duration-300 scale-x-0 bg-blue-600 group-hover:scale-x-100" />
+            <span className="absolute left-0 right-0 h-0.5 transition-transform duration-300 scale-x-0 bg-blue-600 group-hover:scale-x-100" />
           </Link>
         )}
 

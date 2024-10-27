@@ -107,7 +107,7 @@ const MemberSidePanel = ({ children }) => {
               prefetch={false}
             >
               <NotebookPen size={15} />
-              Plan Details
+              Plan Purchased
             </Link>
             <Link
               to="/member-dashboard/daily-tasks"

@@ -2,7 +2,54 @@ import { getAllPlans, getAllTrainers } from "@/redux/adminSlice";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
- 
+
+// const trainers = [
+//   {
+//     name: "John Doe",
+//     role: "Certified Personal Trainer",
+//     description:
+//       "John has been a personal trainer for over 10 years and is passionate about helping people reach their fitness goals.",
+//     image:
+//       "https://i.pinimg.com/originals/bc/fc/c7/bcfcc72f2a3afe5f616efc17ef7e5bb2.jpg",
+//   },
+//   {
+//     name: "Jane Smith",
+//     role: "Yoga Instructor",
+//     description:
+//       "Jane is a certified yoga instructor with over 5 years of experience. She is passionate about helping people improve their flexibility and mindfulness.",
+//     image:
+//       "https://miro.medium.com/v2/resize:fit:1400/1*Hm2MLz5xeO7yR1aOYrXGVQ.jpeg",
+//   },
+//   {
+//     name: "Michael Johnson",
+//     role: "Spin Instructor",
+//     description:
+//       "Michael is a certified spin instructor with over 7 years of experience. He is passionate about helping people push their limits and achieve their fitness goals.",
+//     image:
+//       "https://community.thriveglobal.com/wp-content/uploads/2019/05/Michael-Johnson-screenshot.jpg",
+//   },
+//   {
+//     name: "Alice Cooper",
+//     role: "Nutritionist",
+//     description:
+//       "Alice is a certified nutritionist with over 6 years of experience. She helps clients achieve their health goals through personalized nutrition plans.",
+//     image: "https://via.placeholder.com/300",
+//   },
+//   {
+//     name: "David Brown",
+//     role: "Strength Coach",
+//     description:
+//       "David specializes in strength training and has been helping clients build muscle and improve their overall fitness for 8 years.",
+//     image: "https://via.placeholder.com/300",
+//   },
+//   {
+//     name: "Emily Davis",
+//     role: "Pilates Instructor",
+//     description:
+//       "Emily is a Pilates instructor with a passion for helping clients build core strength and improve their flexibility.",
+//     image: "https://via.placeholder.com/300",
+//   },
+// ];
 
 const TrainersSection = () => {
   const { user } = useSelector((state) => state.user);

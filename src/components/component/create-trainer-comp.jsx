@@ -47,6 +47,7 @@ import {
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { createTrainer, getAllTrainers } from "@/redux/adminSlice";
+// toast for sending message for action
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -88,6 +89,7 @@ export const CreateTrainerComp = () => {
         setSalary(0);
         togglePassword();
         setShowPassword(false);
+        toast.success("Trainer Created Successfully");
         
       } else {
         // Handle failure

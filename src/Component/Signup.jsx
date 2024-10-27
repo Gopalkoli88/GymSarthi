@@ -218,7 +218,6 @@
 //   );
 // };
 
-
 // import { useState } from "react";
 // import { ArrowRight } from "lucide-react";
 // import { Link, useNavigate } from "react-router-dom";
@@ -449,6 +448,7 @@ import { signupUser } from "@/redux/userSlice";
 import { Eye, EyeOff } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Header from "@/pages/Header";
 
 // todo : package for google authentcation
 // import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
@@ -509,10 +509,16 @@ export const SignUpTwo = () => {
 
   return (
     // <section className="flex justify-center items-center mt-12 flex-wrap overflow-hidden">
+    <>
+    <div className="mt-5">
+    <Header />
+    </div>
     <section className="flex justify-center flex-wrap overflow-hidden ">
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* Image -------- */}
-        <div className="relative flex items-start py-4 pb-8 right-10 pt-40 mt-10 sm:py-6 sm:pb-12 md:justify-center lg:py-8 lg:pb-16">
+        {/* <div className="relative flex items-start py-4 pb-8 right-10 pt-40 mt-3 sm:py-6 sm:pb-12 md:justify-center lg:py-8 lg:pb-16"> */}
+        <div className="relative flex items-start py-4  right-10  sm:py-6 sm:pb-12 md:justify-center lg:py-8 lg:pb-16">
+
           <div className="  flex items-center justify-center">
             <img
               className="rounded-md object-cover "
@@ -656,6 +662,7 @@ export const SignUpTwo = () => {
       </div>
       <ToastContainer />
     </section>
+    </>
   );
 };
 

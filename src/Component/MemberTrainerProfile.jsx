@@ -38,7 +38,7 @@ const MemberTrainerProfile = () => {
           > */}
 
           <div
-            className="h-auto bg-blue-400 border border-blue-600 rounded-lg shadow-sm text-card-foreground transform transition-transform duration-300 ease-in-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-md"
+            className="h-auto bg-blue-400 border border-blue-600 rounded-lg shadow-sm text-card-foreground transform transition-transform duration-300 ease-in-out  hover:shadow-md"
             data-v0-t="card"
           >
             <div className="flex flex-col space-y-1.5 p-6 bg-blue-400 rounded-t-lg">
@@ -53,7 +53,7 @@ const MemberTrainerProfile = () => {
             {trainers && trainers.length > 0 ? (
               trainers.map((trainer) => (
                 <>
-                  <div className="grid gap-4 p-6">
+                  <div className="grid gap-4 p-6  bg-blue-400 border m-4 border-blue-600 rounded-lg shadow-sm text-card-foreground transform transition-transform duration-300 ease-in-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-md p-4 ">
                     <div className="flex items-center gap-4">
                       <img
                         src={`${trainer.photoUrl}`}

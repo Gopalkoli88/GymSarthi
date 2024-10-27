@@ -36,10 +36,21 @@ const MemberPlanDetails = () => {
 
   return (
     <>
+    <div>
       <MemberSidePanel>
         {" "}
-        <div className="flex flex-col space-y-1.5 ">
-          <h3 className="whitespace-nowrap tracking-tight text-white text-3xl font-bold">
+        {/* <div className="flex flex-col space-y-1.5 "> */}
+        <div className="grid gap-8">
+
+        <div
+            className="h-auto bg-blue-400 border border-blue-600 rounded-lg shadow-sm text-card-foreground transform transition-transform duration-300 ease-in-out     hover:shadow-md"
+            data-v0-t="card"
+          >
+                        <div className="flex flex-col space-y-1.5 p-6 bg-blue-400 rounded-t-lg">
+
+          {/* <h3 className="whitespace-nowrap tracking-tight text-white text-3xl font-bold"> */}
+          <h3 className="text-3xl font-bold tracking-tight text-white whitespace-nowrap">
+
             Plan Details
           </h3>
           <p className="text-[#b3b3b3] text-xl">
@@ -50,7 +61,7 @@ const MemberPlanDetails = () => {
           plans.length > 0 ?
           plans.map((plan) => (
             <>
-              <Card className="h-auto bg-blue-400 border border-blue-600 rounded-lg shadow-sm text-card-foreground transform transition-transform duration-300 ease-in-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-md p-4">
+              <Card className="h-auto bg-blue-400 border m-4 border-blue-600 rounded-lg shadow-sm text-card-foreground transform transition-transform duration-300 ease-in-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-md p-4">
                 {" "}
                 <div className="grid grid-cols-3  gap-4 items-center justify-center p-2 ">
                   <div className="grid gap-1">
@@ -84,7 +95,13 @@ const MemberPlanDetails = () => {
                   <div className="grid gap-1">
                     <div className="text-lg font-bold text-white">Trainer</div>
                     <div className="text-sm font-medium text-[#b3b3b3]">
-                      {trainer && trainer.name}
+                      {plan.trainerId.name}
+                    </div>
+                  </div>
+                  <div className="grid gap-1">
+                    <div className="text-lg font-bold text-white">Trainer's Email</div>
+                    <div className="text-sm font-medium text-[#b3b3b3]">
+                      {plan.trainerId.email}
                     </div>
                   </div>
                   <div className="grid gap-1">
@@ -97,10 +114,13 @@ const MemberPlanDetails = () => {
               </Card>
             </>
           )) : <div>
-            No Plan
+          <Button className="m-2">No Plan</Button>
           </div>
             }
+            </div>
+            </div>
       </MemberSidePanel>
+      </div>
     </>
   );
 };

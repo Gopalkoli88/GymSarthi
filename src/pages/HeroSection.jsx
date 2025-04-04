@@ -1,11 +1,4 @@
-// components/HeroSection.js
-// import {
-//   Carousel,
-//   CarouselContent,
-//   CarouselItem,
-//   CarouselPrevious,
-//   CarouselNext,
-// } from "../components/ui/Carousel";
+ 
 import { Link } from "react-router-dom";
 import bg1 from "../assets/bg-1.png";
 import { Button } from "@/components/ui/button";

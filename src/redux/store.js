@@ -4,6 +4,7 @@ import userReducer from "./userSlice";
 import storage from "redux-persist/lib/storage";
 import trainerReducer from "./trainerSlice";
 import adminReducer from "./adminSlice";
+import classReducer from "./classSlice";
 
 const persistConfig = {
   key: "root",
@@ -14,12 +15,14 @@ const persistConfig = {
 const persistedUserReducer = persistReducer(persistConfig, userReducer);
 const persistedTrainerReducer = persistReducer(persistConfig, trainerReducer);
 const persistedAdminReducer = persistReducer(persistConfig, adminReducer);
+const persistedClassReducer=persistReducer(persistConfig,classReducer);
 
 const store = configureStore({
   reducer: {
     user: persistedUserReducer,
     trainer: persistedTrainerReducer,
     admin: persistedAdminReducer,
+    class:persistedClassReducer,
   },
 });
 

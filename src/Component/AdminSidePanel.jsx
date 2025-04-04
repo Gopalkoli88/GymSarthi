@@ -36,8 +36,8 @@ import { logout } from "@/redux/userSlice";
 const AdminSidePanel = ({ children }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const location = useLocation(); // Get the current location
-  const [activeLink, setActiveLink] = useState(location.pathname); // Initialize with the current pathname
+  const location = useLocation();
+  const [activeLink, setActiveLink] = useState(location.pathname);
 
   const profileRoute = () => {
     switch (user.role) {
@@ -53,155 +53,284 @@ const AdminSidePanel = ({ children }) => {
   };
 
   useEffect(() => {
-    // Update the active link when the location changes
     setActiveLink(location.pathname);
-  }, [location.pathname]); // Dependency array includes pathname
+  }, [location.pathname]);
 
   const handleLinkClick = (link) => {
-    setActiveLink(link); // Update the active link
+    setActiveLink(link);
   };
 
   const backendUrl = "http://localhost:5000";
 
   return (
-    <div className="flex w-full min-h-screen dark:bg-background dark:text-foreground">
-      <aside className="fixed inset-y-0 left-0 z-10 flex flex-col w-64 border-r border-blue-700 bg-background dark:bg-background sm:flex">
+    // <div className="flex w-full min-h-screen bg-background dark:text-foreground">
+    //   {/* Sidebar */}
+    //   <aside className="fixed inset-y-0.5 left-0 z-10 flex flex-col w-64 border-r border-blue-700 bg-gradient-to-b from-[#0D1117] to-[#1A1F2C] sm:flex rounded-tr-2xl rounded-br-2xl shadow-2xl">
+    //     <div className="flex h-[60px] items-center px-6">
+    //       <Link
+    //         to="#"
+    //         className="flex items-center gap-2 m-2 font-semibold text-white"
+    //         prefetch={false}
+    //       >
+    //         <DumbbellIcon className="w-6 h-6" />
+    //         <span>Gym Admin</span>
+    //       </Link>
+    //     </div>
+    //     <div className="flex-1">
+    //       <nav className="grid items-start px-4 text-sm font-medium">
+    //         <Link
+    //           to="/"
+    //           className={`flex items-center gap-3 rounded-lg px-4 py-2 transition-all duration-300 ${
+    //             activeLink === "/"
+    //               ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+    //               : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+    //           }`}
+    //           onClick={() => handleLinkClick("/")}
+    //           prefetch={false}
+    //         >
+    //           <HomeIcon className="w-4 h-4" />
+    //           Home
+    //         </Link>
+    //         <Link
+    //           to="/admin-dashboard"
+    //           className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
+    //             activeLink === "/admin-dashboard"
+    //               ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+    //               : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+    //           }`}
+    //           onClick={() => handleLinkClick("/admin-dashboard")}
+    //           prefetch={false}
+    //         >
+    //           <UserIcon className="w-4 h-4" />
+    //           Admin Profile
+    //         </Link>
+    //         <Link
+    //           to="/trainer-management"
+    //           className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
+    //             activeLink === "/trainer-management"
+    //               ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+    //               : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+    //           }`}
+    //           onClick={() => handleLinkClick("/trainer-management")}
+    //           prefetch={false}
+    //         >
+    //           <UsersIcon className="w-4 h-4" />
+    //           Trainer Management
+    //         </Link>
+    //         <Link
+    //           to="/user-management"
+    //           className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
+    //             activeLink === "/user-management"
+    //               ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+    //               : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+    //           }`}
+    //           onClick={() => handleLinkClick("/user-management")}
+    //           prefetch={false}
+    //         >
+    //           <UsersIcon className="w-4 h-4" />
+    //           User Management
+    //         </Link>
+    //         <Link
+    //           to="/plan-management"
+    //           className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
+    //             activeLink === "/plan-management"
+    //               ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+    //               : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+    //           }`}
+    //           onClick={() => handleLinkClick("/plan-management")}
+    //           prefetch={false}
+    //         >
+    //           <ClipboardIcon className="w-4 h-4" />
+    //           Plan Management
+    //         </Link>
+    //         <Link
+    //           to="/paymentlist"
+    //           className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
+    //             activeLink === "/paymentlist"
+    //               ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+    //               : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+    //           }`}
+    //           onClick={() => handleLinkClick("/paymentlist")}
+    //           prefetch={false}
+    //         >
+    //           <CreditCardIcon className="w-4 h-4" />
+    //           Payment History
+    //         </Link>
+    //         <Link
+    //           to="/membership-growth"
+    //           className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
+    //             activeLink === "/membership-growth"
+    //               ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+    //               : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+    //           }`}
+    //           onClick={() => handleLinkClick("/membership-growth")}
+    //           prefetch={false}
+    //         >
+    //           <BarChartIcon className="w-4 h-4" />
+    //           Analytics
+    //         </Link>
+    //         <Link
+    //           to="/class-management"
+    //           // className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+    //           //   activeLink === "/class-management"
+    //           //     ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+    //           //     : "text-muted-foreground hover:text-foreground"
+    //           // }`}
+
+    //           className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
+    //             activeLink === "/class-management"
+    //               ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+    //               : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+    //           }`}
+    //           onClick={() => handleLinkClick("/class-management")} // Use handleLinkClick here
+    //           prefetch={false}
+    //         >
+    //           <CreditCardIcon className="w-4 h-4" />
+    //           Class Management
+    //         </Link>
+    //       </nav>
+    //     </div>
+    //   </aside>
+
+    //   {/* Main Content */}
+    //   <div className="flex flex-col w-full sm:gap-4 sm:py-4 sm:pl-64">
+    //     <header className="flex items-center gap-4 px-6 bg-#F7F3FA border-b shadow-sm h-14 md:px-6">
+    //       <Link href="#" className="lg:hidden">
+    //         <DumbbellIcon className="w-6 h-6" />
+    //         <span className="sr-only">Home</span>
+    //       </Link>
+    //       <div className="flex-1 w-full"></div>
+    //       <DropdownMenu>
+    //         <DropdownMenuTrigger asChild>
+    //           <Button
+    //             variant="ghost"
+    //             size="icon"
+    //             className="border rounded-full w-15 h-15 hover:bg-gray-100"
+    //           >
+    //             <img
+    //               src={`${user.photoUrl}`}
+    //               width="32"
+    //               height="32"
+    //               className="w-10 h-10 rounded-full"
+    //               alt="Avatar"
+    //               style={{ aspectRatio: "32/32", objectFit: "cover" }}
+    //             />
+    //             <span className="sr-only">Toggle user menu</span>
+    //           </Button>
+    //         </DropdownMenuTrigger>
+    //         <DropdownMenuContent align="end" className="shadow-lg">
+    //           <Link to={profileRoute()}>
+    //             <DropdownMenuLabel>My Account</DropdownMenuLabel>
+    //           </Link>
+    //           <DropdownMenuSeparator />
+    //           <DropdownMenuItem>Support</DropdownMenuItem>
+    //           <DropdownMenuSeparator />
+    //           <DropdownMenuItem onClick={() => dispatch(logout())}>
+    //             Logout
+    //           </DropdownMenuItem>
+    //         </DropdownMenuContent>
+    //       </DropdownMenu>
+    //     </header>
+    //     <main className="grid items-start flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 bg-gray-50">
+    //       <div className="grid gap-4 lg:col-span-2 xl:col-span-3">
+    //         {children}
+    //       </div>
+    //     </main>
+    //   </div>
+    // </div>
+
+    <div className="flex w-full min-h-screen bg-background dark:text-foreground">
+      {/* Sidebar */}
+      <aside className="fixed inset-y-0.5 left-0 z-10 flex flex-col w-64  bg-gradient-to-b from-[#0D1117] to-[#1A1F2C] sm:flex rounded-tr-2xl rounded-br-2xl shadow-2xl">
+        {/* Logo */}
         <div className="flex h-[60px] items-center px-6">
           <Link
             to="#"
-            className="flex items-center gap-2 font-semibold"
+            className="flex items-center gap-2 m-2 font-semibold text-white"
             prefetch={false}
           >
             <DumbbellIcon className="w-6 h-6" />
             <span>Gym Admin</span>
           </Link>
         </div>
-        <div className="flex-1">
-          <nav className="grid items-start px-4 text-sm font-medium">
-            <Link
-              to="/"
-              className={`flex items-center gap-3 rounded-lg px-4 py-2 transition-all ${
-                activeLink === "/"
-                  ? "text-foreground bg-accent"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => handleLinkClick("/")} // Use handleLinkClick here
-              prefetch={false}
-            >
-              <HomeIcon className="relative flex justify-start w-4 h-4 right-1" />
-              Home
-            </Link>
-            <Link
-              to="/admin-dashboard"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/admin-dashboard"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => handleLinkClick("/admin-dashboard")} // Use handleLinkClick here
-              prefetch={false}
-            >
-              <UserIcon className="w-4 h-4" />
-              Admin Profile
-            </Link>
-            <Link
-              to="/trainer-management"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/trainer-management"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => handleLinkClick("/trainer-management")} // Use handleLinkClick here
-              prefetch={false}
-            >
-              <UsersIcon className="w-4 h-4" />
-              Trainer Management
-            </Link>
-            <Link
-              to="/user-management"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/user-management"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => handleLinkClick("/user-management")} // Use handleLinkClick here
-              prefetch={false}
-            >
-              <UsersIcon className="w-4 h-4" />
-              User Management
-            </Link>
-            <Link
-              to="/plan-management"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/plan-management"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => handleLinkClick("/plan-management")} // Use handleLinkClick here
-              prefetch={false}
-            >
-              <ClipboardIcon className="w-4 h-4" />
-              Plan Management
-            </Link>
-            <Link
-              to="/paymentlist"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/paymentlist"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => handleLinkClick("/paymentlist")} // Use handleLinkClick here
-              prefetch={false}
-            >
-              <CreditCardIcon className="w-4 h-4" />
-              Payment History
-            </Link>
 
+        {/* Navigation Links */}
+        <nav className="grid gap-1 px-4 text-sm font-medium">
+          {[
+            { to: "/", icon: HomeIcon, label: "Home" },
+            { to: "/admin-dashboard", icon: UserIcon, label: "Admin Profile" },
+            {
+              to: "/trainer-management",
+              icon: UsersIcon,
+              label: "Trainer Management",
+            },
+            {
+              to: "/user-management",
+              icon: UsersIcon,
+              label: "User Management",
+            },
+            {
+              to: "/plan-management",
+              icon: ClipboardIcon,
+              label: "Plan Management",
+            },
+            {
+              to: "/paymentlist",
+              icon: CreditCardIcon,
+              label: "Payment History",
+            },
+            {
+              to: "/membership-growth",
+              icon: BarChartIcon,
+              label: "Analytics",
+            },
+            {
+              to: "/class-management",
+              icon: CreditCardIcon,
+              label: "Class Management",
+            },
+            {
+              to: "/qrCode",
+              icon: CreditCardIcon,
+              label: "QR Code",
+            },
+          ].map(({ to, icon: Icon, label }) => (
             <Link
-              to="/membership-growth"
+              key={to}
+              to={to}
               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/membership-growth"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
+                activeLink === to
+                   ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+                : "text-muted-foreground hover:text-foreground"
               }`}
-              onClick={() => handleLinkClick("/membership-growth")} // Use handleLinkClick here
+              onClick={() => handleLinkClick(to)}
               prefetch={false}
             >
-              <CreditCardIcon className="w-4 h-4" />
-              Analytics
+              <Icon className="w-5 h-5" />
+              {label}
             </Link>
-          </nav>
-        </div>
-      </aside>
-      <div className="flex flex-col w-full sm:gap-4 sm:py-4 sm:pl-64">
-        <header className="flex items-center gap-4 px-6 border-b border-blue-700 h-14 md:px-6">
-          <Link href="#" className="lg:hidden">
-            <DumbbellIcon className="w-6 h-6" />
-            <span className="sr-only">Home</span>
-          </Link>
-          <div className="flex-1 w-full"></div>
+          ))}
+        </nav>
+        {/* User Profile */}
+        <div className="flex items-center justify-between w-full mt-auto px-7 py-7 ">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="border rounded-full w-15 h-15"
+                className="border rounded-full w-15 h-15 hover:bg-gray-100"
               >
                 <img
                   src={`${user.photoUrl}`}
-                  width="32"
-                  height="32"
-                  className="w-10 h-10 rounded-full"
+                  width="50"
+                  height="50"
+                  className="object-cover rounded-full w-14 h-14"
                   alt="Avatar"
-                  style={{ aspectRatio: "32/32", objectFit: "cover" }}
                 />
-                <span className="sr-only">Toggle user menu</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <Link to={profileRoute()}>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              </Link>
+            <DropdownMenuContent align="end" className="shadow-lg">
+              <Link to={profileRoute()}>My Account</Link>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -210,8 +339,22 @@ const AdminSidePanel = ({ children }) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <span className="pr-24 font-medium text-white te-xt-lg mt-25">
+            {user.name}
+          </span>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex flex-col w-full sm:gap-4 sm:py-4 sm:pl-64">
+        <header className="flex items-center gap-4 px-6 bg-background h-14 md:px-6">
+          <Link href="#" className="lg:hidden">
+            <DumbbellIcon className="w-6 h-6" />
+            <span className="sr-only">Home</span>
+          </Link>
+          <div className="flex-1 w-full"></div>
         </header>
-        <main className="grid items-start flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+        <main className="grid items-start flex-1 gap-6 p-6 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 bg-gray-50">
           <div className="grid gap-4 lg:col-span-2 xl:col-span-3">
             {children}
           </div>
@@ -222,6 +365,8 @@ const AdminSidePanel = ({ children }) => {
 };
 
 export default AdminSidePanel;
+
+// Icon components remain the same...
 
 function BarChartIcon(props) {
   return (

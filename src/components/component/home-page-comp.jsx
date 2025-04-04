@@ -1,3 +1,5 @@
+ 
+
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +19,7 @@ export function HomePageComp() {
   const dispatch = useDispatch();
   const { plans, trainers } = useSelector((state) => state.admin);
   const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(getAllPlans());
     dispatch(getAllTrainers());
@@ -30,240 +33,169 @@ export function HomePageComp() {
     <div className="min-w-[80dvw] flex mt-5 flex-col min-h-[100dvh]">
       <Header user={user} />
       <main className="flex-1">
-        {/* <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container grid gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-12">
-            <div className="flex flex-col justify-center space-y-4">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                  Unleash Your Fitness Potential
-                </h1>
-                <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  Experience the ultimate fitness journey with our expert
-                  trainers and cutting-edge facilities.
-                </p>
-              </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Link className="inline-flex items-center justify-center h-10 px-8 text-sm font-medium text-white transition-all duration-200 ease-in-out transform rounded-md shadow-md bg-gradient-to-r from-blue-600 to-blue-700 hover:scale-105 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 bg-blue600 ">
-                  Join Now
-                </Link>
-
-                <Link
-                  href="#"
-                  className="inline-flex items-center justify-center h-10 px-8 text-sm font-medium transition-colors border rounded-md shadow-sm border-input bg-background hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-sky-600"
-                  prefetch={false}
-                >
-                  Contact Us
-                </Link>
-              </div>
-            </div>
-            <img
-              src={homeLogo1}
-              width="550"
-              height="550"
-              alt="Gym Hero"
-              className="object-cover w-full h-full mx-auto overflow-hidden aspect-video rounded-xl sm:w-full lg:order-last lg:aspect-square"
-            />
-          </div>
-        </section> */}
-
-        {/*  */}
+        {/* Hero Section */}
         <section
-          className="relative w-full h-full py-12 mt-20 bg-center bg-no-repeat bg-cover md:py-24 lg:py-32"
+          className="relative w-full h-[80vh] bg-center bg-no-repeat bg-cover flex items-center justify-center"
           style={{ backgroundImage: `url(${bg1})` }}
         >
           <div className="absolute inset-0 bg-black/40"></div>
-          <div className="container relative z-10 grid gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-12">
-            <div className="flex flex-col justify-center space-y-4">
-              <div className="space-y-2 text-white">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                  Unleash Your Fitness Potential
-                </h1>
-                <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  Experience the ultimate fitness journey with our expert
-                  trainers and cutting-edge facilities.
-                </p>
-              </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                {/* <Link className="inline-flex items-center justify-center h-10 px-8 text-sm font-medium text-white transition-all duration-200 ease-in-out transform rounded-md shadow-md bg-gradient-to-r from-blue-600 to-blue-700 hover:scale-105 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">
-                  Join Now
-                </Link> */}
-                <Button>Join Now</Button>
-
-                {/* <Link
-                  href="#"
-                  className="inline-flex items-center justify-center h-10 px-8 text-sm font-medium text-white transition-colors border rounded-md shadow-sm border-input bg-background hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border-sky-600"
-                  prefetch={false}
-                >
-                  Contact Us
-                </Link> */}
-
-                <Button>Contact Us</Button>
-              </div>
+          <div className="relative z-10 px-4 text-center text-white">
+            <h1 className="mb-6 text-5xl font-bold tracking-tighter sm:text-6xl lg:text-7xl">
+              Unleash Your Fitness Potential
+            </h1>
+            <p className="max-w-2xl mx-auto mb-8 text-xl">
+              Experience the ultimate fitness journey with our expert trainers
+              and cutting-edge facilities.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Button className="px-8 py-3 text-white transition-transform transform bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105">
+                Join Now
+              </Button>
+              <Button className="px-8 py-3 text-white transition-colors bg-transparent border border-white rounded-lg hover:bg-white hover:text-black">
+                Contact Us
+              </Button>
             </div>
           </div>
         </section>
 
-        {/* trainers list   */}
-        <section
-          id="trainers"
-          className="w-full py-12 bg-black md:py-24 lg:py-32"
-        >
-          <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6 lg:gap-10">
-            <div className="space-y-3">
-              <h2 className="text-3xl font-bold tracking-tighter text-black sm:text-4xl md:text-5xl">
+        {/* Trainers Section */}
+        <section className="w-full py-20 bg-gray-900">
+          <div className="container px-4 mx-auto">
+            <div className="mb-16 text-center">
+              <h2 className="mb-4 text-4xl font-bold text-white">
                 Meet Our Expert Trainers
               </h2>
-              <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              <p className="max-w-2xl mx-auto text-lg text-gray-300">
                 Our team of highly qualified trainers are dedicated to helping
                 you achieve your fitness goals.
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
               {trainers.map((trainer) => (
-                <>
-                  {" "}
-                  <div className="flex flex-col items-center justify-center p-6 space-y-4 rounded-lg shadow-sm bg-background">
-                    <img
-                      src="/placeholder.svg"
-                      width="120"
-                      height="120"
-                      alt="Trainer 1"
-                      className="rounded-full"
-                      style={{ aspectRatio: "120/120", objectFit: "cover" }}
-                    />
-                    <div className="text-center">
-                      <h3 className="text-lg font-bold">{trainer.name}</h3>
-                      <p className="text-muted-foreground">
-                        Certified Personal Trainer {trainer.expertise}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {trainer.experience}+ years of experience in the fitness
-                        industry.
-                      </p>
-                    </div>
+                <div
+                  key={trainer._id}
+                  className="overflow-hidden transition-transform transform bg-white rounded-lg shadow-lg hover:scale-105"
+                >
+                  <img
+                    src="/placeholder.svg"
+                    alt={trainer.name}
+                    className="object-cover w-full h-64"
+                  />
+                  <div className="p-6">
+                    <h3 className="mb-2 text-2xl font-bold">{trainer.name}</h3>
+                    <p className="mb-2 text-gray-600">
+                      Certified Personal Trainer - {trainer.expertise}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {trainer.experience}+ years of experience
+                    </p>
                   </div>
-                </>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* our popular classes */}
+        {/* Classes Section */}
         <section
-          id="classes"
-          className="relative w-full py-12 bg-center bg-no-repeat bg-cover md:py-24 lg:py-32"
+          className="relative w-full py-20 bg-center bg-no-repeat bg-cover"
+          style={{ backgroundImage: `url(${trainerBg})` }}
         >
-          {/* Image container with reduced opacity */}
-          <div
-            className="absolute inset-0 bg-center bg-no-repeat bg-cover opacity-60"
-            style={{ backgroundImage: `url(${trainerBg})` }}
-          ></div>
-
-          {/* Content on top of the image */}
-          <div className="container relative z-10 grid items-center justify-center gap-4 px-4 text-center md:px-6 lg:gap-10">
-            <div className="space-y-3">
-              <h2 className="text-3xl font-bold tracking-tighter text-white sm:text-4xl md:text-5xl">
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="container relative z-10 px-4 mx-auto">
+            <div className="mb-16 text-center">
+              <h2 className="mb-4 text-4xl font-bold text-white">
                 Our Popular Classes
               </h2>
-              <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-white">
+              <p className="max-w-2xl mx-auto text-lg text-gray-200">
                 Explore our diverse range of fitness classes to find the perfect
                 workout for you.
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-           <div className="relative flex flex-col items-center justify-center p-6 space-y-4 transition transition-transform duration-300 ease-in-out transform bg-white border border-transparent rounded-lg shadow-md bg-background hover:scale-105 hover:shadow-2xl">
-            <DumbbellIcon className="w-12 h-12 text-primary" />
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-black">
-                    Weight Training
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Mon, Wed, Fri - 6:00 PM
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Strength-building exercises to tone and sculpt your body.
-                  </p>
-                </div>
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+              <div className="p-6 transition-transform transform bg-white rounded-lg shadow-lg hover:scale-105">
+                <DumbbellIcon className="w-12 h-12 mx-auto mb-4 text-blue-600" />
+                <h3 className="mb-2 text-2xl font-bold text-center">
+                  Weight Training
+                </h3>
+                <p className="mb-4 text-center text-gray-600">
+                  Mon, Wed, Fri - 6:00 PM
+                </p>
+                <p className="text-sm text-center text-gray-500">
+                  Strength-building exercises to tone and sculpt your body.
+                </p>
               </div>
-              <div className="relative flex flex-col items-center justify-center p-6 space-y-4 transition-transform duration-300 ease-in-out transform bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white shadow rounded-lg hover:scale-105 hover:shadow-2xl">
-              <SpaceIcon className="w-12 h-12 text-primary" />
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-black">Yoga</h3>
-                  <p className="text-muted-foreground">Tue, Thu - 7:00 PM</p>
-                  <p className="text-sm text-muted-foreground">
-                    Improve flexibility, balance, and mindfulness through yoga.
-                  </p>
-                </div>
+              <div className="p-6 transition-transform transform bg-blue-600 rounded-lg shadow-lg hover:scale-105">
+                <SpaceIcon className="w-12 h-12 mx-auto mb-4 text-white" />
+                <h3 className="mb-2 text-2xl font-bold text-center text-white">
+                  Yoga
+                </h3>
+                <p className="mb-4 text-center text-gray-200">
+                  Tue, Thu - 7:00 PM
+                </p>
+                <p className="text-sm text-center text-gray-200">
+                  Improve flexibility, balance, and mindfulness through yoga.
+                </p>
               </div>
-              <div className="relative flex flex-col items-center justify-center p-6 space-y-4 transition transition-transform duration-300 ease-in-out transform bg-white border border-transparent rounded-lg shadow-md bg-background hover:scale-105 hover:shadow-2xl">
-                <HeartPulseIcon className="w-12 h-12 text-primary" />
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-black">Cardio</h3>
-                  <p className="text-muted-foreground">
-                    Mon, Wed, Fri - 8:00 AM
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    High-intensity cardio workouts to boost your endurance.
-                  </p>
-                </div>
+              <div className="p-6 transition-transform transform bg-white rounded-lg shadow-lg hover:scale-105">
+                <HeartPulseIcon className="w-12 h-12 mx-auto mb-4 text-blue-600" />
+                <h3 className="mb-2 text-2xl font-bold text-center">Cardio</h3>
+                <p className="mb-4 text-center text-gray-600">
+                  Mon, Wed, Fri - 8:00 AM
+                </p>
+                <p className="text-sm text-center text-gray-500">
+                  High-intensity cardio workouts to boost your endurance.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* member ship plans */}
+        {/* Membership Plans Section */}
         <section
-          id="memberships"
-          className="relative w-full py-12 md:py-24 lg:py-32 bg-muted"
+          className="relative w-full py-20 bg-center bg-no-repeat bg-cover"
+          style={{ backgroundImage: `url(${membershipPlan})` }}
         >
-          {/* Background image with reduced opacity */}
-          <div
-            className="absolute inset-0 bg-center bg-no-repeat bg-cover opacity-60 blur-sm"
-            style={{ backgroundImage: `url(${membershipPlan})` }}
-          ></div>
-
-          {/* Content on top of the image */}
-          <div className="container relative z-10 grid items-center justify-center gap-4 px-4 text-center md:px-6 lg:gap-10">
-            <div className="space-y-3">
-              <h2 className="text-3xl font-bold tracking-tighter text-white sm:text-4xl md:text-5xl">
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="container relative z-10 px-4 mx-auto">
+            <div className="mb-16 text-center">
+              <h2 className="mb-4 text-4xl font-bold text-white">
                 Membership Plans
               </h2>
-              <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-white">
+              <p className="max-w-2xl mx-auto text-lg text-gray-200">
                 Choose the membership plan that best fits your fitness goals and
                 budget.
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
               {plans.map((plan) => (
                 <div
                   key={plan._id}
-                  //className="flex flex-col items-center justify-center p-6 space-y-4 rounded-lg shadow-sm bg-background bg-white/80"
-                   
-                  className="relative flex flex-col items-center justify-center p-6 space-y-4 transition transition-transform duration-300 ease-in-out transform bg-white border border-transparent rounded-lg shadow-md bg-background hover:scale-105 hover:shadow-2xl"
+                  className="p-6 transition-transform transform bg-white rounded-lg shadow-lg hover:scale-105"
                 >
-                  <div className="text-center">
-                    <h3 className="text-lg font-bold">{plan.name}</h3>
-                    <p className="text-4xl font-bold text-primary">
-                      ${plan.price}
-                    </p>
-                    <p className="text-muted-foreground">per month</p>
-                  </div>
-                  <ul className="space-y-2 text-left">
+                  <h3 className="mb-4 text-2xl font-bold text-center">
+                    {plan.name}
+                  </h3>
+                  <p className="mb-4 text-4xl font-bold text-center text-blue-600">
+                    ${plan.price}
+                  </p>
+                  <p className="mb-6 text-center text-gray-600">per month</p>
+                  <ul className="mb-6 space-y-3">
                     <li className="flex items-center gap-2">
-                      <CheckIcon className="w-5 h-5 text-primary" />
+                      <CheckIcon className="w-5 h-5 text-blue-600" />
                       Access to gym facilities
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckIcon className="w-5 h-5 text-primary" />
+                      <CheckIcon className="w-5 h-5 text-blue-600" />
                       Basic fitness classes
                     </li>
                     <li className="flex items-center gap-2">
-                      <XIcon className="w-5 h-5 text-muted-foreground" />
+                      <XIcon className="w-5 h-5 text-gray-400" />
                       Personal training sessions
                     </li>
                   </ul>
                   <Button
-                    className="w-full"
+                    className="w-full py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                     onClick={() => handleClickJoin(plan._id)}
                   >
                     Join Now
@@ -274,30 +206,32 @@ export function HomePageComp() {
           </div>
         </section>
 
-        <section id="testimonials" className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6 lg:gap-10">
-            <div className="space-y-3">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+        {/* Testimonials Section */}
+        <section className="w-full py-20 bg-gray-50">
+          <div className="container px-4 mx-auto">
+            <div className="mb-16 text-center">
+              <h2 className="mb-4 text-4xl font-bold">
                 What Our Members Say
               </h2>
-              <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              <p className="max-w-2xl mx-auto text-lg text-gray-600">
                 Hear from our satisfied members about their experience at our
                 gym.
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-              <div className="flex flex-col items-center justify-center p-6 space-y-4 rounded-lg shadow-sm bg-background">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+              <div className="p-6 bg-white rounded-lg shadow-lg">
                 <blockquote className="text-center">
-                  <p className="text-lg font-semibold leading-snug">
-                    `The trainers at this gym are truly exceptional. They have
+                  <p className="mb-4 text-lg font-semibold leading-snug">
+                    "The trainers at this gym are truly exceptional. They have
                     helped me achieve my fitness goals in a way that is both
-                    challenging and enjoyable.`
+                    challenging and enjoyable."
                   </p>
-                  <cite className="block mt-4 text-sm not-italic font-medium text-muted-foreground">
-                    -
+                  <cite className="block text-sm font-medium text-gray-600">
+                    - John Doe
                   </cite>
                 </blockquote>
               </div>
+              {/* Add more testimonials here */}
             </div>
           </div>
         </section>
@@ -305,6 +239,8 @@ export function HomePageComp() {
     </div>
   );
 }
+
+// Icon components remain the same
 
 function CheckIcon(props) {
   return (
@@ -406,3 +342,4 @@ function XIcon(props) {
     </svg>
   );
 }
+

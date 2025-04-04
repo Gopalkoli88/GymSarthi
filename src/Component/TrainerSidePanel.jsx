@@ -61,121 +61,225 @@ const TrainerSidePanel = ({ children }) => {
 
   const backendUrl = "http://localhost:5000";
 
-  return (
-    <div className="flex min-h-screen w-full dark:bg-background dark:text-foreground">
-      <aside className="fixed inset-y-0 left-0 z-10 flex w-64 flex-col border-r border-blue-700 bg-background dark:bg-background sm:flex">
-        <div className="flex h-[60px] items-center px-6">
+
+
+//   return (
+//     <div className="flex w-full min-h-screen bg-background dark:text-foreground">
+//       <aside className="fixed inset-y-2 left-0 z-10 flex flex-col w-64 border-r border-blue-700 bg-gradient-to-b from-[#0D1117] to-[#1A1F2C] sm:flex rounded-tr-2xl rounded-br-2xl shadow-2xl">
+//         <div className="flex h-[60px] items-center px-6">
+//           <Link
+//             to="#"
+//             className="flex items-center gap-2 font-semibold text-white"
+//             prefetch={false}
+//           >
+//             <DumbbellIcon className="w-6 h-6" />
+//             <span>Gym Trainer</span>
+//           </Link>
+//         </div>
+//         <div className="flex-1">
+//           <nav className="grid items-start px-4 text-sm font-medium">
+//             <Link
+//               to="/"
+//               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
+//                 activeLink === "/"
+//                   ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+//                   : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+//               }`}
+//               onClick={() => handleLinkClick("/")}
+//               prefetch={false}
+//             >
+//               <HomeIcon className="w-4 h-4" />
+//               Home
+//             </Link>
+//             <Link
+//               to="/trainer-dashboard"
+//               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
+//                 activeLink === "/trainer-dashboard"
+//                   ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+//                   : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+//               }`}
+//               onClick={() => handleLinkClick("/trainer-dashboard")}
+//               prefetch={false}
+//             >
+//               <UserIcon className="w-4 h-4" />
+//               Trainer Profile
+//             </Link>
+//             <Link
+//               to="/trainer-dashboard/my-plans"
+//               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
+//                 activeLink === "/trainer-dashboard/my-plans"
+//                   ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+//                   : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+//               }`}
+//               onClick={() => handleLinkClick("/trainer-dashboard/my-plans")}
+//               prefetch={false}
+//             >
+//               <ClipboardIcon className="w-4 h-4" />
+//               My Plans
+//             </Link>
+//             <Link
+//               to="/trainer-dashboard/class-schedule"
+//               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-300 ${
+//                 activeLink === "/trainer-dashboard/class-schedule"
+//                   ? "text-white bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg"
+//                   : "text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:shadow-lg"
+//               }`}
+//               onClick={() => handleLinkClick("/trainer-dashboard/class-schedule")} // Use handleLinkClick here
+//               prefetch={false}
+//             >
+//               <UserIcon className="w-4 h-4" />
+//               Class Scheduled
+//             </Link>
+//           </nav>
+//         </div>
+//       </aside>
+  
+//       <div className="flex flex-col w-full sm:gap-4 sm:py-4 sm:pl-64">
+//         <header className="flex items-center gap-4 px-6 bg-#F7F3FA border-b shadow-sm h-14 md:px-6">
+//           <Link href="#" className="lg:hidden">
+//             <DumbbellIcon className="w-6 h-6" />
+//             <span className="sr-only">Home</span>
+//           </Link>
+//           <div className="flex-1 w-full"></div>
+//           <DropdownMenu>
+//             <DropdownMenuTrigger asChild>
+//               <Button
+//                 variant="ghost"
+//                 size="icon"
+//                 className="border rounded-full w-15 h-15 hover:bg-gray-100"
+//               >
+//                 <img
+//                   src={`${user.photoUrl}`}
+//                   width="32"
+//                   height="32"
+//                   className="w-10 h-10 rounded-full"
+//                   alt="Avatar"
+//                   style={{ aspectRatio: "32/32", objectFit: "cover" }}
+//                 />
+//                 <span className="sr-only">Toggle user menu</span>
+//               </Button>
+//             </DropdownMenuTrigger>
+//             <DropdownMenuContent align="end" className="shadow-lg">
+//               <Link to={profileRoute()}>
+//                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
+//               </Link>
+//               <DropdownMenuSeparator />
+//               <DropdownMenuItem>Support</DropdownMenuItem>
+//               <DropdownMenuSeparator />
+//               <DropdownMenuItem onClick={() => dispatch(logout())}>
+//                 Logout
+//               </DropdownMenuItem>
+//             </DropdownMenuContent>
+//           </DropdownMenu>
+//         </header>
+//         <main className="grid items-start flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 bg-gray-50">
+//           <div className="grid gap-4 lg:col-span-2 xl:col-span-3">
+//             {children}
+//           </div>
+//         </main>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default TrainerSidePanel;
+
+
+return (
+  <div className="flex w-full min-h-screen bg-background dark:text-foreground">
+    {/* Sidebar */}
+    <aside className="fixed inset-y-0.5 left-0 z-10 flex flex-col w-64 bg-gradient-to-b from-[#0D1117] to-[#1A1F2C] sm:flex rounded-tr-2xl rounded-br-2xl shadow-2xl">
+      {/* Logo */}
+      <div className="flex h-[60px] items-center px-6">
+        <Link
+          to="#"
+          className="flex items-center gap-2 m-2 font-semibold text-white"
+          prefetch={false}
+        >
+          <DumbbellIcon className="w-6 h-6" />
+          <span>Gym Trainer</span>
+        </Link>
+      </div>
+
+      {/* Navigation Links */}
+      <nav className="grid gap-1 px-4 text-sm font-medium">
+        {[
+          { to: "/", icon: HomeIcon, label: "Home" },
+          { to: "/trainer-dashboard", icon: UserIcon, label: "Trainer Profile" },
+          { to: "/trainer-dashboard/my-plans", icon: ClipboardIcon, label: "My Plans" },
+          { to: "/trainer-dashboard/class-schedule", icon: UserIcon, label: "Class Schedule" },
+        ].map(({ to, icon: Icon, label }) => (
           <Link
-            to="#"
-            className="flex items-center gap-2 font-semibold"
+            key={to}
+            to={to}
+            className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+              activeLink === to
+                 ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+            onClick={() => handleLinkClick(to)}
             prefetch={false}
           >
-            <DumbbellIcon className="h-6 w-6" />
-            <span className="">Gym Trainer</span>
+            <Icon className="w-5 h-5" />
+            {label}
           </Link>
-        </div>
-        <div className="flex-1">
-          <nav className="grid items-start px-4 text-sm font-medium">
-            <Link
-              to="/"
-              className="flex items-center gap-2 relative  rounded-lg px-3 py-2 text-muted-foreground dark:text-muted-foreground transition-all hover:text-foreground"
-              prefetch={false}
-            >
-              <HomeIcon className="h-4 2-4  flex justify-start relative right-1" />
-              {/* <SettingsIcon className="h-4 w-4" /> */}
-              Home
-            </Link>
-            <Link
-              to="/trainer-dashboard"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/trainer-dashboard"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => handleLinkClick("/trainer-dashboard")} // Use handleLinkClick here
-              prefetch={false}
-            >
-              <UserIcon className="h-4 w-4" />
-              Trainer Profile
-            </Link>
-            <Link
-              to="/trainer-dashboard/my-plans"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/trainer-dashboard/my-plans"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => handleLinkClick("/trainer-dashboard/my-plans")} // Use handleLinkClick here
-              prefetch={false}
-            >
-              <UserIcon className="h-4 w-4" />
-              My Plans
-            </Link>
-          </nav>
-        </div>
-      </aside>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-64 w-full">
-        <header className="flex h-14 items-center gap-4 border-b border-blue-700 px-6 md:px-6">
-          <Link href="#" className="lg:hidden">
-            <DumbbellIcon className="h-6 w-6" />
-            <span className="sr-only">Home</span>
-          </Link>
-          <div className="w-full flex-1">
-            {/* <form>
-          <div className="relative bottom-2">
-            <SearchIcon className="absolute  left-2.5 top-4 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search"
-              className="w-full bg-background shadow-none appearance-none pl-8 md:w-2/3 lg:w-1/3"
-            />
-          </div>
-        </form> */}
-        {/* add this file */}
-          </div>
+        ))}
+      </nav>
+
+      {/* User Profile */}
+      <div className="flex items-center gap-4 px-4 py-6 mt-auto">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                // variant="profile"
+                variant="ghost"
                 size="icon"
-                className="rounded-full border w-15 h-15"
+                className="border rounded-full w-14 h-14 "
               >
                 <img
-                  src={`${user.photoUrl}`}
-                  width="32"
-                  height="32"
-                  className="rounded-full w-10 h-10"
+                  src={user?.photoUrl}
+                  width="50"
+                  height="50"
+                  className="object-cover w-12 h-12 rounded-full"
                   alt="Avatar"
-                  style={{ aspectRatio: "32/32", objectFit: "cover" }}
                 />
-                <span className="sr-only">Toggle user menu</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <Link to={profileRoute()}>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuContent align="end" className="shadow-lg">
+              <Link to="/profile">
+                <DropdownMenuItem>My Account</DropdownMenuItem>
               </Link>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-
               <DropdownMenuItem onClick={() => dispatch(logout())}>
                 Logout
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </header>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-          <div className="grid lg:col-span-2 xl:col-span-3 gap-4">
-            {children}
-          </div>
-        </main>
-      </div>
+          <span className="text-lg font-medium text-white">{user?.name}</span>
+        </div>
+    </aside>
+
+    {/* Main Content */}
+    <div className="flex flex-col w-full sm:gap-4 sm:py-4 sm:pl-64">
+      <header className="flex items-center gap-4 px-6 bg-background h-14 md:px-6">
+        <Link to="#" className="lg:hidden">
+          <DumbbellIcon className="w-6 h-6" />
+          <span className="sr-only">Home</span>
+        </Link>
+        <div className="flex-1 w-full"></div>
+      </header>
+
+      <main className="grid items-start flex-1 gap-6 p-6 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 bg-gray-50">
+        <div className="grid gap-4 lg:col-span-2 xl:col-span-3">{children}</div>
+      </main>
     </div>
-  );
+  </div>
+);
 };
 
 export default TrainerSidePanel;
+
 
 function BarChartIcon(props) {
   return (
@@ -404,3 +508,5 @@ function HomeIcon(props) {
     </svg>
   );
 }
+
+

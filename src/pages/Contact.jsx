@@ -6,11 +6,13 @@ import { useSelector } from "react-redux";
 
 const ContactUsmain = () => {
   const { user } = useSelector((state) => state.user);
-  return (
-    <>
+  return (<>
+    <div>
     
       <ContactUs />
-      <Footer />
+      
+    {/* <Footer /> */}
+    </div>
     </>
   );
 };

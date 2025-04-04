@@ -15,6 +15,12 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -22,20 +28,20 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { purchasePlan } from "@/redux/userSlice";
+import { getUserDetails, purchasePlan } from "@/redux/userSlice";
 import "../../App.css";
 import Header from "@/pages/Header";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // Spinner component
 // const Spinner = () => (
-//   <div className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full border-t-transparent border-white"></div>
+//   <div className="inline-block w-4 h-4 border-2 border-white rounded-full spinner-border animate-spin border-t-transparent"></div>
 // );
 
 // Spinner Component using Tailwind CSS
 const Spinner = () => (
   <svg
-    className="animate-spin h-5 w-5 text-white"
+    className="w-5 h-5 text-white animate-spin"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
@@ -67,7 +73,8 @@ export function PurchasePlanPage() {
   const [paymentInfo, setPaymentInfo] = useState({
     planId: id,
     paymentMethod: "credit_card",
-    amount: selectedPlan ? selectedPlan.price : 0,
+    amount:"",
+    planFee:selectedPlan.price,
     paymentDetails: {
       cardNumber: "",
       expirationDate: "",
@@ -82,17 +89,37 @@ export function PurchasePlanPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [errors, setErrors] = useState({});
 
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setPaymentInfo((prev) => ({
+  //     ...prev,
+  //     paymentDetails: {
+  //       ...prev.paymentDetails,
+  //       [name]: value,
+  //     },
+  //   }));
+  // };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setPaymentInfo((prev) => ({
-      ...prev,
-      paymentDetails: {
-        ...prev.paymentDetails,
+    setPaymentInfo((prev) => {
+      // If the field is part of paymentDetails
+      if (['cardNumber', 'expirationDate', 'cvv', 'name', 'zip'].includes(name)) {
+        return {
+          ...prev,
+          paymentDetails: {
+            ...prev.paymentDetails,
+            [name]: value,
+          },
+        };
+      }
+      // Otherwise, update top-level fields
+      return {
+        ...prev,
         [name]: value,
-      },
-    }));
+      };
+    });
   };
-
   // validate the plan purchase validation :
   const validateForm = () => {
     const newErrors = {};
@@ -140,30 +167,34 @@ export function PurchasePlanPage() {
    try {
     if (validateForm()) {
       setLoading(true);
+      console.log('paymentInfo before submit:', paymentInfo); // Add this
+      const result = await dispatch(purchasePlan(paymentInfo)).unwrap();
 
-      setTimeout(async () => {
-        try {
-          // Call the API to process payment
-          const success = await dispatch(purchasePlan(paymentInfo));
+     
+       
           setLoading(false);
-          if (success) {
+
+          if (result.success) {
             setShowThankYou(true);
+            dispatch(getUserDetails());
             setTimeout(() => {
               navigate("/member-dashboard");
             }, 1000);
           } else {
-            setErrorMessage("Payment failed. Please try again.");
+            setErrorMessage( result.message  ||  "Payment failed. Please try again.");
+            toast.error(result.message || "Payment failed. Please try again.")
           }
-        } catch (error) {
-          console.error("Error processing payment:", error);
-          setErrorMessage("An error occurred. Please try again.");
-        }
-      }, 3000);
+       
+  
     }else{
-      toast.error("Plan Info. Not Validate");
+      toast.error("Plan Info. Not Validated");
     }
    } catch (error) {
-    toast.error(error.message || "Plan not purchse something went wrong...");
+    setLoading(false);
+    const errorMessage=error.message|| "An error occurred. Please try again.";
+    setErrorMessage(errorMessage);
+    toast.error(errorMessage);
+    console.log("Error processing payment:", error);
    }
   };
 
@@ -179,206 +210,483 @@ export function PurchasePlanPage() {
     { value: "upi", label: "UPI" },
   ];
 
-  return (
-    <div className="min-w-[80dvw] flex mt-5 flex-col min-h-[100dvh]">
-      {loading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="flex flex-col items-center">
-            <Spinner />
-            <span className="text-white mt-4">Processing...</span>
-          </div>
+  // return (
+  //   <div className="flex flex-col items-center justify-center min-h-screen px-4 py-8 bg-gradient-to-br from-gray-900 to-black">
+  //     {loading && (
+  //       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  //         <div className="flex flex-col items-center">
+  //           <Spinner />
+  //           <span className="mt-4 text-white">Processing...</span>
+  //         </div>
+  //       </div>
+  //     )}
+  
+  //     <Header user={user} />
+  
+  //     <div className="w-full max-w-5xl mx-auto mt-8 space-y-8 md:mt-12">
+  //       {showThankYou && (
+  //         <div className="px-6 py-4 text-center text-white bg-green-600 rounded-lg">
+  //           <p>Thank you for your purchase!</p>
+  //         </div>
+  //       )}
+  
+  //       {errorMessage && <div className="text-center text-red-500">{errorMessage}</div>}
+  
+  //       <div className="grid gap-10 md:grid-cols-2">
+  //         {/* Left Side - Plan Details */}
+  //         <div className="space-y-6">
+  //           <h1 className="text-3xl font-bold text-white">Purchase Plan</h1>
+  
+  //           <Card className="bg-gray-800 border border-gray-700 shadow-lg">
+  //             <CardHeader>
+  //               <CardTitle className="text-white">{selectedPlan.name}</CardTitle>
+  //               <CardDescription className="text-gray-400">
+  //                 Unlock full access to our gym facilities and services.
+  //               </CardDescription>
+  //             </CardHeader>
+  //             <CardContent className="grid gap-6">
+  //               <div className="flex items-center justify-between">
+  //                 <div>
+  //                   <div className="text-4xl font-bold text-white">${selectedPlan.price}</div>
+  //                   <div className="text-sm text-gray-400">per month</div>
+  //                 </div>
+  //                 <Button variant="secondary" className="text-white" onClick={() => navigate("/")}>
+  //                   Change Plan
+  //                 </Button>
+  //               </div>
+  //               <Separator />
+  //               <div className="grid gap-3">
+  //                 {[
+  //                   "Unlimited access to gym",
+  //                   "Free personal training sessions",
+  //                   "Discounts on supplements",
+  //                   "Access to exclusive events",
+  //                 ].map((benefit, index) => (
+  //                   <div className="flex items-center gap-2" key={index}>
+  //                     <CheckIcon className="w-5 h-5 text-green-400" />
+  //                     <span className="text-gray-300">{benefit}</span>
+  //                   </div>
+  //                 ))}
+  //               </div>
+  //             </CardContent>
+  //           </Card>
+  //         </div>
+  
+  //         {/* Right Side - Payment Details */}
+  //         <div className="space-y-6">
+  //           <Card className="bg-gray-800 border border-gray-700 shadow-lg">
+  //             <CardHeader>
+  //               <CardTitle className="text-white">Payment Details</CardTitle>
+  //               <CardDescription className="text-gray-400">
+  //                 Enter your payment information to complete your purchase.
+  //               </CardDescription>
+  //             </CardHeader>
+  //             <CardContent>
+  //               <form className="grid gap-5" onSubmit={handleSubmit}>
+  //                 <div className="grid gap-3">
+  //                   <Label htmlFor="name" className="text-gray-300">Name on Card</Label>
+  //                   <Input
+  //                     id="name"
+  //                     type="text"
+  //                     placeholder="Enter your name"
+  //                     name="name"
+  //                     required
+  //                     onChange={handleInputChange}
+  //                     value={paymentInfo.paymentDetails.name}
+  //                     className="text-white bg-gray-700 border border-gray-600 focus:border-blue-500"
+  //                   />
+  //                   {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
+  //                 </div>
+  
+  //                 <div className="grid gap-3">
+  //                   <Label htmlFor="cardNumber" className="text-gray-300">Card Number</Label>
+  //                   <Input
+  //                     id="cardNumber"
+  //                     name="cardNumber"
+  //                     type="text"
+  //                     placeholder="0000 0000 0000 0000"
+  //                     required
+  //                     value={paymentInfo.paymentDetails.cardNumber}
+  //                     onChange={handleInputChange}
+  //                     className="text-white bg-gray-700 border border-gray-600 focus:border-blue-500"
+  //                   />
+  //                   {errors.cardNumber && <p className="text-sm text-red-500">{errors.cardNumber}</p>}
+  //                 </div>
+  
+  //                 <div className="grid gap-3">
+  //                   <Label htmlFor="amount" className="text-gray-300">Amount</Label>
+  //                   <Input
+  //                     id="amount"
+  //                     name="amount"
+  //                     type="number"
+  //                     required
+  //                     value={paymentInfo.amount}
+  //                     onChange={handleInputChange}
+  //                     disabled={loading}
+  //                     className="text-white bg-gray-700 border border-gray-600 focus:border-blue-500"
+  //                     placeholder="Enter amount"
+  //                   />
+  //                   {errors.amount && <p className="text-sm text-red-500">{errors.amount}</p>}
+  //                 </div>
+  
+  //                 <div className="grid grid-cols-3 gap-4">
+  //                   <div className="grid gap-3">
+  //                     <Label htmlFor="expirationDate" className="text-gray-300">Expiry Date</Label>
+  //                     <Input
+  //                       id="expirationDate"
+  //                       name="expirationDate"
+  //                       type="text"
+  //                       placeholder="MM/YY"
+  //                       required
+  //                       value={paymentInfo.paymentDetails.expirationDate}
+  //                       onChange={handleInputChange}
+  //                       className="text-white bg-gray-700 border border-gray-600 focus:border-blue-500"
+  //                     />
+  //                     {errors.expirationDate && <p className="text-sm text-red-500">{errors.expirationDate}</p>}
+  //                   </div>
+  //                   <div className="grid gap-3">
+  //                     <Label htmlFor="cvv" className="text-gray-300">CVC</Label>
+  //                     <Input
+  //                       id="cvv"
+  //                       name="cvv"
+  //                       type="text"
+  //                       placeholder="123"
+  //                       required
+  //                       value={paymentInfo.paymentDetails.cvv}
+  //                       onChange={handleInputChange}
+  //                       className="text-white bg-gray-700 border border-gray-600 focus:border-blue-500"
+  //                     />
+  //                     {errors.cvv && <p className="text-sm text-red-500">{errors.cvv}</p>}
+  //                   </div>
+  //                   <div className="grid gap-3">
+  //                     <Label htmlFor="zip" className="text-gray-300">Zip Code</Label>
+  //                     <Input
+  //                       id="zip"
+  //                       type="text"
+  //                       placeholder="12345"
+  //                       required
+  //                       name="zip"
+  //                       onChange={handleInputChange}
+  //                       value={paymentInfo.paymentDetails.zip}
+  //                       className="text-white bg-gray-700 border border-gray-600 focus:border-blue-500"
+  //                     />
+  //                     {errors.zip && <p className="text-sm text-red-500">{errors.zip}</p>}
+  //                   </div>
+  //                 </div>
+  
+  //                 <div className="space-y-2">
+  //                   <Label htmlFor="paymentMethod" className="text-gray-300">Payment Method</Label>
+  //                   <Select
+  //                     id="paymentMethod"
+  //                     value={paymentInfo.paymentMethod}
+  //                     onValueChange={handlePaymentMethodChange}
+  //                   >
+  //                     <SelectTrigger className="text-white bg-gray-700 border border-gray-600">
+  //                       <SelectValue placeholder="Select payment method" />
+  //                     </SelectTrigger>
+  //                     <SelectContent className="text-white bg-gray-800 border border-gray-600">
+  //                       {paymentMethods.map((method) => (
+  //                         <SelectItem key={method.value} value={method.value}>
+  //                           {method.label}
+  //                         </SelectItem>
+  //                       ))}
+  //                     </SelectContent>
+  //                   </Select>
+  //                 </div>
+  
+  //                 <Button type="Submit" className="w-full mt-5 bg-blue-600 hover:bg-blue-500">
+  //                   {loading ? <Spinner /> : "Purchase Plan"}
+  //                 </Button>
+  //               </form>
+  //             </CardContent>
+  //           </Card>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
+
+return (
+  <div className="min-w-[80dvw] flex flex-col bg-gradient-to-br from-gray-900 to-black min-h-[100dvh] mt-[-2px]">
+    {loading && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="flex flex-col items-center">
+          <Spinner />
+          <span className="mt-4 text-white">Processing...</span>
+        </div>
+      </div>
+    )}
+    <Header user={user} />
+    <div className="w-full max-w-4xl px-6 py-12 mx-auto md:py-16 md:px-8">
+      {showThankYou && (
+        <div className="popup-message">
+          <p>Thank you for your purchase!</p>
         </div>
       )}
-      <Header user={user} />
-      <div className="w-full max-w-4xl mx-auto py-12 md:py-16 px-4 md:px-6">
-        {showThankYou && (
-          <div className="popup-message">
-            <p>Thank you for your purchase!</p>
-          </div>
-        )}
-        {errorMessage && <div className="text-red-600">{errorMessage}</div>}
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="grid gap-6">
-            <h1 className="text-3xl font-bold">Purchase Plan</h1>
-            <Card>
-              <CardHeader>
-                <CardTitle>{selectedPlan.name}</CardTitle>
-                <CardDescription>
-                  Unlock full access to our gym facilities and services.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-4xl font-bold">
-                      ${selectedPlan.price}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      per month
-                    </div>
+      {errorMessage && (
+        <div className="p-4 mb-6 text-sm text-red-600 bg-red-100 rounded-lg">
+          {errorMessage}
+        </div>
+      )}
+      <div className="grid gap-8 md:grid-cols-2">
+        {/* Plan Details Section */}
+        <div className="space-y-6">
+          <h1 className="text-3xl font-bold text-white">Purchase Plan</h1>
+          <Card className="bg-gray-800 border-gray-700">
+            <CardHeader>
+              <CardTitle className="text-2xl text-white">
+                {selectedPlan.name}
+              </CardTitle>
+              <CardDescription className="text-gray-400">
+                Unlock full access to our gym facilities and services.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-4xl font-bold text-white">
+                    ${selectedPlan.price}
                   </div>
-                  <Button variant="secondary" onClick={() => navigate("/")}>
-                    Change Plan
-                  </Button>
+                  <div className="text-sm text-gray-400">per month</div>
                 </div>
-                <Separator />
-                <div className="grid gap-2">
-                  {[
-                    "Unlimited access to gym",
-                    "Free personal training sessions",
-                    "Discounts on supplements",
-                    "Access to exclusive events",
-                  ].map((benefit, index) => (
-                    <div className="flex items-center gap-2" key={index}>
-                      <CheckIcon className="w-5 h-5 text-primary" />
-                      <span>{benefit}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-          <div className="grid gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Payment Details</CardTitle>
-                <CardDescription>
-                  Enter your payment information to complete your purchase.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form className="grid gap-4" onSubmit={handleSubmit}>
-                  <div className="grid gap-2">
-                    <Label htmlFor="name">Name on Card</Label>
-                    <Input
-                      id="name"
-                      type="text"
-                      placeholder="Enter your name"
-                      name="name"
-                      required
-                      onChange={handleInputChange}
-                      value={paymentInfo.paymentDetails.name}
-                    />
-                    {errors.name && (
-                      <p className="text-red-500 text-sm">{errors.name}</p>
-                    )}
+                <Button
+                  variant="secondary"
+                  onClick={() => navigate("/")}
+                  className="text-white bg-gray-700 hover:bg-gray-600"
+                >
+                  Change Plan
+                </Button>
+              </div>
+              <Separator className="bg-gray-700" />
+              <div className="grid gap-3">
+                {[
+                  "Unlimited access to gym",
+                  "Free personal training sessions",
+                  "Discounts on supplements",
+                  "Access to exclusive events",
+                ].map((benefit, index) => (
+                  <div className="flex items-center gap-3" key={index}>
+                    <CheckIcon className="w-5 h-5 text-blue-500" />
+                    <span className="text-gray-300">{benefit}</span>
                   </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
+        {/* Payment Details Section */}
+        <div className="grid gap-6">
+          <Card className="bg-gray-800 border-gray-700">
+            <CardHeader>
+              <CardTitle className="text-2xl text-white">
+                Payment Details
+              </CardTitle>
+              <CardDescription className="text-gray-400">
+                Enter your payment information to complete your purchase.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form className="grid gap-6" onSubmit={handleSubmit}>
+                {/* Name on Card */}
+                <div className="grid gap-2">
+                  <Label htmlFor="name" className="text-gray-300">
+                    Name on Card
+                  </Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Enter your name"
+                    name="name"
+                    required
+                    onChange={handleInputChange}
+                    value={paymentInfo.paymentDetails.name}
+                    className="text-white placeholder-gray-400 bg-gray-700 border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                  />
+                  {errors.name && (
+                    <p className="text-sm text-red-500">{errors.name}</p>
+                  )}
+                </div>
+
+                {/* Card Number */}
+                <div className="grid gap-2">
+                  <Label htmlFor="cardNumber" className="text-gray-300">
+                    Card Number
+                  </Label>
+                  <Input
+                    id="cardNumber"
+                    name="cardNumber"
+                    type="text"
+                    placeholder="0000 0000 0000 0000"
+                    required
+                    value={paymentInfo.paymentDetails.cardNumber}
+                    onChange={handleInputChange}
+                    className="text-white placeholder-gray-400 bg-gray-700 border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                  />
+                  {errors.cardNumber && (
+                    <p className="text-sm text-red-500">{errors.cardNumber}</p>
+                  )}
+                </div>
+
+                {/* Amount */}
+                <div className="grid gap-2">
+                  <Label htmlFor="amount" className="text-gray-300">
+                    Amount
+                  </Label>
+                  <Input
+                    id="amount"
+                    name="amount"
+                    type="number"
+                    required
+                    value={paymentInfo.amount}
+                    onChange={handleInputChange}
+                    disabled={loading}
+                    className="text-white placeholder-gray-400 bg-gray-700 border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter amount"
+                  />
+                  {errors.amount && (
+                    <p className="text-sm text-red-500">{errors.amount}</p>
+                  )}
+                </div>
+
+                {/* Expiry Date, CVC, and Zip Code */}
+                <div className="grid grid-cols-3 gap-4">
+                  {/* Expiry Date with Calendar */}
                   <div className="grid gap-2">
-                    <Label htmlFor="cardNumber">Card Number </Label>
-                    <Input
-                      id="cardNumber"
-                      name="cardNumber"
-                      type="text"
-                      placeholder="0000 0000 0000 0000"
-                      required
-                      value={paymentInfo.paymentDetails.cardNumber}
-                      onChange={handleInputChange}
-                    />
-                    {errors.cardNumber && (
-                      <p className="text-red-600 text-sm">
-                        {errors.cardNumber}
+                    <Label htmlFor="expirationDate" className="text-gray-300">
+                      Expiry Date
+                    </Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button className="justify-start w-full font-normal text-white bg-gray-700 border-gray-600 hover:bg-gray-600">
+                          <CalendarDaysIcon className="w-4 h-4 mr-2" />
+                          {paymentInfo.paymentDetails.expirationDate
+                            ? paymentInfo.paymentDetails.expirationDate
+                            :"select"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 bg-gray-800 border-gray-700">
+                        <Calendar
+                          mode="single"
+                          selected={new Date(paymentInfo.paymentDetails.expirationDate || "")}
+                          onSelect={(date) => {
+                            const formattedDate = date
+                              ? date.toLocaleDateString("en-GB", {
+                                  month: "2-digit",
+                                  year: "2-digit",
+                                })
+                              : "";
+                            handleInputChange({
+                              target: {
+                                name: "expirationDate",
+                                value: formattedDate,
+                              },
+                            });
+                          }}
+                          
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    {errors.expirationDate && (
+                      <p className="text-sm text-red-500">
+                        {errors.expirationDate}
                       </p>
                     )}
                   </div>
 
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="expirationDate">Expiry Date</Label>
-                      <Input
-                        id="expirationDate"
-                        name="expirationDate"
-                        type="text"
-                        placeholder="MM/YY"
-                        required
-                        value={paymentInfo.paymentDetails.expirationDate}
-                        onChange={handleInputChange}
-                      />
-                      {errors.expirationDate && (
-                        <p className="text-red-500 text-sm">
-                          {errors.expirationDate}
-                        </p>
-                      )}
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="cvv">CVC</Label>
-                      <Input
-                        id="cvv"
-                        name="cvv"
-                        type="text"
-                        placeholder="123"
-                        required
-                        value={paymentInfo.paymentDetails.cvv}
-                        onChange={handleInputChange}
-                      />
-                      {errors.cvv && (
-                        <p className="text-red-500 text-sm">{errors.cvv}</p>
-                      )}
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="zip">Zip Code</Label>
-                      <Input
-                        id="zip"
-                        type="text"
-                        placeholder="12345"
-                        required
-                        name="zip"
-                        onChange={handleInputChange}
-                        value={paymentInfo.paymentDetails.zip}
-                      />
-                      {errors.zip && (
-                        <p className="text-red-500 text-sm">{errors.zip}</p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="paymentMethod">Payment Method</Label>
-                    <Select
-                      id="paymentMethod"
-                      value={paymentInfo.paymentMethod}
-                      onValueChange={handlePaymentMethodChange}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select payment method" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {paymentMethods.map((method) => (
-                          <SelectItem key={method.value} value={method.value}>
-                            {method.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  {/* 
-                  <Button type="submit" className="mt-4">
-                    Purchase Plan
-                  </Button> */}
-
-                  <Button
-                    type="Submit"
-                    className="mt-4 flex items-center justify-center"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <div className="flex items-center gap-2">
-                        <Spinner /> Processing...
-                      </div>
-                    ) : (
-                      "Purchase Plan"
+                  {/* CVC */}
+                  <div className="grid gap-2">
+                    <Label htmlFor="cvv" className="text-gray-300">
+                      CVC
+                    </Label>
+                    <Input
+                      id="cvv"
+                      name="cvv"
+                      type="text"
+                      placeholder="123"
+                      required
+                      value={paymentInfo.paymentDetails.cvv}
+                      onChange={handleInputChange}
+                      className="text-white placeholder-gray-400 bg-gray-700 border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                    />
+                    {errors.cvv && (
+                      <p className="text-sm text-red-500">{errors.cvv}</p>
                     )}
-                  </Button>
-                </form>
-              </CardContent>
-              <CardFooter>
-                <Progress value={50} />
-              </CardFooter>
-            </Card>
-          </div>
+                  </div>
+
+                  {/* Zip Code */}
+                  <div className="grid gap-2">
+                    <Label htmlFor="zip" className="text-gray-300">
+                      Zip Code
+                    </Label>
+                    <Input
+                      id="zip"
+                      type="text"
+                      placeholder="12345"
+                      required
+                      name="zip"
+                      onChange={handleInputChange}
+                      value={paymentInfo.paymentDetails.zip}
+                      className="text-white placeholder-gray-400 bg-gray-700 border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                    />
+                    {errors.zip && (
+                      <p className="text-sm text-red-500">{errors.zip}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Payment Method */}
+                <div className="grid gap-2">
+                  <Label htmlFor="paymentMethod" className="text-gray-300">
+                    Payment Method
+                  </Label>
+                  <Select
+                    id="paymentMethod"
+                    value={paymentInfo.paymentMethod}
+                    onValueChange={handlePaymentMethodChange}
+                  >
+                    <SelectTrigger className="text-white placeholder-gray-400 bg-gray-700 border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500">
+                      <SelectValue placeholder="Select payment method" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-800 border-gray-700">
+                      {paymentMethods.map((method) => (
+                        <SelectItem
+                          key={method.value}
+                          value={method.value}
+                          className="text-white hover:bg-gray-700"
+                        >
+                          {method.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Submit Button */}
+                <Button
+                  type="submit"
+                  className="flex items-center justify-center mt-4 text-white transition-transform transform bg-blue-600 hover:bg-blue-700 hover:scale-105"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <div className="flex items-center gap-2">
+                      <Spinner /> Processing...
+                    </div>
+                  ) : (
+                    "Purchase Plan"
+                  )}
+                </Button>
+              </form>
+            </CardContent>
+            <CardFooter>
+              <Progress value={50} className="bg-gray-700" />
+            </CardFooter>
+          </Card>
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 function CheckIcon(props) {
@@ -419,3 +727,32 @@ function LockIcon(props) {
     </svg>
   );
 }
+
+function CalendarDaysIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8 2v4" />
+      <path d="M16 2v4" />
+      <rect width="18" height="18" x="3" y="4" rx="2" />
+      <path d="M3 10h18" />
+      <path d="M8 14h.01" />
+      <path d="M12 14h.01" />
+      <path d="M16 14h.01" />
+      <path d="M8 18h.01" />
+      <path d="M12 18h.01" />
+      <path d="M16 18h.01" />
+    </svg>
+  );
+}
+

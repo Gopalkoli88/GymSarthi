@@ -1,203 +1,71 @@
-// import React from "react";
-// import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+ 
 
-// const styles = StyleSheet.create({
-//   page: {
-//     padding: 30,
-//     backgroundColor: "#f4f4f4",
-//   },
-//   section: {
-//     marginBottom: 10,
-//   },
-//   table: {
-//     display: "table",
-//     width: "100%",
-//     borderStyle: "solid",
-//     borderWidth: 1,
-//     borderColor: "#ddd",
-//     borderRadius: 5,
-//     marginBottom: 20,
-//     overflow: "hidden",
-//   },
-//   tableHeader: {
-//     backgroundColor: "#4CAF50",
-//     color: "#fff",
-//     fontSize: 12,
-//     fontWeight: "bold",
-//   },
-//   tableRow: {
-//     flexDirection: "row",
-//     borderBottomWidth: 1,
-//     borderBottomColor: "#ddd",
-//   },
-//   tableCol: {
-//     flex: 1, // Adjust this to control the width of each column
-//     padding: 8,
-//     borderRightWidth: 1,
-//     borderRightColor: "#ddd",
-//   },
-//   tableCellHeader: {
-//     fontSize: 11,
-//     fontWeight: "bold",
-//     color: "#fff",
-//     padding: 10,
-//     textAlign: "center",
-//     backgroundColor: "#4CAF50",
-//   },
-//   tableCell: {
-//     fontSize: 10,
-//     padding: 10,
-//     textAlign: "center",
-//     color: "#333",
-//     wordBreak: "break-all", // Ensure long words break properly
-//   },
-//   footer: {
-//     marginTop: 20,
-//     fontSize: 12,
-//     textAlign: "center",
-//     color: "#888",
-//   },
-// });
-
-// // Function to format the date in dd-mm-yyyy format
-// const formatDate = (dateString) => {
-//   const date = new Date(dateString);
-//   const day = String(date.getDate()).padStart(2, "0");
-//   const month = String(date.getMonth() + 1).padStart(2, "0");
-//   const year = date.getFullYear();
-//   return `${day}-${month}-${year}`;
-// };
-
-// const PaymentHistoryPDF = ({ transactions }) => (
-//   <Document>
-//     <Page size="A4" style={styles.page}>
-//       <Text style={styles.header}>Payment History</Text>
-//       <View style={styles.table}>
-//         <View style={[styles.tableRow, styles.tableHeader]}>
-//           <Text style={[styles.tableCol, styles.tableCellHeader]}>
-//             Transaction ID
-//           </Text>
-//           <Text style={[styles.tableCol, styles.tableCellHeader]}>Date</Text>
-//           <Text style={[styles.tableCol, styles.tableCellHeader]}>Amount</Text>
-//           <Text style={[styles.tableCol, styles.tableCellHeader]}>
-//             Payment Method
-//           </Text>
-//           <Text style={[styles.tableCol, styles.tableCellHeader]}>Status</Text>
-//           <Text style={[styles.tableCol, styles.tableCellHeader]}>
-//             User Name
-//           </Text>
-//           <Text style={[styles.tableCol, styles.tableCellHeader]}>
-//             Plan Name
-//           </Text>
-//         </View>
-//         {transactions &&
-//           transactions.map((tx) => (
-//             <View key={tx._id} style={styles.tableRow}>
-//               <Text style={[styles.tableCol, styles.tableCell]}>
-//                 {tx.paymentDetails.transactionId}
-//               </Text>
-//               console.log(tx.paymentDetails.transactionId) 
-//               <Text style={[styles.tableCol, styles.tableCell]}>
-//                 {formatDate(tx.paymentDate)}
-//               </Text>
-//               <Text style={[styles.tableCol, styles.tableCell]}>
-//                 ${tx.amount.toFixed(2)}
-//               </Text>
-//               <Text style={[styles.tableCol, styles.tableCell]}>
-//                 {tx.paymentMethod}
-//               </Text>
-//               <Text style={[styles.tableCol, styles.tableCell]}>
-//                 {tx.status}
-//               </Text>
-//               <Text style={[styles.tableCol, styles.tableCell]}>
-//                 {tx.userName}
-//               </Text>
-//               <Text style={[styles.tableCol, styles.tableCell]}>
-//                 {tx.planName}
-//               </Text>
-//             </View>
-//           ))}
-//       </View>
-//       <Text style={styles.footer}>Generated on {formatDate(new Date())}</Text>
-//     </Page>
-//   </Document>
-// );
-
-// export default PaymentHistoryPDF;
-
-
-
-// ! swapnil makes :
 import React from "react";
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 
+// Define styles similar to the web table
 const styles = StyleSheet.create({
   page: {
     padding: 30,
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "#ffff", // Dark theme background
+    fontSize: 10,
+    fontFamily: "Helvetica",
+    color: "#e5e7eb", // Light text color
   },
   header: {
-    fontSize: 20,
-    marginBottom: 20,
+    fontSize: 18,
+    fontWeight: "bold",
     textAlign: "center",
-    color: "#333",
-  },
-  table: {
-    display: "table",
-    width: "100%",
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
     marginBottom: 20,
+    color: "#3b82f6", // Blue header
+    textTransform: "uppercase",
+  },
+  tableContainer: {
+    borderRadius: 10,
     overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#3b82f6",
+    backgroundColor: "#374151", // Dark background
   },
   tableHeader: {
-    backgroundColor: "#4CAF50",
     flexDirection: "row",
+    backgroundColor: "#3b82f6", // Blue gradient effect
+    color: "#ffffff",
+    fontWeight: "bold",
+    paddingVertical: 8,
   },
   tableRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-    alignItems: "center", // Align items in the center vertically
+    borderBottomColor: "#4b5563", // Darker gray for row separator
+    backgroundColor: "#1f2937", // Alternating row colors
+    paddingVertical: 5,
+  },
+  tableColHeader: {
+    flex: 1,
+    padding: 6,
+    textAlign: "center",
   },
   tableCol: {
     flex: 1,
-    paddingVertical: 10, // Vertical padding for consistent row height
-    paddingHorizontal: 5, // Horizontal padding to keep text within boundaries
-    borderRightWidth: 1,
-    borderRightColor: "#ddd",
-    textAlign: "center", // Center text horizontally
+    padding: 6,
+    textAlign: "center",
+    color: "#d1d5db", // Lighter text
   },
   transactionCol: {
-    flex: 2,
-    paddingVertical: 10,
-    paddingHorizontal: 5,
-    borderRightWidth: 1,
-    borderRightColor: "#ddd",
-    textAlign: "center",
+    flex: 2, // Wider column for transaction ID
   },
   lastCol: {
-    borderRightWidth: 0, // Remove right border for the last column
-  },
-  tableCellHeader: {
-    fontSize: 11,
-    fontWeight: "bold",
-    color: "#fff",
-    textAlign: "center",
-  },
-  tableCell: {
-    fontSize: 10,
-    color: "#333",
-    wordBreak: "break-all",
-    textAlign: "center",
+    borderRightWidth: 0, // No border on the last column
   },
   footer: {
-    marginTop: 20,
-    fontSize: 12,
+    fontSize: 9,
     textAlign: "center",
-    color: "#888",
+    marginTop: 20,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: "#4b5563",
+    color: "#9ca3af", // Gray footer text
   },
 });
 
@@ -210,52 +78,55 @@ const formatDate = (dateString) => {
   return `${day}-${month}-${year}`;
 };
 
+// Payment History PDF Component
 const PaymentHistoryPDF = ({ transactions }) => (
   <Document>
     <Page size="A4" style={styles.page}>
+      {/* Header */}
       <Text style={styles.header}>Payment History</Text>
-      <View style={styles.table}>
+
+      {/* Table */}
+      <View style={styles.tableContainer}>
+        {/* Table Header */}
         <View style={styles.tableHeader}>
-          <Text style={[styles.transactionCol, styles.tableCellHeader]}>
-            Transaction ID
-          </Text>
-          <Text style={[styles.tableCol, styles.tableCellHeader]}>Date</Text>
-          <Text style={[styles.tableCol, styles.tableCellHeader]}>Amount</Text>
-          <Text style={[styles.tableCol, styles.tableCellHeader]}>
-            Payment Method
-          </Text>
-          <Text style={[styles.tableCol, styles.tableCellHeader]}>Status</Text>
-          <Text style={[styles.tableCol, styles.tableCellHeader]}>User Name</Text>
-          <Text style={[styles.tableCol, styles.tableCellHeader, styles.lastCol]}>
-            Plan Name
-          </Text>
+          <Text style={[styles.tableColHeader, styles.transactionCol]}>Transaction ID</Text>
+          <Text style={styles.tableColHeader}>Date</Text>
+          <Text style={styles.tableColHeader}>Amount</Text>
+          <Text style={styles.tableColHeader}>Payment Method</Text>
+          <Text style={styles.tableColHeader}>Status</Text>
+          <Text style={styles.tableColHeader}>User Name</Text>
+          <Text style={[styles.tableColHeader, styles.lastCol]}>Plan Name</Text>
         </View>
-        {transactions &&
+
+        {/* Table Rows */}
+        {transactions && transactions.length > 0 ? (
           transactions.map((tx) => (
             <View key={tx._id} style={styles.tableRow}>
-              <Text style={[styles.transactionCol, styles.tableCell]}>
+              <Text style={[styles.tableCol, styles.transactionCol]}>
                 {tx.paymentDetails?.transactionId || tx._id || "N/A"}
               </Text>
-              <Text style={[styles.tableCol, styles.tableCell]}>
-                {formatDate(tx.paymentDate)}
-              </Text>
-              <Text style={[styles.tableCol, styles.tableCell]}>
-                ${tx.amount.toFixed(2)}
-              </Text>
-              <Text style={[styles.tableCol, styles.tableCell]}>
-                {tx.paymentMethod}
-              </Text>
-              <Text style={[styles.tableCol, styles.tableCell]}>{tx.status}</Text>
-              <Text style={[styles.tableCol, styles.tableCell]}>{tx.userName}</Text>
-              <Text style={[styles.tableCol, styles.tableCell, styles.lastCol]}>
-                {tx.planName}
-              </Text>
+              <Text style={styles.tableCol}>{formatDate(tx.paymentDate)}</Text>
+              <Text style={styles.tableCol}>${tx.amount.toFixed(2)}</Text>
+              <Text style={styles.tableCol}>{tx.paymentMethod}</Text>
+              <Text style={styles.tableCol}>{tx.status}</Text>
+              <Text style={styles.tableCol}>{tx.userName}</Text>
+              <Text style={[styles.tableCol, styles.lastCol]}>{tx.planName}</Text>
             </View>
-          ))}
+          ))
+        ) : (
+          <View style={styles.tableRow}>
+            <Text style={[styles.tableCol, { textAlign: "center", flex: 7 }]}>No Transactions Found</Text>
+          </View>
+        )}
       </View>
+
+      {/* Footer */}
       <Text style={styles.footer}>Generated on {formatDate(new Date())}</Text>
     </Page>
   </Document>
 );
 
 export default PaymentHistoryPDF;
+
+
+

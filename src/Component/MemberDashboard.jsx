@@ -24,7 +24,7 @@ const MemberDashboard = () => {
     if (!user) {
       navigate("/signin");
     } else {
-        dispatch(fetchUserPaymentInfo());
+      dispatch(fetchUserPaymentInfo());
       dispatch(fetchUserTasksInfo());
     }
   }, [dispatch, navigate, user]);
@@ -35,9 +35,7 @@ const MemberDashboard = () => {
 
   return (
     <>
-      <MemberSidePanel>
-       
-      </MemberSidePanel>
+      <MemberSidePanel></MemberSidePanel>
     </>
   );
 };

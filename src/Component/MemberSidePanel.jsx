@@ -17,9 +17,15 @@ import { NotebookPen } from "lucide-react";
 
 const MemberSidePanel = ({ children }) => {
   const dispatch = useDispatch();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user } = useSelector((state) => state.user);
   const location = useLocation(); // Get the current location
   const [activeLink, setActiveLink] = useState(location.pathname); // Initialize with the current pathname
+
+  const handleLinkClick = (path) => {
+    setActiveLink(path);
+    setIsSidebarOpen(false); // Close sidebar on mobile after clicking a link
+  };
 
   const profileRoute = () => {
     switch (user.role) {
@@ -38,160 +44,383 @@ const MemberSidePanel = ({ children }) => {
     setActiveLink(location.pathname);
   }, [location.pathname]); // Dependency array includes pathname
 
-  const handleLinkClick = (link) => {
-    setActiveLink(link); // Update the active link
-  };
-
   const backendUrl = "http://localhost:5000";
 
+  // return (
+  //   <div className="flex w-full min-h-screen bg-background dark:text-foreground">
+  //     {/* Hamburger Menu Button (Mobile Only) */}
+  //     <button
+  //       className="fixed z-20 p-2 text-white bg-blue-600 rounded-lg top-4 left-4 sm:hidden"
+  //       onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+  //     >
+  //       <svg
+  //         xmlns="http://www.w3.org/2000/svg"
+  //         className="w-6 h-6"
+  //         fill="none"
+  //         viewBox="0 0 24 24"
+  //         stroke="currentColor"
+  //       >
+  //         <path
+  //           strokeLinecap="round"
+  //           strokeLinejoin="round"
+  //           strokeWidth={2}
+  //           d="M4 6h16M4 12h16m-7 6h7"
+  //         />
+  //       </svg>
+  //     </button>
+
+  //     {/* Sidebar */}
+  //     <aside
+  //       className={`fixed inset-y-2 left-0 z-10 flex flex-col w-64 border-r border-blue-700 bg-gradient-to-b from-[#0D1117] to-[#1A1F2C] sm:flex rounded-tr-2xl rounded-br-2xl shadow-2xl transition-transform duration-300 ease-in-out ${
+  //         isSidebarOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0"
+  //       }`}
+  //     >
+  //       <div className="flex h-[60px] items-center px-6">
+  //         <Link
+  //           to="#"
+  //           className="flex items-center gap-2 font-semibold text-white"
+  //           prefetch={false}
+  //         >
+  //           <DumbbellIcon className="w-6 h-6" />
+  //           <span>Gym Member</span>
+  //         </Link>
+  //       </div>
+  //       <div className="flex-1">
+  //         <nav className="grid items-start px-4 text-sm font-medium">
+  //           <Link
+  //             to="/"
+  //             className="flex items-center gap-2 px-4 py-2 transition-all rounded-lg text-muted-foreground dark:text-muted-foreground hover:text-foreground"
+  //             prefetch={false}
+  //           >
+  //             <HomeIcon className="relative flex justify-start w-4 h-4 right-1" />
+  //             Home
+  //           </Link>
+  //           <Link
+  //             to="/member-dashboard"
+  //             className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+  //               activeLink === "/member-dashboard"
+  //                 ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+  //                 : "text-muted-foreground hover:text-foreground"
+  //             }`}
+  //             onClick={() => handleLinkClick("/member-dashboard")}
+  //             prefetch={false}
+  //           >
+  //             <UserIcon className="w-4 h-4" />
+  //             Member Profile
+  //           </Link>
+  //           <Link
+  //             to="/member-dashboard/trainer-profile"
+  //             className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+  //               activeLink === "/member-dashboard/trainer-profile"
+  //                 ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+  //                 : "text-muted-foreground hover:text-foreground"
+  //             }`}
+  //             onClick={() => handleLinkClick("/member-dashboard/trainer-profile")}
+  //             prefetch={false}
+  //           >
+  //             <UserIcon className="w-4 h-4" />
+  //             Trainer Profile
+  //           </Link>
+  //           <Link
+  //             to="/member-dashboard/plan-details"
+  //             className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+  //               activeLink === "/member-dashboard/plan-details"
+  //                 ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+  //                 : "text-muted-foreground hover:text-foreground"
+  //             }`}
+  //             onClick={() => handleLinkClick("/member-dashboard/plan-details")}
+  //             prefetch={false}
+  //           >
+  //             <NotebookPen size={15} />
+  //             Plan Purchased
+  //           </Link>
+  //           <Link
+  //             to="/member-dashboard/daily-tasks"
+  //             className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+  //               activeLink === "/member-dashboard/daily-tasks"
+  //                 ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+  //                 : "text-muted-foreground hover:text-foreground"
+  //             }`}
+  //             onClick={() => handleLinkClick("/member-dashboard/daily-tasks")}
+  //             prefetch={false}
+  //           >
+  //             <ClipboardIcon className="w-4 h-4" />
+  //             Daily Tasks
+  //           </Link>
+  //           <Link
+  //             to="/member-dashboard/payment-history"
+  //             className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+  //               activeLink === "/member-dashboard/payment-history"
+  //                 ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+  //                 : "text-muted-foreground hover:text-foreground"
+  //             }`}
+  //             onClick={() => handleLinkClick("/member-dashboard/payment-history")}
+  //             prefetch={false}
+  //           >
+  //             <CreditCardIcon className="w-4 h-4" />
+  //             Payment History
+  //           </Link>
+
+  //           <Link
+  //               to="/member-dashboard/class-book"
+  //               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+  //                 activeLink === "/member-dashboard/class-book"
+  //                   ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+  //                   : "text-muted-foreground hover:text-foreground"
+  //               }`}
+  //               onClick={() =>
+  //                 handleLinkClick("/member-dashboard/class-book")
+  //               } // Use handleLinkClick here
+  //               prefetch={false}
+  //             >
+  //               <CreditCardIcon className="w-4 h-4" />
+  //             Class Booking
+  //             </Link>
+
+  //             <Link
+  //               to="/member-dashboard/payment-status"
+  //               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+  //                 activeLink === "/member-dashboard/payment-status"
+  //                   ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+  //                   : "text-muted-foreground hover:text-foreground"
+  //               }`}
+  //               onClick={() =>
+  //                 handleLinkClick("/member-dashboard/payment-status")
+  //               } // Use handleLinkClick here
+  //               prefetch={false}
+  //             >
+  //               <CreditCardIcon className="w-4 h-4" />
+  //               Pending Payments
+  //             </Link>
+  //           <Link
+  //             to="/member-dashboard/attendance-calendar"
+  //             className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+  //               activeLink === "/member-dashboard/attendance-calendar"
+  //                 ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+  //                 : "text-muted-foreground hover:text-foreground"
+  //             }`}
+  //             onClick={() => handleLinkClick("/member-dashboard/attendance-calendar")}
+  //             prefetch={false}
+  //           >
+  //             <CalendarIcon className="w-4 h-4" />
+  //             Attendance Calendar
+  //           </Link>
+  //         </nav>
+  //       </div>
+  //     </aside>
+
+  //     {/* Main Content */}
+  //     <div className="flex flex-col w-full sm:gap-4 sm:py-4 sm:pl-64">
+  //       <header className="flex items-center gap-4 px-6 border-b shadow-sm bg-background h-14 md:px-6">
+  //         <div className="flex-1 w-full"></div>
+  //         <DropdownMenu>
+  //           <DropdownMenuTrigger asChild>
+  //             <Button
+  //               variant="ghost"
+  //               size="icon"
+  //               className="border rounded-full w-15 h-15"
+  //             >
+  //               <img
+  //                 src={`${user.photoUrl}`}
+  //                 width="32"
+  //                 height="32"
+  //                 className="w-10 h-10 rounded-full"
+  //                 alt="Avatar"
+  //                 style={{ aspectRatio: "32/32", objectFit: "cover" }}
+  //               />
+  //               <span className="sr-only">Toggle user menu</span>
+  //             </Button>
+  //           </DropdownMenuTrigger>
+  //           <DropdownMenuContent align="end">
+  //             <Link to={profileRoute()}>
+  //               <DropdownMenuLabel>My Account</DropdownMenuLabel>
+  //             </Link>
+  //             <DropdownMenuSeparator />
+  //             <DropdownMenuItem>Support</DropdownMenuItem>
+  //             <DropdownMenuSeparator />
+  //             <DropdownMenuItem onClick={() => dispatch(logout())}>
+  //               Logout
+  //             </DropdownMenuItem>
+  //           </DropdownMenuContent>
+  //         </DropdownMenu>
+  //       </header>
+  //       <main className="grid items-start flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+  //         <div className="grid gap-4 lg:col-span-2 xl:col-span-3">
+  //           {children}
+  //         </div>
+  //       </main>
+  //     </div>
+  //   </div>
+  // );
+  // };
+
+  // export default MemberSidePanel;
+
   return (
-    <div className="flex min-h-screen w-full dark:bg-background dark:text-foreground">
-      <aside className="fixed inset-y-0 left-0 z-10 flex w-64 flex-col border-r border-blue-700 bg-background dark:bg-background sm:flex">
+    <div className="flex w-full min-h-screen bg-background dark:text-foreground">
+      {/* Sidebar */}
+      <aside className="fixed inset-y-0.5 left-0 z-10 flex flex-col w-64 bg-gradient-to-b from-[#0D1117] to-[#1A1F2C] sm:flex rounded-tr-2xl rounded-br-2xl shadow-2xl">
+        {/* Logo */}
         <div className="flex h-[60px] items-center px-6">
           <Link
             to="#"
-            className="flex items-center gap-2 font-semibold"
+            className="flex items-center gap-2 m-2 font-semibold text-white"
             prefetch={false}
           >
-            <DumbbellIcon className="h-6 w-6" />
-            <span className="">Gym Member</span>
+            <DumbbellIcon className="w-6 h-6" />
+            <span>Gym Member</span>
           </Link>
         </div>
-        <div className="flex-1">
-          <nav className="grid items-start px-4 text-sm font-medium">
+
+        {/* Navigation Links */}
+        <nav className="grid gap-1 px-4 text-sm font-medium">
+          {/* {[
+            { to: "/", icon: HomeIcon, label: "Home" },
+            {
+              to: "/member-dashboard",
+              icon: UserIcon,
+              label: "Member Profile",
+            },
+            {
+              to: "/member-dashboard/trainer-profile",
+              icon: UserIcon,
+              label: "Trainer Profile",
+            },
+            {
+              to: "/member-dashboard/plan-details",
+              icon: NotebookPen,
+              label: "Plan Purchased",
+            },
+            {
+              to: "/member-dashboard/daily-tasks",
+              icon: ClipboardIcon,
+              label: "Daily Tasks",
+            },
+            {
+              to: "/member-dashboard/payment-history",
+              icon: CreditCardIcon,
+              label: "Payment History",
+            },
+            {
+              to: "/member-dashboard/class-book",
+              icon: CreditCardIcon,
+              label: "Class Booking",
+            },
+            {
+              to: "/member-dashboard/payment-status",
+              icon: CreditCardIcon,
+              label: "Pending Payments",
+            },
+            {
+              to: "/member-dashboard/attendance-calendar",
+              icon: CalendarIcon,
+              label: "Attendance Calendar",
+            }, */}
+            {[
+            { to: "/", icon: HomeIcon, label: "Home" },
+            {
+              to: "/member-dashboard",
+              icon: MemberIcon,
+              label: "Member Profile",
+            },
+            {
+              to: "/member-dashboard/trainer-profile",
+              icon: TrainerIcon,
+              label: "Trainer Profile",
+            },
+            {
+              to: "/member-dashboard/plan-details",
+              icon: PlanIcon,
+              label: "Plan Purchased",
+            },
+            {
+              to: "/member-dashboard/daily-tasks",
+              icon: TasksIcon,
+              label: "Daily Tasks",
+            },
+            {
+              to: "/member-dashboard/payment-history",
+              icon: PaymentHistoryIcon,
+              label: "Payment History",
+            },
+            {
+              to: "/member-dashboard/class-book",
+              icon: ClassBookingIcon,
+              label: "Class Booking",
+            },
+            {
+              to: "/member-dashboard/payment-status",
+              icon: PendingPaymentsIcon,
+              label: "Pending Payments",
+            },
+            {
+              to: "/member-dashboard/attendance-calendar",
+              icon: CalendarIcon,
+              label: "Attendance Calendar",
+            },
+          ].map(({ to, icon: Icon, label }) => (
             <Link
-              to="/"
-              className="flex items-center gap-2 rounded-lg px-4 py-2 text-muted-foreground dark:text-muted-foreground transition-all hover:text-foreground"
-              prefetch={false}
-            >
-              <HomeIcon className="h-4 w-4 flex justify-start relative right-1" />
-              {/* <SettingsIcon className="h-4 w-4" /> */}
-              Home
-            </Link>
-            <Link
-              to="/member-dashboard"
+              key={to}
+              to={to}
               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/member-dashboard"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
+                activeLink === to
+                   ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
+                : "text-muted-foreground hover:text-foreground"
               }`}
-              onClick={() => handleLinkClick("/member-dashboard")} // Use handleLinkClick here
+              onClick={() => handleLinkClick(to)}
               prefetch={false}
             >
-              <UserIcon className="h-4 w-4" />
-              Member Profile
+              <Icon className="w-5 h-5" />
+              {label}
             </Link>
-            <Link
-              to="/member-dashboard/trainer-profile"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/member-dashboard/trainer-profile"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() =>
-                handleLinkClick("/member-dashboard/trainer-profile")
-              } // Use handleLinkClick here
-              prefetch={false}
-            >
-              <UserIcon className="h-4 w-4" />
-              Trainer Profile
-            </Link>
-            <Link
-              to="/member-dashboard/plan-details"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/member-dashboard/plan-details"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => handleLinkClick("/member-dashboard/plan-details")} // Use handleLinkClick here
-              prefetch={false}
-            >
-              <NotebookPen size={15} />
-              Plan Purchased
-            </Link>
-            <Link
-              to="/member-dashboard/daily-tasks"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/member-dashboard/daily-tasks"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => handleLinkClick("/member-dashboard/daily-tasks")} // Use handleLinkClick here
-              prefetch={false}
-            >
-              <ClipboardIcon className="h-4 w-4" />
-              Daily Tasks
-            </Link>
-            <Link
-              to="/member-dashboard/payment-history"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                activeLink === "/member-dashboard/payment-history"
-                  ? "relative flex items-center transition-transform duration-300 ease-in-out transform text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:scale-105 hover:shadow-2xl"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() =>
-                handleLinkClick("/member-dashboard/payment-history")
-              } // Use handleLinkClick here
-              prefetch={false}
-            >
-              <CreditCardIcon className="h-4 w-4" />
-              Payment History
-            </Link>
-          </nav>
-        </div>
-      </aside>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-64 w-full">
-        <header className="flex h-14 items-center gap-4 border-b border-blue-700  px-6 md:px-6">
-          <Link href="#" className="lg:hidden">
-            <DumbbellIcon className="h-6 w-6" />
-            <span className="sr-only">Home</span>
-          </Link>
-          <div className="w-full flex-1">
-            {/* <form>
-              <div className="relative bottom-2">
-                <SearchIcon className="absolute  left-2.5 top-4 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search"
-                  className="w-full bg-background shadow-none appearance-none pl-8 md:w-2/3 lg:w-1/3"
-                />
-              </div>
-            </form> */}
-          </div>
+          ))}
+        </nav>
+
+        {/* User Profile */}
+        <div className="flex items-center justify-between w-full mt-auto px-7 py-7">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full border w-15 h-15"
+                className="border rounded-full w-15 h-15 hover:bg-gray-100"
               >
                 <img
                   src={`${user.photoUrl}`}
-                  width="32"
-                  height="32"
-                  className="rounded-full w-10 h-10"
+                  width="50"
+                  height="50"
+                  className="object-cover rounded-full w-14 h-14"
                   alt="Avatar"
-                  style={{ aspectRatio: "32/32", objectFit: "cover" }}
                 />
-                <span className="sr-only">Toggle user menu</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <Link to={profileRoute()}>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              </Link>
+            <DropdownMenuContent align="end" className="shadow-lg">
+              <Link to={profileRoute()}>My Account</Link>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-
               <DropdownMenuItem onClick={() => dispatch(logout())}>
                 Logout
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <span className="pr-3 text-lg font-medium text-white mt-25">
+            {user.name}
+          </span>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex flex-col w-full sm:gap-4 sm:py-4 sm:pl-64">
+        <header className="flex items-center gap-4 px-6 bg-background h-14 md:px-6">
+          <Link href="#" className="lg:hidden">
+            <DumbbellIcon className="w-6 h-6" />
+            <span className="sr-only">Home</span>
+          </Link>
+          <div className="flex-1 w-full"></div>
         </header>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-          <div className="grid lg:col-span-2 xl:col-span-3 gap-4">
+        <main className="grid items-start flex-1 gap-6 p-6 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 bg-gray-50">
+          <div className="grid gap-4 lg:col-span-2 xl:col-span-3">
             {children}
           </div>
         </main>
@@ -202,7 +431,8 @@ const MemberSidePanel = ({ children }) => {
 
 export default MemberSidePanel;
 
-function BarChartIcon(props) {
+
+function MemberIcon(props) {
   return (
     <svg
       {...props}
@@ -216,12 +446,154 @@ function BarChartIcon(props) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <line x1="12" x2="12" y1="20" y2="10" />
-      <line x1="18" x2="18" y1="20" y2="4" />
-      <line x1="6" x2="6" y1="20" y2="16" />
+      <circle cx="12" cy="7" r="4" />
+      <path d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2" />
     </svg>
   );
 }
+
+function TrainerIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="7" r="4" />
+      <path d="M4 21v-2a6 6 0 0 1 12 0v2" />
+      <path d="M16 3a6 6 0 0 1 6 6v2" />
+    </svg>
+  );
+}
+function PlanIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="M8 2v4M16 2v4M3 10h18" />
+    </svg>
+  );
+}
+
+function TasksIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12l2 2 4-4" />
+      <path d="M3 6h18M3 18h18" />
+    </svg>
+  );
+}
+
+function PaymentHistoryIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="2" y="5" width="20" height="14" rx="2" />
+      <path d="M2 10h20M7 15h.01M11 15h2" />
+    </svg>
+  );
+}
+
+function ClassBookingIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 6h18M3 12h18M3 18h18" />
+      <path d="M9 6v12" />
+      <path d="M15 6v12" />
+    </svg>
+  );
+}
+
+function PendingPaymentsIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 8v4l3 3" />
+    </svg>
+  );
+}
+function WorkoutIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M14.4 14.4L9.6 9.6" />
+      <path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z" />
+      <path d="M21.5 21.5l-1.4-1.4" />
+      <path d="M3.9 3.9L2.5 2.5" />
+    </svg>
+  );
+}
+
 
 function ClipboardIcon(props) {
   return (
@@ -286,88 +658,8 @@ function DumbbellIcon(props) {
   );
 }
 
-function LayoutDashboardIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="7" height="9" x="3" y="3" rx="1" />
-      <rect width="7" height="5" x="14" y="3" rx="1" />
-      <rect width="7" height="9" x="14" y="12" rx="1" />
-      <rect width="7" height="5" x="3" y="16" rx="1" />
-    </svg>
-  );
-}
 
-function MenuIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="18" y2="18" />
-    </svg>
-  );
-}
 
-function SearchIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
-  );
-}
-
-function SettingsIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  );
-}
 
 function UserIcon(props) {
   return (
@@ -389,27 +681,7 @@ function UserIcon(props) {
   );
 }
 
-function UsersIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </svg>
-  );
-}
+
 function HomeIcon(props) {
   return (
     <svg
@@ -426,6 +698,25 @@ function HomeIcon(props) {
     >
       <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
       <polyline points="9 22 9 12 15 12 15 22" />
+    </svg>
+  );
+}
+function CalendarIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="M16 2v4M8 2v4M3 10h18" />
     </svg>
   );
 }

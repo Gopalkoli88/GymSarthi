@@ -1,148 +1,106 @@
- 
-
-
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
- import { useSelector } from "react-redux";
- import { Button } from "@/components/ui/button";
-
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { useSelector } from "react-redux";
+import { Button } from "@/components/ui/button";
 
 export const DailyTaskComp = () => {
-  const { tasks, user } = useSelector((state) => state.user);
-  console.log("Member tasks :", tasks);
+  const { tasks } = useSelector((state) => state.user);
+  console.log("Member tasks:", tasks);
 
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    return date.toLocaleDateString("en-US", options);
-  }
+  const formatDate = (dateString) =>
+    new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 
-  return (
-    <div className="space-y-6 overflow-hidden">
-      {tasks && tasks.length > 0 ? (
-        tasks.map((task, index) => (
-          <Card
-            key={index}
-            className="h-auto bg-blue-400 border border-blue-600 rounded-lg shadow-md space-y-4 p-4"
-          >
-            <DailyTaskHeader />
-            <CardContent className="px-6 py-4 space-y-4">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <TaskDate date={task.date} formatDate={formatDate} />
-                <PlanName planName={task.planId.name} />
-                <MemberStatus status={task.memberStatus} />
-                </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <ExercisesSection title="Warm Up Exercises" exercises={task.warmupExercises} />
-                <ExercisesSection title="Main Exercises" exercises={task.mainExercises} />
-                <ExercisesSection title="Cool Down Exercises" exercises={task.cooldownExercises} />
-              </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <AdviceCard title="Pre-Workout Advice" advice={task.preWorkoutAdvice} />
-                <AdviceCard title="Post-Workout Advice" advice={task.postWorkoutAdvice} />
-                <AdviceCard title="Daily Hydration" advice={task.dailyHydration} />
-                <AdviceCard title="Balanced Diet Advice" advice={task.balancedDietAdvice} />
-              </div>
-            </CardContent>
-          </Card>
-        ))
-      ) : (
- 
-        <Button className="m-2">No Tasks</Button>
-
-      )}
-    </div>
-  );
-};
-
-const DailyTaskHeader = () => (
-  <CardHeader className="bg-[#000000] rounded-t-xl px-6 py-4">
-    <h3 className="text-xl font-bold text-white font-['Poppins', 'sans-serif']">
-      Daily Tasks
-    </h3>
-  </CardHeader>
-);
-
-const TaskDate = ({ date, formatDate }) => (
-  <div>
-    <h3 className="text-lg font-bold text-white font-['Poppins', 'sans-serif']">Date</h3>
-    <ul className="mt-2 space-y-2 text-white font-['Poppins', 'sans-serif'] text-sm">
-      <li className="flex items-center gap-2">
-        <span>{formatDate(date)}</span>
-      </li>
-    </ul>
-  </div>
-);
-
-const PlanName = ({ planName }) => (
-  <div>
-    <h3 className="text-lg font-bold text-white font-['Poppins', 'sans-serif']">Plan Name</h3>
-    <ul className="mt-2 space-y-2 text-white font-['Poppins', 'sans-serif'] text-sm">
-      <li className="flex items-center gap-2">
-        <span>{planName}</span>
-      </li>
-    </ul>
-  </div>
-);
-
-const MemberStatus = ({ status }) => (
-  <div>
-    <h3 className="text-lg font-bold text-white font-['Poppins', 'sans-serif']">Member Status</h3>
-    <ul className="mt-2 space-y-2 text-white font-['Poppins', 'sans-serif'] text-sm">
-      <li className="flex items-center gap-2">
-        <div className="rounded-full bg-[#1f2937] px-2 py-1 text-sm font-medium text-white">
-          {status}
+      return (
+        <> 
+<div className=" items-start justify-start min-h-screen p-6 bg-white mt-[-70px]">
+<DailyTaskHeader /> 
+        <div className="p-4 space-y-6 overflow-hidden md:p-6 lg:p-8">
+          {tasks?.length ? (
+            tasks.map((task, index) => (
+              <Card
+                key={index}
+                className="p-4 text-white border border-gray-700 shadow-lg sm:p-6 md:p-8 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-700 rounded-xl"
+              >
+              
+                <CardContent className="px-4 py-4 space-y-6 md:px-6">
+                  {/* Task Details */}
+                  <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    <TaskDetail title="Date" content={formatDate(task.date)} />
+                    <TaskDetail title="Plan Name" content={task.planId.name} />
+                    <TaskDetail title="Member Status" content={task.memberStatus} highlight />
+                  </div>
+    
+                  {/* Exercise Sections */}
+                  <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    <ExercisesSection title="Warm Up" exercises={task.warmupExercises} />
+                    <ExercisesSection title="Main Workout" exercises={task.mainExercises} />
+                    <ExercisesSection title="Cool Down" exercises={task.cooldownExercises} />
+                  </div>
+    
+                  {/* Advice Sections */}
+                  <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    <AdviceCard title="Pre-Workout Advice" advice={task.preWorkoutAdvice} />
+                    <AdviceCard title="Post-Workout Advice" advice={task.postWorkoutAdvice} />
+                    <AdviceCard title="Daily Hydration" advice={task.dailyHydration} />
+                    <AdviceCard title="Balanced Diet" advice={task.balancedDietAdvice} />
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <div className="flex justify-center">
+              <Button className="m-4">No Tasks</Button>
+            </div>
+          )}
         </div>
-      </li>
-    </ul>
-  </div>
-);
-
-const CreatedDate = ({ createdAt, formatDate }) => (
-  <div>
-    <h3 className="text-lg font-bold text-white font-['Poppins', 'sans-serif']">Created Date</h3>
-    <ul className="mt-2 space-y-2 text-white font-['Poppins', 'sans-serif'] text-sm">
-      <li className="flex items-center gap-2">
-        <span>{formatDate(createdAt)}</span>
-      </li>
-    </ul>
-  </div>
-);
-
-const ExercisesSection = ({ title, exercises }) => (
-  <div>
-    <h3 className="text-lg font-bold text-white font-['Poppins', 'sans-serif']">{title}</h3>
-    <ul className="mt-2 space-y-2 text-white font-['Poppins', 'sans-serif'] text-sm">
-      {exercises.map((we) => (
-        <li key={we._id} className="flex flex-row items-center gap-1">
-          <div className="flex items-center gap-2">
-            <span>{we.name}</span>
-          </div>
-          <div className="ml-4 text-xs">
-            <span>Reps: {we.reps}</span> | <span>Sets: {we.sets}</span>
-          </div>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
-
-const AdviceCard = ({ title, advice }) => (
-  <Card
-    className="bg-[#000000] p-3 rounded-xl border border-blue-500 relative transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
-    style={{ zIndex: 10 }} // Ensures it's on top during hover without affecting layout
-  >
-    <div className="p-4">
-      <h3 className="text-lg font-bold text-white font-['Poppins', 'sans-serif']">
-        {title}
-      </h3>
-      <p className="text-white">{advice}</p>
-    </div>
-  </Card>
-);
-
-export default DailyTaskComp;
+        </div>
+        </>
+      );
+    };
+    
+    // Header Component
+    const DailyTaskHeader = () => (
+      <h1 className="ml-10 text-3xl font-semibold text-black dark:text-white">
+Daily Tasks</h1>
+   
+    );
+    
+    // Generic Task Detail Component
+    const TaskDetail = ({ title, content, highlight = false }) => (
+      <div>
+        <h3 className="text-base font-bold text-white sm:text-lg">{title}</h3>
+        <p
+          className={`mt-2 text-sm text-white ${highlight ? "bg-gray-700 px-2 py-1 rounded-md" : ""}`}
+        >
+          {content}
+        </p>
+      </div>
+    );
+    
+    // Exercises Section Component
+    const ExercisesSection = ({ title, exercises }) => (
+      <div>
+        <h3 className="text-base font-bold text-white sm:text-lg">{title}</h3>
+        <ul className="mt-2 space-y-2 text-sm text-white">
+          {exercises.map((we, index) => (
+            <li key={we._id || index} className="flex flex-wrap items-center gap-2">
+              <span>{we.name}</span>
+              <span className="text-xs">Reps: {we.reps} | Sets: {we.sets}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+    
+    // Advice Card Component
+    const AdviceCard = ({ title, advice }) => (
+      <Card className="bg-[#1E293B] p-4 rounded-xl border  transition-transform duration-300 ease-in-out transform  border-gray-300">
+        <h3 className="mb-2 text-base font-bold text-white sm:text-lg">{title}</h3>
+        <p className="text-sm text-white">{advice}</p>
+      </Card>
+    );
+    
+    export default DailyTaskComp;

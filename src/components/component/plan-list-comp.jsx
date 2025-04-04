@@ -90,14 +90,16 @@ export function  PlanListComp() {
     }
   };
   return (
-    <main >
+    <div className="flex flex-col w-full gap-6 p-6 sm:gap-8 sm:p-10 mt-[-90px]" >
+
+    <main className="flex flex-col flex-1 gap-10 md:gap-8 md:p-6">
+
+    <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+        Plans
+      </h1>
 
       <div className="grid gap-10">
-        <Card>
-          <CardHeader>
-            <CardTitle>Plans</CardTitle>
-          </CardHeader>
-          <CardContent>
+       
             <Table>
               <TableHeader>
                 <TableRow>
@@ -188,7 +190,7 @@ export function  PlanListComp() {
                         </div>
                       ) : (
                         <div className="flex gap-2">
-                          <Button
+                          <Button className="bg-green-500"
                             variant="outline"
                             size="icon"
                             onClick={() => handleEditPlan(plan)}
@@ -196,7 +198,7 @@ export function  PlanListComp() {
                             <FilePenIcon className="w-4 h-4" />
                             <span className="sr-only">Edit</span>
                           </Button>
-                          <Button
+                          <Button className="bg-red-600"
                             variant="outline"
                             size="icon"
                             onClick={() => handleDeletePlan(plan._id)}
@@ -211,11 +213,11 @@ export function  PlanListComp() {
                 ))}
               </TableBody>
             </Table>
-          </CardContent>
-        </Card>
+    
       </div>
       <ToastContainer/>
     </main>
+    </div>
   );
 }
 

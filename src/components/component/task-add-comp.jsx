@@ -116,34 +116,33 @@ export function TaskAddComp(id) {
       toast.error(error.message || "An error occured");
     }
   };
+  
   return (
     <TrainerSidePanel>
       {" "}
-      <div className="dark:bg-black dark:text-white">
-        <Card className="w-full max-w-4xl border-opacity-20">
-          <CardHeader>
-            <CardTitle>Create Workout Plan</CardTitle>
-            <CardDescription>
-              Fill out the details for your client's workout plan.
-            </CardDescription>
-          </CardHeader>
+      <div className="flex items-start justify-start min-h-screen p-6 bg-white mt-[-70px]">
+      <div className="w-full max-w-4xl ml-12 space-y-6">
+      <header className="w-full">
+            <h1 className="text-3xl font-semibold text-black dark:text-white">
+            Create Workout Plan
+            </h1>
+            <p className="mt-1 text-black dark:text-gray-400">
+            Fill out the details for your client's workout plan.
+            </p>
+          </header>
+      <div className="flex items-center justify-center min-h-screen">
+      <Card className="w-full max-w-4xl border-opacity-20 mt-[50px]">
+   
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
-              {/* <div className="space-y-2">
-                <Label htmlFor="plan-id">Plan ID</Label>
-                <Input
-                  id="plan-id"
-                  type="text"
-                  value={planId}
-                  readOnly
-                  onChange={(e) => setPlanId(e.target.value)}
-                />
-              </div> */}
+ 
               <div className="space-y-2">
-                <Label htmlFor="date">Date</Label>
+                <Label className="text-white" htmlFor="date">Date</Label>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button className="justify-start w-full font-normal">
+                    {/* <Button className="justify-start w-full font-normal"> */}
+                       <Button
+                      className="justify-start w-full font-normal text-white transition-transform bg-green-500 shadow-lg">
                       <CalendarDaysIcon className="w-4 h-4 mr-2" />
                       {date ? date.toLocaleDateString() : "Select a date"}
                     </Button>
@@ -159,21 +158,37 @@ export function TaskAddComp(id) {
               </div>
             </div>
             <div className="space-y-4">
-              <Card className="border-opacity-20 p-4">
+              <Card className="p-8 text-white border border-gray-700 shadow-xl bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-xl">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium">Warmup Exercises</h3>
-                  <Button onClick={addWarmupExercise}>Add Exercise</Button>
+                  <h3 className="text-lg font-semibold text-gray-100">
+                    Warmup Exercises
+                  </h3>
+                  <Button
+                    onClick={addWarmupExercise}
+                    className="px-4 py-2 text-white transition-transform rounded-lg shadow-md bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105 hover:shadow-xl"
+                  >
+                    + Add Exercise
+                  </Button>
                 </div>
-                <div className="grid gap-4 pt-4">
+
+                <div className="grid gap-6 pt-4">
                   {warmupExercises.map((exercise, index) => (
-                    <div key={index} className="grid grid-cols-3 gap-4">
+                    <div
+                      key={index}
+                      className="grid grid-cols-4 gap-4 p-4 border border-gray-700 rounded-lg shadow-md bg-gray-900/50"
+                    >
+                      {/* Exercise Name */}
                       <div className="space-y-2">
-                        <Label htmlFor={`warmup-exercise-${index}-name`}>
+                        <Label
+                          className="text-gray-300"
+                          htmlFor={`warmup-exercise-${index}-name`}
+                        >
                           Exercise Name
                         </Label>
                         <Input
                           id={`warmup-exercise-${index}-name`}
                           value={exercise.name}
+                          className="w-full px-3 py-2 text-white bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
                           onChange={(e) => {
                             const updatedExercises = [...warmupExercises];
                             updatedExercises[index].name = e.target.value;
@@ -181,14 +196,20 @@ export function TaskAddComp(id) {
                           }}
                         />
                       </div>
+
+                      {/* Sets */}
                       <div className="space-y-2">
-                        <Label htmlFor={`warmup-exercise-${index}-sets`}>
+                        <Label
+                          className="text-gray-300"
+                          htmlFor={`warmup-exercise-${index}-sets`}
+                        >
                           Sets
                         </Label>
                         <Input
                           id={`warmup-exercise-${index}-sets`}
                           type="number"
                           value={exercise.sets}
+                          className="w-full px-3 py-2 text-white bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
                           onChange={(e) => {
                             const updatedExercises = [...warmupExercises];
                             updatedExercises[index].sets = parseInt(
@@ -198,14 +219,20 @@ export function TaskAddComp(id) {
                           }}
                         />
                       </div>
+
+                      {/* Reps */}
                       <div className="space-y-2">
-                        <Label htmlFor={`warmup-exercise-${index}-reps`}>
+                        <Label
+                          className="text-gray-300"
+                          htmlFor={`warmup-exercise-${index}-reps`}
+                        >
                           Reps
                         </Label>
                         <Input
                           id={`warmup-exercise-${index}-reps`}
                           type="number"
                           value={exercise.reps}
+                          className="w-full px-3 py-2 text-white bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
                           onChange={(e) => {
                             const updatedExercises = [...warmupExercises];
                             updatedExercises[index].reps = parseInt(
@@ -215,33 +242,53 @@ export function TaskAddComp(id) {
                           }}
                         />
                       </div>
-                      <Button
-                        variant="profile"
-                        onClick={() => removeWarmupExercise(index)}
-                      >
-                        <TrashIcon className="w-4 h-4" />
-                      </Button>
+
+                      {/* Delete Button */}
+                      <div className="flex items-end justify-end">
+                        <Button
+                          variant="destructive"
+                          onClick={() => removeWarmupExercise(index)}
+                          className="p-2 transition-transform bg-red-600 rounded-lg hover:scale-105 hover:bg-red-700"
+                        >
+                          <TrashIcon className="w-5 h-5 text-white" />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
               </Card>
-              <Card className="border-opacity-20 p-4">
+
+              <Card className="p-8 text-white border border-gray-700 shadow-xl bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-xl">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium">
+                  <h3 className="text-lg font-semibold text-gray-100">
                     Main Workout Exercises
                   </h3>
-                  <Button onClick={addMainExercise}>Add Exercise</Button>
+                  <Button
+                    onClick={addMainExercise}
+                    className="px-4 py-2 text-white transition-transform rounded-lg shadow-md bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105 hover:shadow-xl"
+                  >
+                    + Add Exercise
+                  </Button>
                 </div>
-                <div className="grid gap-4 pt-4">
+
+                <div className="grid gap-6 pt-4">
                   {mainExercises.map((exercise, index) => (
-                    <div key={index} className="grid grid-cols-3 gap-4">
+                    <div
+                      key={index}
+                      className="grid grid-cols-4 gap-4 p-4 border border-gray-700 rounded-lg shadow-md bg-gray-900/50"
+                    >
+                      {/* Exercise Name */}
                       <div className="space-y-2">
-                        <Label htmlFor={`main-exercise-${index}-name`}>
+                        <Label
+                          className="text-gray-300"
+                          htmlFor={`main-exercise-${index}-name`}
+                        >
                           Exercise Name
                         </Label>
                         <Input
                           id={`main-exercise-${index}-name`}
                           value={exercise.name}
+                          className="w-full px-3 py-2 text-white bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
                           onChange={(e) => {
                             const updatedExercises = [...mainExercises];
                             updatedExercises[index].name = e.target.value;
@@ -249,14 +296,20 @@ export function TaskAddComp(id) {
                           }}
                         />
                       </div>
+
+                      {/* Sets */}
                       <div className="space-y-2">
-                        <Label htmlFor={`main-exercise-${index}-sets`}>
+                        <Label
+                          className="text-gray-300"
+                          htmlFor={`main-exercise-${index}-sets`}
+                        >
                           Sets
                         </Label>
                         <Input
                           id={`main-exercise-${index}-sets`}
                           type="number"
                           value={exercise.sets}
+                          className="w-full px-3 py-2 text-white bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
                           onChange={(e) => {
                             const updatedExercises = [...mainExercises];
                             updatedExercises[index].sets = parseInt(
@@ -266,14 +319,20 @@ export function TaskAddComp(id) {
                           }}
                         />
                       </div>
+
+                      {/* Reps */}
                       <div className="space-y-2">
-                        <Label htmlFor={`main-exercise-${index}-reps`}>
+                        <Label
+                          className="text-gray-300"
+                          htmlFor={`main-exercise-${index}-reps`}
+                        >
                           Reps
                         </Label>
                         <Input
                           id={`main-exercise-${index}-reps`}
                           type="number"
                           value={exercise.reps}
+                          className="w-full px-3 py-2 text-white bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
                           onChange={(e) => {
                             const updatedExercises = [...mainExercises];
                             updatedExercises[index].reps = parseInt(
@@ -283,31 +342,53 @@ export function TaskAddComp(id) {
                           }}
                         />
                       </div>
-                      <Button
-                        variant="profile"
-                        onClick={() => removeMainExercise(index)}
-                      >
-                        <TrashIcon className="w-4 h-4" />
-                      </Button>
+
+                      {/* Delete Button */}
+                      <div className="flex items-end justify-end">
+                        <Button
+                          variant="destructive"
+                          onClick={() => removeMainExercise(index)}
+                          className="p-2 transition-transform bg-red-600 rounded-lg hover:scale-105 hover:bg-red-700"
+                        >
+                          <TrashIcon className="w-5 h-5 text-white" />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
               </Card>
-              <Card className="border-opacity-20 p-4">
+
+              <Card className="p-8 text-white border border-gray-700 shadow-xl bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-xl">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium">Cooldown Exercises</h3>
-                  <Button onClick={addCooldownExercise}>Add Exercise</Button>
+                  <h3 className="text-lg font-semibold text-gray-100">
+                    Cooldown Exercises
+                  </h3>
+                  <Button
+                    onClick={addCooldownExercise}
+                    className="px-4 py-2 text-white transition-transform rounded-lg shadow-md bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105 hover:shadow-xl"
+                  >
+                    + Add Exercise
+                  </Button>
                 </div>
-                <div className="grid gap-4 pt-4">
+
+                <div className="grid gap-6 pt-4">
                   {cooldownExercises.map((exercise, index) => (
-                    <div key={index} className="grid grid-cols-3 gap-4">
+                    <div
+                      key={index}
+                      className="grid grid-cols-4 gap-4 p-4 border border-gray-700 rounded-lg shadow-md bg-gray-900/50"
+                    >
+                      {/* Exercise Name */}
                       <div className="space-y-2">
-                        <Label htmlFor={`cooldown-exercise-${index}-name`}>
+                        <Label
+                          className="text-gray-300"
+                          htmlFor={`cooldown-exercise-${index}-name`}
+                        >
                           Exercise Name
                         </Label>
                         <Input
                           id={`cooldown-exercise-${index}-name`}
                           value={exercise.name}
+                          className="w-full px-3 py-2 text-white bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
                           onChange={(e) => {
                             const updatedExercises = [...cooldownExercises];
                             updatedExercises[index].name = e.target.value;
@@ -315,14 +396,20 @@ export function TaskAddComp(id) {
                           }}
                         />
                       </div>
+
+                      {/* Sets */}
                       <div className="space-y-2">
-                        <Label htmlFor={`cooldown-exercise-${index}-sets`}>
+                        <Label
+                          className="text-gray-300"
+                          htmlFor={`cooldown-exercise-${index}-sets`}
+                        >
                           Sets
                         </Label>
                         <Input
                           id={`cooldown-exercise-${index}-sets`}
                           type="number"
                           value={exercise.sets}
+                          className="w-full px-3 py-2 text-white bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
                           onChange={(e) => {
                             const updatedExercises = [...cooldownExercises];
                             updatedExercises[index].sets = parseInt(
@@ -332,14 +419,20 @@ export function TaskAddComp(id) {
                           }}
                         />
                       </div>
+
+                      {/* Reps */}
                       <div className="space-y-2">
-                        <Label htmlFor={`cooldown-exercise-${index}-reps`}>
+                        <Label
+                          className="text-gray-300"
+                          htmlFor={`cooldown-exercise-${index}-reps`}
+                        >
                           Reps
                         </Label>
                         <Input
                           id={`cooldown-exercise-${index}-reps`}
                           type="number"
                           value={exercise.reps}
+                          className="w-full px-3 py-2 text-white bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
                           onChange={(e) => {
                             const updatedExercises = [...cooldownExercises];
                             updatedExercises[index].reps = parseInt(
@@ -349,30 +442,39 @@ export function TaskAddComp(id) {
                           }}
                         />
                       </div>
-                      <Button
-                        variant="profile"
-                        onClick={() => removeCooldownExercise(index)}
-                      >
-                        <TrashIcon className="w-4 h-4" />
-                      </Button>
+
+                      {/* Delete Button */}
+                      <div className="flex items-end justify-end">
+                        <Button
+                          variant="destructive"
+                          onClick={() => removeCooldownExercise(index)}
+                          className="p-2 transition-transform bg-red-600 rounded-lg hover:scale-105 hover:bg-red-700"
+                        >
+                          <TrashIcon className="w-5 h-5 text-white" />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
               </Card>
             </div>
 
-            <Card className="border-opacity-20 p-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="pre-workout">Pre-Workout Advice</Label>
+            <Card className="p-6 text-white bg-gray-900 border border-gray-700 rounded-lg shadow-lg">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <Label htmlFor="pre-workout" className="text-gray-300">
+                    Pre-Workout Advice
+                  </Label>
                   <Textarea
                     id="pre-workout"
                     value={preWorkoutAdvice}
                     onChange={(e) => setPreWorkoutAdvice(e.target.value)}
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="post-workout">Post-Workout Advice</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="post-workout" className="text-gray-300">
+                    Post-Workout Advice
+                  </Label>
                   <Textarea
                     id="post-workout"
                     value={postWorkoutAdvice}
@@ -380,46 +482,44 @@ export function TaskAddComp(id) {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="hydration">Daily Hydration</Label>
+
+              <div className="grid grid-cols-2 gap-6 mt-6">
+                <div className="space-y-3">
+                  <Label htmlFor="hydration" className="text-gray-300">
+                    Daily Hydration
+                  </Label>
                   <Textarea
                     id="hydration"
                     value={dailyHydration}
                     onChange={(e) => setDailyHydration(e.target.value)}
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="diet">Balanced Diet Advice</Label>
-                  <Textarea
-                    id="diet"
-                    value={balancedDietAdvice}
-                    onChange={(e) => setBalancedDietAdvice(e.target.value)}
-                  />
-                </div>
+                <div className="space-y-3">
+  <Label htmlFor="diet" className="text-gray-300 ">
+    Balanced Diet Advice
+  </Label>
+  <Textarea
+    id="diet"
+    value={balancedDietAdvice}
+    onChange={(e) => setBalancedDietAdvice(e.target.value)}
+  />
+</div>
+
               </div>
             </Card>
 
-            {/* <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
-              <Select id="status" value={status} onValueChange={setStatus}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div> */}
+        
           </CardContent>
           <CardFooter>
-            <Button type="submit" onClick={handleSubmit} className="ml-auto">
+            <Button type="submit" onClick={handleSubmit}  className="w-full py-3 font-semibold transition duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 hover:scale-105"
+            >
               Save Workout Plan
             </Button>
           </CardFooter>
           <ToastContainer />
         </Card>
+      </div>
+      </div>
       </div>
     </TrainerSidePanel>
   );

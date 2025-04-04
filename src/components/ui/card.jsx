@@ -1,63 +1,66 @@
-import * as React from "react"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-import { cn } from "@/lib/utils"
-
-// const Card = React.forwardRef(({ className, ...props }, ref) => (
-//   <div
-//     ref={ref}
-//     className={cn("rounded-xl border bg-card text-card-foreground shadow", className)}
-//     {...props} />
-// ))
-// Card.displayName = "Card"
-
+// Card Component with updated border, shadow, and hover effect
 const Card = React.forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("rounded-xl border border-blue-600 bg-blue-400 text-card-foreground shadow", className)} // Added border color here
-    {...props} />
-))
-Card.displayName = "Card"
+    className={cn(
+      className="p-8 text-white border border-gray-700 shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-xl", // Slow down transition for better visibility
+      className
+    )}
+    {...props}
+  />
+));
+Card.displayName = "Card";
 
-
-
-
-
-
+// CardHeader with more consistent padding
 const CardHeader = React.forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
     className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props} />
-))
-CardHeader.displayName = "CardHeader"
+    {...props}
+  />
+));
+CardHeader.displayName = "CardHeader";
 
+// CardTitle with more emphasis on text
 const CardTitle = React.forwardRef(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn("font-semibold leading-none tracking-tight", className)}
-    {...props} />
-))
-CardTitle.displayName = "CardTitle"
+    className={cn("text-2xl font-semibold tracking-wide text-gray-100", className)} // Increased text size for emphasis
+    {...props}
+  />
+));
+CardTitle.displayName = "CardTitle";
 
+// CardDescription with adjusted color for better readability
 const CardDescription = React.forwardRef(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
-    {...props} />
-))
-CardDescription.displayName = "CardDescription"
+  <p ref={ref} className={cn("text-gray-400", className)} {...props} /> // Added margin-top for spacing
+));
+CardDescription.displayName = "CardDescription";
 
+// CardContent with padding adjustments
 const CardContent = React.forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-))
-CardContent.displayName = "CardContent"
+  <div ref={ref} className={cn("space-y-8", className)} {...props} />
+));
+CardContent.displayName = "CardContent";
 
+// CardFooter with flexbox adjustments
 const CardFooter = React.forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
-    {...props} />
-))
-CardFooter.displayName = "CardFooter"
+    className={cn("flex justify-end gap-4 p-6", className)} // Added justify-between for balanced footer layout
+    {...props}
+  />
+));
+CardFooter.displayName = "CardFooter";
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent,
+};

@@ -65,7 +65,7 @@ export const updateUser = createAsyncThunk(
 
 export const purchasePlan = createAsyncThunk(
   "member/purchasePlan",
-  async (paymentInfo, { getState }) => {
+  async (paymentInfo, { getState, rejectWithValue }) => {
     try {
       const state = getState();
       const token = state.user.token;
@@ -81,7 +81,35 @@ export const purchasePlan = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log("error from purchase plan  :", error);
+      return rejectWithValue(error.response?.data || {
+        message: 'An unexpected error occurred'
+      });
     }
+  }
+);
+
+export const getMemberReaminingPaymentStatus=createAsyncThunk(
+  
+  "member/payment-status",
+  async(_, {getState,rejectWithValue})=>{
+   try {
+    const state = getState();
+    const token = state.user.token;
+    const id = state.user.user._id;
+
+    const response = await api.get(`/payment/payment-status`,{
+      headers:{
+        Authorization:`Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+   } catch (error) {
+    console.log("Error fetching payment status:",error.response?.data || error);
+    return rejectWithValue(error.response?.data || {
+      message: 'Failed to fetch payment status'
+    });
+   }
   }
 );
 
@@ -165,6 +193,33 @@ export const getUserDetails = createAsyncThunk(
   }
 );
 
+
+export const markAttendance = createAsyncThunk(
+  'user/markAttendance',
+  async (date, { getState, rejectWithValue }) => {
+    const state = getState();  // Get the current Redux state
+    const token = state.user.token;  // Retrieve token from the Redux state
+
+    try {
+      const response = await api.post(
+        '/user/mark-attendance',
+        { date },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data; // Return the response data to be handled in the reducers
+    } catch (error) {
+      return rejectWithValue(error.response.data); // Reject with error response
+    }
+  }
+);
+
+
+
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -176,9 +231,11 @@ const userSlice = createSlice({
     tasks: [],
     trainers: [],
     payments: [],
+    paymentStatus:[],
     feedbacks: [],
     status: "idle",
     error: null,
+    tempUser:null,
   },
   reducers: {
     logout: (state) => {
@@ -193,7 +250,7 @@ const userSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.status = "Loading";
       })
-      .addCase(signupUser.fulfilled, (state, action) => {
+      .addCase(signupUser.fulfilled, (state) => {
         state.status = "succeeded";
       })
       .addCase(loginUser.fulfilled, (state, action) => {
@@ -246,6 +303,10 @@ const userSlice = createSlice({
         state.status = "succeeded";
         state.payments = action.payload;
       })
+      .addCase(purchasePlan.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload; // Contains { success: false, message: "..." }
+      })
       .addCase(uploadUserPhoto.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.user = { ...state.user, photoUrl: action.payload }; // Store the photo URL in the state
@@ -253,6 +314,35 @@ const userSlice = createSlice({
       .addCase(getUserDetails.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.user = action.payload;
+        state.tempUser=action.payload;
+      })
+
+
+      // Handle the markAttendance action states
+      .addCase(markAttendance.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(markAttendance.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.user = action.payload;
+        // Optionally update the user data with the attendance information if needed
+        alert(action.payload.message); // Show a success message from the response
+      })
+      .addCase(markAttendance.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload.error || 'Failed to mark attendance';
+        alert(state.error); // Show an error message if the attendance marking failed
+      })
+      // .addCase(getMemberReaminingPaymentStatus.pending, (state) => {
+      //   state.status = 'loading';
+      // })
+      .addCase(getMemberReaminingPaymentStatus.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.payments = action.payload; // Store the full payment status object
+      })
+      .addCase(getMemberReaminingPaymentStatus.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload?.message || 'Failed to fetch payment status';
       });
   },
 });

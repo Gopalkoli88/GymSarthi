@@ -1,3 +1,6 @@
+ 
+
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Bar } from "react-chartjs-2";
@@ -10,7 +13,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels"; // Import the DataLabels plugin
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import AdminSidePanel from "./AdminSidePanel";
 import {
   fetchMembershipGrowthByMonth,
@@ -110,44 +113,58 @@ const MembershipGrowthChart = () => {
             : monthlyRevenueData,
         backgroundColor:
           chartType === "signups"
-            ? "rgba(34, 92, 229, 0.7)"
+            ? "rgba(99, 102, 241, 0.7)" // Indigo
             : chartType === "purchases"
-            ? "rgba(75, 192, 192, 0.7)"
-            : "rgb(132 204 22)",
+            ? "rgba(16, 185, 129, 0.7)" // Emerald
+            : "rgba(245, 158, 11, 0.7)", // Amber
         borderColor:
           chartType === "signups"
-            ? "rgb(34, 92, 229)"
+            ? "rgb(99, 102, 241)"
             : chartType === "purchases"
-            ? "rgb(75, 192, 192)"
-            : "rgb(132 204 22)",
-        borderWidth: 1,
+            ? "rgb(16, 185, 129)"
+            : "rgb(245, 158, 11)",
+        borderWidth: 2,
+        borderRadius: 4, // Rounded bars
       },
     ],
   };
 
   const chartOptions = {
     maintainAspectRatio: false,
+    responsive: true,
     scales: {
       x: {
-        beginAtZero: true,
+        grid: {
+          display: false,
+        },
         title: {
           display: true,
           text: "Months",
           font: {
-            size: 16,
+            size: 14,
             weight: "bold",
           },
+          color: "#9CA3AF", // Gray-400
+        },
+        ticks: {
+          color: "#9CA3AF", // Gray-400
         },
       },
       y: {
-        beginAtZero: true,
+        grid: {
+          color: "#374151", // Gray-700
+        },
         title: {
           display: true,
           text: chartType === "revenue" ? "Revenue (₹)" : "Number of Users",
           font: {
-            size: 16,
+            size: 14,
             weight: "bold",
           },
+          color: "#9CA3AF", // Gray-400
+        },
+        ticks: {
+          color: "#9CA3AF", // Gray-400
         },
       },
     },
@@ -155,26 +172,36 @@ const MembershipGrowthChart = () => {
       legend: {
         display: true,
         position: "top",
-      },
-      tooltip: {
-        callbacks: {
-          label: (context) => `${context.dataset.label}: ${context.raw}`, // Add ₹ symbol in tooltip
+        labels: {
+          color: "#F3F4F6", // Gray-100
+          font: {
+            size: 14,
+          },
         },
       },
+      tooltip: {
+        backgroundColor: "#1F2937", // Gray-800
+        titleColor: "#F3F4F6", // Gray-100
+        bodyColor: "#D1D5DB", // Gray-300
+        borderColor: "#374151", // Gray-700
+        borderWidth: 1,
+        padding: 10,
+      },
       datalabels: {
-        display: true, // Always display the labels
+        display: true,
         align: "end",
         anchor: "end",
         formatter: (value) => {
           if (chartType === "revenue") {
-            return `₹${value}`; // Add ₹ symbol in labels for revenue only
+            return `₹${value}`;
           } else if (chartType === "purchases") {
             return `${value} Plans`;
           } else if (chartType === "signups") {
             return `${value} Users`;
           }
           return value;
-        }, // Add ₹ symbol in labels
+        },
+        color: "#F3F4F6", // Gray-100
         font: {
           size: 12,
           weight: "bold",
@@ -185,74 +212,93 @@ const MembershipGrowthChart = () => {
 
   return (
     <AdminSidePanel>
-      <div className="w-4/5 mx-auto">
-        <h1 className="text-2xl font-semibold mb-4">
-          Membership Growth & Plan Purchases
-        </h1>
-        <div className="mb-5 flex flex-wrap items-center justify-between">
-          <div className="gap-3 flex ">
+    <div className="mt-[-50px]" >
+    <h1 className="mb-6 text-3xl font-bold text-center text-black mt">
+        Membership Growth & Plan Purchases
+      </h1>
+      <div className="w-4/5 p-8 mx-auto transition-all duration-300 transform shadow-2xl bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-xl hover:shadow-3xl">
+
+
+        {/* Chart Type Buttons */}
+        <div className="flex flex-wrap items-center justify-between mb-6">
+          <div className="flex gap-3">
             <Button
-              // className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+              className={`px-5 py-2.5 text-sm font-semibold transition-all duration-300 rounded-lg ${
+                chartType === "signups"
+                  ? "bg-indigo-600 hover:bg-indigo-700 shadow-lg"
+                  : "bg-gray-700 hover:bg-gray-600 shadow-md"
+              }`}
               onClick={() => handleChartTypeChange("signups")}
             >
-              User Sign-Up Growth
+              User Sign-Ups
             </Button>
             <Button
-              // className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+              className={`px-5 py-2.5 text-sm font-semibold transition-all duration-300 rounded-lg ${
+                chartType === "purchases"
+                  ? "bg-emerald-600 hover:bg-emerald-700 shadow-lg"
+                  : "bg-gray-700 hover:bg-gray-600 shadow-md"
+              }`}
               onClick={() => handleChartTypeChange("purchases")}
             >
-              Plan Purchase Growth
+              Plan Purchases
             </Button>
             <Button
-              // className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+              className={`px-5 py-2.5 text-sm font-semibold transition-all duration-300 rounded-lg ${
+                chartType === "revenue"
+                  ? "bg-amber-600 hover:bg-amber-700 shadow-lg"
+                  : "bg-gray-700 hover:bg-gray-600 shadow-md"
+              }`}
               onClick={() => handleChartTypeChange("revenue")}
             >
               Monthly Revenue
             </Button>
           </div>
 
-          <div className="relative flex gap-2 items-center justify-center outline-none border-none">
-            {/* <p className="text-gray-500 text-sm mt-1">Year: {selectedYear}</p> */}
-            <div className="relative outline-none border-none">
-              <DatePicker
-                selected={new Date(selectedYear, 0, 1)} // Set the date to January of the selected year
-                onChange={handleDateChange}
-                showYearPicker
-                value={`Year ${selectedYear}`}
-                dateFormat="yyyy"
-                className="bg-blue-500 outline-none border border-gray-300 rounded-md p-2 text-gray-700 shadow-sm focus:outline-none border-none  focus:ring-2 focus:ring-blue-500 cursor-pointer w-28 justify-center"
-                calendarClassName="custom-calendar"
-              />
-            </div>
+          {/* Year Picker */}
+          <div className="relative">
+            <DatePicker
+              selected={new Date(selectedYear, 0, 1)}
+              onChange={handleDateChange}
+              showYearPicker
+              dateFormat="yyyy"
+              className="p-2 text-gray-200 bg-gray-700 border border-gray-600 rounded-lg shadow-sm cursor-pointer w-28 "
+            />
           </div>
         </div>
 
-       
-        <div className="h-96 w-full">
-          {status === "loading" && <p className="text-center">Loading...</p>}
+        {/* Chart */}
+        <div className="w-full h-[400px]">
+          {status === "loading" && (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-gray-400">Loading...</p>
+            </div>
+          )}
           {status === "failed" && (
-            <p className="text-center text-red-500">Error fetching data.</p>
+            <div className="flex items-center justify-center h-full">
+              <p className="text-red-500">Error fetching data.</p>
+            </div>
           )}
           {status === "succeeded" && (
             <Bar data={chartData} options={chartOptions} />
           )}
         </div>
-      </div>
-      <div>
-      <div className="mb-5 flex gap-4 items-center justify-center mt-5">
+
+        {/* Year Navigation */}
+        <div className="flex items-center justify-center gap-4 mt-6">
           <Button
-            className="bg-blue-600 text-white px-4 py-2 rounded-md w-30 hover:bg-blue-700"
-            onClick={() => handleYearChange(selectedYear - 1)} // Previous year
+                    className="text-white transition-transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105"
+                    onClick={() => handleYearChange(selectedYear - 1)}
           >
             Previous Year
           </Button>
           <Button
-            className="bg-blue-600 text-white px-4 py-2 rounded-md w-30 hover:bg-blue-700"
-            onClick={() => handleYearChange(selectedYear + 1)} // Next year
+                    className="text-white transition-transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105"
+                    onClick={() => handleYearChange(selectedYear + 1)}
           >
             Next Year
           </Button>
         </div>
+      </div>
       </div>
     </AdminSidePanel>
   );

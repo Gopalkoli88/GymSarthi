@@ -24,72 +24,64 @@ const MemberTrainerProfile = () => {
   }
 
   const backendUrl = "http://localhost:5000";
-  return (
-    <div>
+  
+    return (
       <MemberSidePanel>
-        <div className="grid gap-8">
-          {/* <div
-            className="h-auto bg-blue-400 border border-blue-600 rounded-lg shadow-sm text-card-foreground"
-            data-v0-t="card"
-          > */}
-          {/* <div
-            className="w-full max-w-md mx-auto h-auto bg-blue-400 border border-blue-600 rounded-lg shadow-sm text-card-foreground transform transition-transform duration-300 ease-in-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-md"
-            data-v0-t="card"
-          > */}
-
-          <div
-            className="h-auto bg-blue-400 border border-blue-600 rounded-lg shadow-sm text-card-foreground transform transition-transform duration-300 ease-in-out  hover:shadow-md"
-            data-v0-t="card"
-          >
-            <div className="flex flex-col space-y-1.5 p-6 bg-blue-400 rounded-t-lg">
-              <h3 className="text-3xl font-bold tracking-tight text-white whitespace-nowrap">
-                Trainer Profile
-              </h3>
-              <p className="text-[#b3b3b3] text-xl">
-                Get in touch with your personal trainer.
-              </p>
-            </div>
-
+<div className="flex items-start justify-start min-h-screen p-6 bg-white mt-[-70px]">
+<div className="w-full max-w-4xl ml-12 space-y-6">
+     
+            <header className="w-full">
+      <h1 className="text-3xl font-semibold text-black dark:text-white">
+      Trainer Profile
+      </h1>
+      <p className="mt-1 text-black dark:text-gray-400">
+      Get in touch with your personal trainer.
+      </p>
+    </header>
+  
             {trainers && trainers.length > 0 ? (
-              trainers.map((trainer) => (
-                <>
-                  <div className="grid gap-4 p-6  bg-blue-400 border m-4 border-blue-600 rounded-lg shadow-sm text-card-foreground transform transition-transform duration-300 ease-in-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-md p-4 ">
-                    <div className="flex items-center gap-4">
+              <div className="space-y-4">
+                {trainers.map((trainer) => (
+                  <div
+                    key={trainer.id}
+                    className="p-4 transition-all bg-gray-900 border border-gray-700 rounded-lg shadow-md sm:p-6 hover:shadow-xl hover:-translate-y-1"
+                  >
+                    <div className="flex flex-col items-center gap-4 sm:flex-row">
                       <img
-                        src={`${trainer.photoUrl}`}
-                        width={64}
-                        height={64}
+                        src={trainer.photoUrl}
                         alt="Trainer Avatar"
-                        className="rounded-full"
-                        style={{ aspectRatio: "64 / 64", objectFit: "cover" }}
+                        className="object-cover w-16 h-16 border border-gray-700 rounded-full"
                       />
-                      <div>
-                        <div className="text-lg font-bold text-white">
-                          {trainer && trainer.name.toUpperCase()}
+                      <div className="text-center sm:text-left">
+                        <div className="text-lg font-bold text-gray-100">
+                          {trainer.name.toUpperCase()}
                         </div>
-                        <div className="text-sm text-[#b3b3b3]">
+                        <div className="text-sm text-gray-400">
                           Certified Personal Trainer
                         </div>
-                        <div className="text-sm text-[#b3b3b3]">
-                          Expertise: {trainer && trainer.expertise}
+                        <div className="text-sm text-gray-400">
+                          Expertise: {trainer.expertise}
                         </div>
-                        <div className="text-sm text-[#b3b3b3]">
-                          Experience: {trainer && trainer.experience}
+                        <div className="text-sm text-gray-400">
+                          Experience: {trainer.experience} years
                         </div>
-                        <div className="text-sm text-[#b3b3b3]" />
                       </div>
                     </div>
                   </div>
-                </>
-              ))
+                ))}
+              </div>
             ) : (
-              <Button className="m-2">No Trainer</Button>
- )}
+              <div className="flex justify-center mt-4">
+                <Button className="px-4 py-2 text-sm font-medium text-white rounded-lg shadow-lg bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:scale-105 hover:shadow-xl">
+                  No Trainer Available
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </MemberSidePanel>
-    </div>
-  );
-};
-
-export default MemberTrainerProfile;
+    );
+  };
+  
+  export default MemberTrainerProfile;
+  

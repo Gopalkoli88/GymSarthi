@@ -18,84 +18,65 @@ const TrainerPlans = () => {
       dispatch(getallPlansofTrainer());
     }
   }, [dispatch, user]);
+ 
+
   return (
     <TrainerSidePanel>
-      {" "}
-      <div
-            className="h-auto bg-blue-400 border border-blue-600 rounded-lg shadow-sm text-card-foreground border-opacity-50 "
-            x-chunk="dashboard-05-chunk-1"
-        data-v0-t="card"
-      >
-        <div className="flex flex-col space-y-1.5 p-6 pb-3">
-          <h3 className="text-2xl font-semibold leading-none tracking-tight text-black whitespace-nowrap">
+          {/* <h3 className="mb-3 text-2xl font-bold tracking-tight text-gray-100">
             My Plans
           </h3>
-          <p className="text-sm max-w-lg text-balance leading-relaxed text-[#999]">
+          <p className="mb-6 text-sm text-gray-400">
             View and manage the plans you are responsible for.
-          </p>
-        </div>
-        <div className="p-6">
-          <div className="grid gap-4">
+          </p> */}
+        <div className="flex items-start justify-start min-h-screen p-6 bg-white mt-[-70px]">
+        <div className="w-full max-w-4xl ml-12 space-y-6">
+          <header className="w-full">
+            <h1 className="text-3xl font-semibold text-black dark:text-white">
+            My Plans
+            </h1>
+            <p className="mt-1 text-black dark:text-gray-400">
+            View and manage the plans you are responsible for.
+            </p>
+          </header>
+
+
+          <div className="space-y-4">
             {plans.map((plan) => (
-              <>
-                <Card className="grid grid-cols-[1fr_auto] items-center gap-4 p-5 border-opacity-20">
+              <div
+                key={plan._id}
+                className="p-6 transition-all bg-gray-900 border border-gray-700 rounded-lg shadow-md "
+              >
+                <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium text-black">{plan.name}</div>
-                    <div className="text-sm text-[#999]">
+                    <div className="text-lg font-semibold text-gray-100">
+                      {plan.name}
+                    </div>
+                    <div className="text-sm text-gray-400">
                       {plan.users.length} members, {plan.duration}
                     </div>
                   </div>
-                  <div className="flex space-x-4">
+                  <div className="flex gap-3">
                     <Button
-                      className="w-1/2 p-2"
-                      onClick={() => {
-                        navigate(`/task-form/${plan._id}`);
-                      }}
+                      className="px-4 py-2 text-sm font-medium text-white transition-transform rounded-lg shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105 hover:shadow-xl"
+                      onClick={() => navigate(`/task-form/${plan._id}`)}
                     >
                       Add Task
                     </Button>
                     <Button
-                      className="w-1/2 p-2"
-                      onClick={() => {
-                        navigate(`/plan-details/${plan._id}`);
-                      }}
+                      className="px-4 py-2 text-sm font-medium text-white transition-transform rounded-lg shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105 hover:shadow-xl"
+                      onClick={() => navigate(`/plan-details/${plan._id}`)}
                     >
                       View Details
                     </Button>
                   </div>
-                </Card>
-              </>
+                </div>
+              </div>
             ))}
-
-            {/* <div className="grid grid-cols-[1fr_auto] items-center gap-4">
-        <div>
-          <div className="font-medium text-black">
-            Yoga for Beginners
           </div>
-          <div className="text-sm text-[#999]">
-            15 members, 8 weeks
           </div>
-        </div>
-        <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-9 rounded-md px-3 bg-[#333] text-white">
-          View Details
-        </button>
-      </div>
-      <div className="grid grid-cols-[1fr_auto] items-center gap-4">
-        <div>
-          <div className="font-medium text-black">
-            Nutrition Coaching
           </div>
-          <div className="text-sm text-[#999]">
-            20 members, 6 months
-          </div>
-        </div>
-        <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-9 rounded-md px-3 bg-[#333] text-white">
-          View Details
-        </button>
-      </div> */}
-          </div>
-        </div>
-      </div>
+        
+     
     </TrainerSidePanel>
   );
 };

@@ -31,6 +31,20 @@ export default {
       "red-600": "#dc2626",
       "red-700": "#b91c1c",
       "red-500": "#dc2626",
+      "gray-900": "#111827",
+      "gray-800": "#1F2937",
+      "gray-700": "#374151",
+      "gray-600": "#4B5563",
+      "gray-300": "#D1D5DB",
+      "gray-100": "#F3F4F6",
+      "black": "#000000",
+      "white": "#FFFFFF",
+      "green-500": "#22c55e",
+      "blue-900": "#1E3A8A",
+      "purple-600": "#7C3AED",
+      "purple-700": "#6B2D92",
+
+      // Corrected missing value
     },
     extend: {
       fontFamily: {
@@ -44,8 +58,16 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
+        // background: "hsl(var(--background))",
+        // background: "#F7F3FA",
+        // background: "#E2D4EC ",
+        // background: "#F3F4F6  ",
+        background: "#FFFFFF",
+
+               
+        
         foreground: "hsl(var(--foreground))",
+
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

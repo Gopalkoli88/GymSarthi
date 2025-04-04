@@ -25,7 +25,6 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 export function TrainerListComp() {
   const dispatch = useDispatch();
   const { trainers } = useSelector((state) => state.admin);
@@ -39,67 +38,74 @@ export function TrainerListComp() {
   const handleDeleteTrainer = async (trainerId) => {
     setTrainerList(trainerList.filter((p) => p._id !== trainerId));
     const success = await dispatch(deleteTrainer(trainerId));
-  try {
-    if (success) {
-      dispatch(getAllTrainers());
-      toast.success("Trainer Deleted Successfully");
-    } 
-  } catch (error) {
-    toast.error(error.message || "An error occurred");
-  }
+    try {
+      if (success) {
+        dispatch(getAllTrainers());
+        toast.success("Trainer Deleted Successfully");
+      }
+    } catch (error) {
+      toast.error(error.message || "An error occurred");
+    }
   };
   return (
-    <main className="flex flex-1 flex-col gap-10  md:gap-8 md:p-6">
+    <div className="flex flex-col w-full gap-6 p-16 sm:gap-8 sm:p-10 mt-[-90px]" >
+
+    <main className="flex flex-col flex-1 gap-10 md:gap-8 md:p-5">
+      <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+        Trainers
+      </h1>
+
       <div className="grid gap-10">
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>Trainers</CardTitle>
           </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Expertise</TableHead>
+          <CardContent> */}
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Expertise</TableHead>
 
-                  <TableHead>Experience</TableHead>
+              <TableHead>Experience</TableHead>
 
-                  <TableHead>Salary</TableHead>
-                  <TableHead>Status</TableHead>
+              <TableHead>Salary</TableHead>
+              <TableHead>Status</TableHead>
 
-                  <TableHead>Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {trainers.map((trainer) => (
-                  
-                  <TableRow key={trainer._id}>
-                    <TableCell>{trainer.name}</TableCell>
-                    <TableCell>{trainer.email}</TableCell>
-                    <TableCell>{trainer.expertise}</TableCell>
-                    <TableCell>{trainer.experience}</TableCell>
-                    <TableCell>${trainer.salary || 0}</TableCell>
-                    <TableCell>${trainer.status}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="profile"
-                        size="icon"
-                        onClick={() => handleDeleteTrainer(trainer._id)}
-                      >
-                        <TrashIcon className="h-4 w-4" />
-                        <span className="sr-only">Delete</span>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+              <TableHead>Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {trainers.map((trainer) => (
+              <TableRow key={trainer._id}>
+                <TableCell>{trainer.name}</TableCell>
+                <TableCell>{trainer.email}</TableCell>
+                <TableCell>{trainer.expertise}</TableCell>
+                <TableCell>{trainer.experience}</TableCell>
+                <TableCell>₹{trainer.salary || 0}</TableCell>
+                <TableCell>{trainer.status}</TableCell>
+
+                <TableCell>
+                  <Button
+                    variant="profile"
+                    size="icon"
+                    onClick={() => handleDeleteTrainer(trainer._id)}
+                  >
+                    <TrashIcon className="w-4 h-4" />
+                    <span className="sr-only">Delete</span>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {/* </CardContent>
+        </Card> */}
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </main>
+    </div>
   );
 }
 

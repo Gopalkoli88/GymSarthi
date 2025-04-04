@@ -36,7 +36,13 @@ import AboutAs from "./pages/AboutPage";
 import ContactUsmain from "./pages/Contact";
 import HomePageComp from "./pages/HomePageNew";
 import MembershipGrowthChart from "./Component/MembershipGrowthChart";
-
+import MemberAttendance from "./Component/MemberAttendance";
+import ForgotPassword from "./Component/forgatePassword";
+import GetMemberRemainingPaymentStatusComponent from "./components/component/memberRemainingPaymentSection";
+import MemberClassBooking from "./Component/MemberClassBooking";
+import TrainerSchedule from "./Component/TrainerSchedule";
+import AdminClassManagement from "./Component/AdminClassManagement";
+import QrScanner from "./components/component/QRCodeGenerator";
 const App = () => {
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -49,6 +55,8 @@ const App = () => {
       <Route path="/signup" element={<SignUpTwo />} />
       <Route path="/about" element={<AboutAs />} />
       <Route path="/contact" element={<ContactUsmain />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      
       <Route element={<AuthLayout />}>
         <Route path="/admin-dashboard" element={<AdminDasboard />} />
         <Route path="/member-dashboard" element={<MemberDashboardNew />} />
@@ -78,13 +86,30 @@ const App = () => {
           path="/member-dashboard/payment-history"
           element={<MemberPaymentHistory />}
         />
+         <Route
+        path="/member-dashboard/payment-status"
+        element={<GetMemberRemainingPaymentStatusComponent/>}
+        />
+
+<Route
+        path="/member-dashboard/class-book"
+        element={<MemberClassBooking/>}
+        />
+        <Route
+          path="/member-dashboard/attendance-calendar"
+          element={<MemberAttendance />}
+        />
 
         <Route path="/trainer-dashboard/my-plans" element={<TrainerPlans />} />
-      
+        <Route path="/trainer-dashboard/class-schedule" element={< TrainerSchedule />} />
 
         <Route path="/homepage" element={<HomePageComp />} />
+        <Route path="/class-management" element={<AdminClassManagement/>} />
 
         <Route path="/membership-growth" element={<MembershipGrowthChart />} />
+        <Route path="//qrCode" element={<QrScanner />} />
+
+
       </Route>
     </Routes>
   );

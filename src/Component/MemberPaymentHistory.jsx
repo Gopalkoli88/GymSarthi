@@ -1,9 +1,5 @@
- 
-
-
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import profileImage from "../assets/michael-dam-mEZ3PoFGs_k-unsplash (1).jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
@@ -15,17 +11,12 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 
 import {
   fetchUserPaymentInfo,
-  fetchUserPlanInfo,
-  fetchUserTasksInfo,
-  fetchUserTrainerInfo,
+  
 } from "@/redux/userSlice";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
-import Header from "./Header";
 import MemberSidePanel from "./MemberSidePanel";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -193,67 +184,60 @@ const MemberPaymentHistory = () => {
   };
 
   return (
-    <div> 
+    <div>
+      <div className="flex min-h-screen">
       <MemberSidePanel>
-        <div className="container px-4 py-8 mx-auto md:px-6">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold">Payment History</h1>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Label htmlFor="date-range" className="whitespace-nowrap">
-                Date range:
-                </Label>
-                <div className="flex items-center gap-4 mr-8" >
-                  
+      <div className="container px-4 py-8 mx-auto md:px-6 mt-[-70px]">
+      {/* Header */}
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <h1 className="text-xl font-bold text-black md:text-2xl">Payment History</h1>
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <Label htmlFor="date-range" className="whitespace-nowrap">Date range:</Label>
+                <div className="flex items-center gap-4 mr-4">
                   <Popover>
-                <PopoverTrigger asChild>
-                  <Button className="justify-start w-full font-normal">
-                    <CalendarDaysIcon className="w-4 h-4 mr-2" />
-                 
-                    {startDate ? formatDateToDDMMYYYY(startDate) : "Start Date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={(date) => {
-                      setStartDate(date);
-                      if (endDate && date > endDate) {
-                        setEndDate(null); // Reset end date if start date is after it
-                      }
-                    }}
-                  />
-                </PopoverContent>
-              </Popover>
-              <span>-</span>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button className="justify-start w-full font-normal">
-                    <CalendarDaysIcon className="w-4 h-4 mr-2" />
-                    {/* {endDate ? endDate.toLocaleDateString() : "End Date"} */}
-                    {endDate ? formatDateToDDMMYYYY(endDate) : "End Date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={endDate}
-                    onSelect={(date) => setEndDate(date)}
-                  />
-                </PopoverContent>
-              </Popover>
+                    <PopoverTrigger asChild>
+                      <Button className="justify-start w-full text-sm font-normal md:text-base">
+                        <CalendarDaysIcon className="w-4 h-4 mr-2" />
+                        {startDate ? formatDateToDDMMYYYY(startDate) : "Start Date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={startDate}
+                        onSelect={(date) => {
+                          setStartDate(date);
+                          if (endDate && date > endDate) {
+                            setEndDate(null);
+                          }
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <span className="text-black">-</span>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button className="justify-start w-full text-sm font-normal md:text-base">
+                        <CalendarDaysIcon className="w-4 h-4 mr-2" />
+                        {endDate ? formatDateToDDMMYYYY(endDate) : "End Date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" selected={endDate} onSelect={(date) => setEndDate(date)} />
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
-
-              <Button className="w-1/2" onClick={handleFilterChange}>
-                Filter
-              </Button>
-              <Button className="w-1/2" onClick={handleReset}>
-                Reset
-              </Button>
+  
+              <div className="flex flex-wrap gap-2">
+                <Button className="w-full sm:w-auto" onClick={handleFilterChange}>Filter</Button>
+                <Button className="w-full sm:w-auto" onClick={handleReset}>Reset</Button>
+              </div>
             </div>
           </div>
+  
+          {/* Table */}
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -264,77 +248,60 @@ const MemberPaymentHistory = () => {
                   <TableHead>Payment Method</TableHead>
                   <TableHead>User</TableHead>
                   <TableHead>Plan</TableHead>
-
                   <TableHead>Status</TableHead>
-
-                  {/* <TableHead>Plan Name</TableHead> */}
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredTransactions.length >0 ?
-                 filteredTransactions.map((tx) => (
-                  <TableRow key={tx._id}>
-                    <TableCell>{generateCustomTransactionId(tx._id)}</TableCell>
-                    <TableCell>
-                      {formatDate(
-                        new Date(tx.paymentDate).toLocaleDateString()
-                      )}
+                {filteredTransactions.length > 0 ? (
+                  filteredTransactions.map((tx) => (
+                    <TableRow key={tx._id}>
+                      <TableCell>{generateCustomTransactionId(tx._id)}</TableCell>
+                      <TableCell>{formatDate(new Date(tx.paymentDate).toLocaleDateString())}</TableCell>
+                      <TableCell>${tx.amount.toFixed(2)}</TableCell>
+                      <TableCell>{tx.paymentMethod}</TableCell>
+                      <TableCell>{tx.userId.name}</TableCell>
+                      <TableCell>{tx.planId.name}</TableCell>
+                      <TableCell>
+                        <Badge
+                          className="px-4 py-2 text-xs md:text-sm"
+                          variant={
+                            tx.status.toLowerCase() === "completed"
+                              ? "secondary"
+                              : tx.status.toLowerCase() === "pending"
+                              ? "outline"
+                              : "danger"
+                          }
+                        >
+                          {tx.status.toUpperCase()}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan="7" className="p-4 text-center">
+                      <Button>No Payments</Button>
                     </TableCell>
-                    <TableCell>${tx.amount.toFixed(2)}</TableCell>
-                    <TableCell>{tx.paymentMethod}</TableCell>
-                    <TableCell>{tx.userId.name}</TableCell>
-                    <TableCell>{tx.planId.name}</TableCell>
-                    <TableCell>
-                      <Badge
-                        className="px-5 py-2"
-                        variant={
-                          tx.status.toLowerCase() === "completed"
-                            ? "secondary"
-                            : tx.status.toLowerCase() === "pending"
-                            ? "outline"
-                            : "danger"
-                        }
-                      >
-                        {tx.status.toUpperCase()}
-                      </Badge>
-                    </TableCell>
-
-                    {/* <TableCell>{tx.planName}</TableCell> */}
-                    {console.log(
-                      "member currentplan information :",
-                      filteredTransactions[0].status
-                    )}
-                    {/* <p>{tx.planName}</p> */}
                   </TableRow>
-                )) : (
-                
-
-                  <Button className="m-2">No Payments</Button>
                 )}
               </TableBody>
             </Table>
           </div>
+  
+          {/* Export Button */}
           <div className="flex justify-end gap-2 mt-6">
-            {/* <Button  onClick={() => handleExport("pdf")}>
-              Export to PDF
-            </Button> */}
             <Button>
-              <PDFDownloadLink
-                document={
-                  <PaymentHistoryPDF transactions={filteredTransactions} />
-                }
-                fileName="payment_history.pdf"
-              >
-                {({ loading }) =>
-                  loading ? "Preparing document..." : "Export to PDF"
-                }
+              <PDFDownloadLink document={<PaymentHistoryPDF transactions={filteredTransactions} />} fileName="payment_history.pdf">
+                {({ loading }) => (loading ? "Preparing document..." : "Export to PDF")}
               </PDFDownloadLink>
             </Button>
           </div>
         </div>
       </MemberSidePanel>
     </div>
+    </div>
   );
+  
 };
 
 export default MemberPaymentHistory;

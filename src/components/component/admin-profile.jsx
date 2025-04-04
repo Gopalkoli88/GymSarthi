@@ -10,14 +10,7 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+
 import {
   Card,
   CardHeader,
@@ -105,18 +98,7 @@ export const AdminProfile = () => {
     setPhoto(e.target.files[0]);
   };
 
-  // const handleUpload = async () => {
-  //   if (photo && user) {
-  //     try {
-  //       await dispatch(uploadUserPhoto({ userId: user._id, photo }));
-  //       // Fetch the updated user details to get the new photo URL
-  //       await dispatch(getUserDetails());
-  //       toast.success("Photo uploaded successfully");
-  //     } catch (err) {
-  //       toast.error("Failed to upload photo");
-  //     }
-  //   }
-  // };
+
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -133,7 +115,6 @@ export const AdminProfile = () => {
     }
 
     if (!isDirty) return; // Do nothing if no changes
-   
 
     setIsEditMode(false);
     try {
@@ -147,7 +128,6 @@ export const AdminProfile = () => {
         experience,
         sponsors,
       };
-      
 
       await dispatch(updateAdminInfo(adminData));
 
@@ -167,76 +147,46 @@ export const AdminProfile = () => {
     return <div>Loading...</div>;
   }
   return (
-    <div className="flex min-h-screen w-full dark:bg-background dark:text-foreground">
-      <div className="flex flex-col sm:gap-4 sm:py-4 w-full">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b  bg-background dark:bg-background dark:border-muted px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button size="icon" variant="outline" className="sm:hidden">
-                {/* Add your MenuIcon here */}
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-          </Sheet>
-          <Breadcrumb className="hidden md:flex">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to="#" prefetch={false}>
-                    Dashboard
-                  </Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Admin Profile</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </header>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-          <div className="grid lg:col-span-2 xl:col-span-3 gap-4">
-            <Card className="dark:bg-muted dark:text-foreground">
-              <CardHeader>
-                <CardTitle>Admin Profile</CardTitle>
-                <CardDescription>
-                  Detailed information about the gym admin.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div>
-                      {isEditMode ? (
-                        <div>
-                          <Input type="file" onChange={handleFileChange} />
-                          {/* <Button
-                            onClick={handleUpload}
-                            disabled={status === "loading"}
-                          >
-                            {status === "loading"
-                              ? "Uploading..."
-                              : "Upload Photo"}
-                          </Button> */}
-                          {error && <p>Error: {error}</p>}
-                        </div>
-                      ) : (
-                        <div>
-                          {imageUrl ? (
-                            <img
-                              src={`${imageUrl}`}
-                              alt="user"
-                              className="w-32 h-32 object-cover rounded-full"
-                            />
-                          ) : (
-                            <p>No photo uploaded</p>
-                          )}
-                        </div>
-                      )}
-                    </div>
+   
+      <div className="flex flex-col w-full gap-6 p-6 sm:gap-8 sm:p-10 mt-[-90px]" >
+      <header className="w-full ml-12 sm:mb-8">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Admin Profile</h1>
+        <p className="mt-1 text-gray-600 dark:text-gray-400">Detailed information about the gym admin.</p>
+      </header>
 
+        <main className="grid flex-1 gap-6 p-6 sm:gap-10 sm:px-12 sm:py-6 md:gap-12 lg:grid-cols-2 xl:grid-cols-3 mt-[-50px]">
+          <div className="grid gap-8 lg:col-span-2 xl:col-span-3 ">
+            <Card>
+              <CardContent>
+                <div className="flex flex-col items-center gap-8 md:flex-row">
+                  <div className="relative">
+                    {isEditMode ? (
+                      <div>
+                        <Input type="file" onChange={handleFileChange} />
+                        {error && (
+                          <p className="text-red-500">Error: {error}</p>
+                        )}
+                      </div>
+                    ) : (
+                      <div>
+                        {imageUrl ? (
+                          <img
+                            src={`${imageUrl}`}
+                            alt="user"
+                            className="object-cover w-32 h-32 border-4 border-purple-500 rounded-full shadow-md mt-[-100px]"
+                          />
+                        ) : (
+                          <p className="text-gray-300">No photo uploaded</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid flex-1 gap-6 md:grid-cols-2">
                     <div>
-                      <Label htmlFor="name">Name</Label>
+                      <Label htmlFor="name" className="text-gray-300">
+                        Name
+                      </Label>
                       <Input
                         id="name"
                         type="text"
@@ -246,10 +196,13 @@ export const AdminProfile = () => {
                           handleFieldChange();
                         }}
                         disabled={!isEditMode}
+                        className="mt-2 text-white bg-gray-800 border-gray-600 focus:ring-purple-500"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email" className="text-gray-300">
+                        Email
+                      </Label>
                       <Input
                         id="email"
                         type="email"
@@ -259,10 +212,13 @@ export const AdminProfile = () => {
                           handleFieldChange();
                         }}
                         disabled={!isEditMode}
+                        className="mt-2 text-white bg-gray-800 border-gray-600 focus:ring-purple-500"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="contact">Contact Number</Label>
+                      <Label htmlFor="contact" className="text-gray-300">
+                        Contact Number
+                      </Label>
                       <Input
                         id="contact"
                         type="tel"
@@ -272,10 +228,13 @@ export const AdminProfile = () => {
                           handleFieldChange();
                         }}
                         disabled={!isEditMode}
+                        className="w-full p-3 mt-2 text-white bg-gray-800 border-gray-600 rounded-lg focus:ring-purple-500"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="address">Gym Address</Label>
+                      <Label htmlFor="address" className="text-gray-300">
+                        Gym Address
+                      </Label>
                       <Textarea
                         id="address"
                         value={gymAddress}
@@ -283,80 +242,60 @@ export const AdminProfile = () => {
                           setGymAddress(e.target.value);
                           handleFieldChange();
                         }}
-                        className="min-h-[100px]"
                         disabled={!isEditMode}
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="owner">Owner Information</Label>
-                      <Textarea
-                        id="owner"
-                        value={ownerInformation}
-                        onChange={(e) => {
-                          setOwnerInformation(e.target.value);
-                          handleFieldChange();
-                        }}
-                        className="min-h-[100px]"
-                        disabled={!isEditMode}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="achievements">Achievements</Label>
-                      <Textarea
-                        id="achievements"
-                        value={achievements}
-                        onChange={(e) => {
-                          setAchievements(e.target.value);
-                          handleFieldChange();
-                        }}
-                        className="min-h-[100px]"
-                        disabled={!isEditMode}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="experience">Experience</Label>
-                      <Textarea
-                        id="experience"
-                        value={experience}
-                        onChange={(e) => {
-                          setExperience(e.target.value);
-                          handleFieldChange();
-                        }}
-                        className="min-h-[100px]"
-                        disabled={!isEditMode}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="sponsors">Sponsors</Label>
-                      <Textarea
-                        id="sponsors"
-                        value={sponsors}
-                        onChange={(e) => {
-                          setSponsors(e.target.value);
-                          handleFieldChange();
-                        }}
-                        className="min-h-[100px]"
-                        disabled={!isEditMode}
+                        className="w-full p-3 mt-2 text-white bg-gray-800 border-gray-600 rounded-lg focus:ring-purple-500 min-h-[100px]"
                       />
                     </div>
                   </div>
                 </div>
+
+                <div className="space-y-6">
+                  {[
+                    ["owner", ownerInformation, setOwnerInformation],
+                    ["achievements", achievements, setAchievements],
+                    ["experience", experience, setExperience],
+                    ["sponsors", sponsors, setSponsors],
+                  ].map(([id, value, setter]) => (
+                    <div key={id}>
+                      <Label htmlFor={id} className="text-gray-300 capitalize">
+                        {id.replace("_", " ")}
+                      </Label>
+                      <Textarea
+                        id={id}
+                        value={value}
+                        onChange={(e) => {
+                          setter(e.target.value);
+                          handleFieldChange();
+                        }}
+                        disabled={!isEditMode}
+                        className="w-full p-3 mt-2 text-white bg-gray-800 border-gray-600 rounded-lg focus:ring-purple-500 min-h-[100px]"
+                      />
+                    </div>
+                  ))}
+                </div>
               </CardContent>
+
               <CardFooter>
                 {isEditMode ? (
-                  <div className="flex gap-6">
-                    {" "}
-                    <Button className="  h-10" onClick={handleUpdate}>
+                  <div className="flex gap-4">
+                    <Button
+                      className="text-white transition-transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105"
+                      onClick={handleUpdate}
+                    >
                       Save Changes
                     </Button>
-                    <Button className="w-24  h-10" onClick={handleCancelButton}>
+                    <Button
+                      className="text-white transition-transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105"
+                      onClick={handleCancelButton}
+                    >
                       Cancel
                     </Button>
                   </div>
                 ) : (
-                  <Button className="w-24  h-10" onClick={handleEditButton}>
+                  <Button
+                    className="text-white transition-transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105"
+                    onClick={handleEditButton}
+                  >
                     Edit
                   </Button>
                 )}
@@ -366,7 +305,9 @@ export const AdminProfile = () => {
           </div>
         </main>
       </div>
-    </div>
+  
+
+
   );
 };
 

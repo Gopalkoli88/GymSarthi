@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteMember, getPurchasedAndNonPurchased } from "@/redux/adminSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import QRCodeGenerator from "./QRCodeGenerator";
 
 export const UserManagementComp = () => {
   const { purchased, nonPurchased } = useSelector((state) => state.admin.users);
@@ -67,18 +68,17 @@ export const UserManagementComp = () => {
 
     return `${day}-${month}-${year} ${hours}:${minutes}`;
   }
+
   return (
-    <div className="flex min-h-screen w-full dark:bg-background dark:text-foreground">
-      <div className="flex flex-col sm:gap-4 sm:py-4  w-full">
-        
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+      <div className="flex flex-col w-full sm:gap-4 sm:py-3 mt-[-80px]">
+        <main className="flex flex-col flex-1 gap-4 p-4 md:gap-8 md:p-6">
           <div className="flex flex-col items-start gap-4 md:flex-row md:items-center">
             <Button variant="outline" size="icon" className="md:hidden">
-              <ArrowLeftIcon className="h-4 w-4" />
+              <ArrowLeftIcon className="w-4 h-4" />
               <span className="sr-only">Back</span>
             </Button>
-            <h1 className="font-semibold text-lg md:text-xl">Members</h1>
-            <div className="ml-auto flex flex-col items-start gap-2 md:flex-row md:items-center">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Member</h1>
+            <div className="flex flex-col items-start gap-2 ml-auto md:flex-row md:items-center">
               <Button
                 variant={activeTab === "purchased" ? "" : "outline"}
                 onClick={() => setActiveTab("purchased")}
@@ -93,18 +93,20 @@ export const UserManagementComp = () => {
               >
                 Unpurchased
               </Button>
+
+              {/* <QRCodeGenerator /> */}
             </div>
           </div>
+
           <div className="grid gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>
+          
+                <CardTitle className="text-2xl font-semibold tracking-wide text-gray-700">
                   {activeTab === "purchased"
                     ? "Purchased Members"
                     : "Unpurchased Members"}
                 </CardTitle>
-              </CardHeader>
-              <CardContent>
+            
+              
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -113,8 +115,9 @@ export const UserManagementComp = () => {
                       <TableHead>Plan</TableHead>
                       <TableHead>Trainer</TableHead>
                       <TableHead>Purchase Date</TableHead>
+                      <TableHead>Total Attendance</TableHead>
                       <TableHead>Action</TableHead>
-
+                      <TableHead>Status</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -128,6 +131,15 @@ export const UserManagementComp = () => {
                           {formatDate(user.purchaseDate) || "N/A"}
                         </TableCell>
                         <TableCell>
+                          {" "}
+                          <div className="mt-4 text-center">
+                            <p className="">
+                              Attendances: {user.attendance.length || 0}
+                              <span className="text-green-500"></span>
+                            </p>
+                          </div>
+                        </TableCell>
+                        <TableCell>
                           <Button
                             variant="profile"
                             size="icon"
@@ -135,21 +147,22 @@ export const UserManagementComp = () => {
                               handleDeleteUser(user._id, user.name)
                             }
                           >
-                            <TrashIcon className="h-4 w-4" />
+                            <TrashIcon className="w-4 h-4" />
                             <span className="sr-only">Delete</span>
                           </Button>
                         </TableCell>
+                        <TableCell>{user.isActive ? "Active" : "InActive"}</TableCell>
+
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
                 <ToastContainer />
-              </CardContent>
-            </Card>
+            
+            
           </div>
         </main>
       </div>
-    </div>
   );
 };
 

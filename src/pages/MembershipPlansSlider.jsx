@@ -18,7 +18,7 @@ const MembershipPlansSlider = ({ plans }) => {
       viewBox="0 0 24 24"
       strokeWidth={2}
       stroke="currentColor"
-      className="h-5 w-5 text-green-500"
+      className="w-5 h-5 text-green-500"
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
     </svg>
@@ -31,7 +31,7 @@ const MembershipPlansSlider = ({ plans }) => {
       viewBox="0 0 24 24"
       strokeWidth={2}
       stroke="currentColor"
-      className="h-5 w-5 text-red-500"
+      className="w-5 h-5 text-red-500"
     >
       <path
         strokeLinecap="round"
@@ -108,92 +108,194 @@ const MembershipPlansSlider = ({ plans }) => {
     navigate(`/purchase-plan/${planId}`);
   };
 
-  return (
+//   return (
+//     <div
+//       className="relative overflow-hidden"
+//       onMouseEnter={handleMouseEnter}
+//       onMouseLeave={handleMouseLeave}
+//     >
+//       <div
+//         className="flex transition-transform duration-500 ease-in-out"
+//         style={{
+//           transform: isSliderActive
+//             ? `translateX(-${currentIndex * (100 / numberOfSlides)}%)`
+//             : "translateX(0)",
+//           width: isSliderActive ? `${numberOfSlides * 100}%` : "100%",
+//         }}
+//       >
+//         <div
+//           className="flex flex-row gap-2 "
+//           style={{
+//             width: isSliderActive ? `${100 / numberOfSlides}%` : "100%",
+//           }}
+//         >
+//           {Array.isArray(plans) && plans.length > 0 ?
+//             plans.map((plan, index) => (
+//               <div
+//                 key={plan._id}
+//                 className="flex-shrink-0 w-full md:w-1/3 flex flex-col items-center justify-center space-y-4 p-6 rounded-lg shadow-sm bg-black text-white   border-2 space-x-3  *:
+//                    hover:to-[rgba(0,0,0,0.583158263305322)] hover:text-white 
+//                  "
+//               >
+//                 <div className="text-center h-72">
+//                   <p className="text-4xl font-bold text-primary">
+//                     ${plan.price}
+//                   </p>
+//                   <p className="text-lg font-bold">/ per month</p>
+//                   <h3 className="mt-2 text-lg font-bold">{plan.name}</h3>
+//                   {/* Image placed here */}
+//                   {/* <img
+//                     src={plan.imageUrl} // Assuming imageUrl is a property of the plan
+//                     alt={plan.name}
+//                     className="object-cover w-32 h-32 mx-auto my-4 rounded-full"
+//                   /> */}
+//                 </div>
+//                 <ul className="space-y-2 text-left">
+//                   <li className="flex items-center gap-2">
+//                     <CheckIcon />
+//                     Access to gym facilities
+//                   </li>
+//                   <li className="flex items-center gap-2">
+//                     <CheckIcon />
+//                     Basic fitness classes
+//                   </li>
+//                   <li className="flex items-center gap-2">
+//                     <XIcon />
+//                     Personal training sessions
+//                   </li>
+//                 </ul>
+
+//                 <Button
+//                   onClick={() => handleClickJoin(plan._id)}
+//                   className="w-full   bg-[#1455f4]"
+//                 >
+//                   Join Now
+//                 </Button>
+//               </div>
+//             )) : (
+//               <div>No Plans Available</div>
+//             )}
+//         </div>
+//       </div>
+
+//       {/* Navigation buttons */}
+//       <button
+//         onClick={prevSlide}
+//         className="absolute p-2 text-white transform -translate-y-1/2 bg-gray-700 rounded-full top-1/2 left-4"
+//       >
+//         &#10094;
+//       </button>
+//       <button
+//         onClick={nextSlide}
+//         className="absolute p-2 text-white transform -translate-y-1/2 bg-gray-700 rounded-full top-1/2 right-4"
+//       >
+//         &#10095;
+//       </button>
+//     </div>
+//   );
+// };
+
+// // Example usage
+// const MembershipPlanSliderComp = () => {
+//   const { plans } = useSelector((state) => state.admin);
+
+//   const handleClickJoin = (id) => {
+//     console.log("Join plan with id:", id);
+//   };
+
+//   return (
+//     <div className="container p-4 mx-auto">
+//       <MembershipPlansSlider plans={plans} />
+//     </div>
+//   );
+// };
+
+// export default MembershipPlanSliderComp;
+
+
+
+return (
+  <div
+    className="relative overflow-hidden"
+    onMouseEnter={handleMouseEnter}
+    onMouseLeave={handleMouseLeave}
+  >
     <div
-      className="relative overflow-hidden"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className="flex transition-transform duration-500 ease-in-out"
+      style={{
+        transform: isSliderActive
+          ? `translateX(-${currentIndex * (100 / numberOfSlides)}%)`
+          : "translateX(0)",
+        width: isSliderActive ? `${numberOfSlides * 100}%` : "100%",
+      }}
     >
       <div
-        className="flex  transition-transform duration-500 ease-in-out"
+        className="flex flex-row gap-5 px-10 my-5"
         style={{
-          transform: isSliderActive
-            ? `translateX(-${currentIndex * (100 / numberOfSlides)}%)`
-            : "translateX(0)",
-          width: isSliderActive ? `${numberOfSlides * 100}%` : "100%",
+          width: isSliderActive ? `${100 / numberOfSlides}%` : "100%",
         }}
       >
-        <div
-          className="flex flex-row gap-2 "
-          style={{
-            width: isSliderActive ? `${100 / numberOfSlides}%` : "100%",
-          }}
-        >
-          {Array.isArray(plans) && plans.length > 0 ?
-            plans.map((plan, index) => (
-              <div
-                key={plan._id}
-                className="flex-shrink-0 w-full md:w-1/3 flex flex-col items-center justify-center space-y-4 p-6 rounded-lg shadow-sm bg-black text-white   border-2 space-x-3  *:
-                hover:bg-gradient-to-b hover:from-[#1455f4] via-transparent    hover:to-[rgba(0,0,0,0.583158263305322)] hover:text-white 
-                 "
-              >
-                <div className="text-center h-72">
-                  <p className="text-4xl font-bold text-primary">
-                    ${plan.price}
-                  </p>
-                  <p className="text-lg font-bold">/ per month</p>
-                  <h3 className="mt-2 text-lg font-bold">{plan.name}</h3>
-                  {/* Image placed here */}
-                  {/* <img
-                    src={plan.imageUrl} // Assuming imageUrl is a property of the plan
-                    alt={plan.name}
-                    className="my-4 h-32 w-32 object-cover rounded-full mx-auto"
-                  /> */}
-                </div>
-                <ul className="space-y-2 text-left">
-                  <li className="flex items-center gap-2">
-                    <CheckIcon />
-                    Access to gym facilities
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckIcon />
-                    Basic fitness classes
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <XIcon />
-                    Personal training sessions
-                  </li>
-                </ul>
-
-                <Button
-                  onClick={() => handleClickJoin(plan._id)}
-                  className="w-full   bg-[#1455f4]"
-                >
-                  Join Now
-                </Button>
+        {Array.isArray(plans) && plans.length > 0 ? (
+          plans.map((plan, index) => (
+            <div
+              key={plan._id}
+              className="flex flex-col items-center justify-center flex-shrink-0 w-full p-5 space-y-1 text-white transition-all duration-300 border-2 border-gray-700 rounded-lg shadow-lg md:w-1/3 bg-gradient-to-br from-gray-900 to-black hover:border-blue-500 hover:scale-105 hover:shadow-2xl "
+            // className="flex flex-col items-center justify-center flex-shrink-0 w-full p-5 space-y-1 text-white transition-all duration-300 border-2 border-gray-700 rounded-lg shadow-lg md:w-1/3 bg-gradient-to-br from-gray-900 to-black hover:border-blue-500 hover:scale-105 hover:shadow-2xl"
+            >
+              <div className="text-center h-72">
+                <p className="text-4xl font-bold text-blue-500">
+                ₹{plan.price}
+                </p>
+                <p className="text-lg font-bold text-gray-400">/ per month</p>
+                <h3 className="mt-2 text-2xl font-bold text-white">
+                  {plan.name}
+                </h3>
               </div>
-            )) : (
-              <div>No Plans Available</div>
-            )}
-        </div>
-      </div>
+              <ul className="space-y-2 text-left">
+                <li className="flex items-center gap-2 text-gray-300">
+                  <CheckIcon className="text-green-500" />
+                  Access to gym facilities
+                </li>
+                <li className="flex items-center gap-2 text-gray-300">
+                  <CheckIcon className="text-green-500" />
+                  Basic fitness classes
+                </li>
+                <li className="flex items-center gap-2 text-gray-300">
+                  <XIcon className="text-red-500" />
+                  Personal training sessions
+                </li>
+              </ul>
 
-      {/* Navigation buttons */}
-      <button
-        onClick={prevSlide}
-        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
-      >
-        &#10094;
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
-      >
-        &#10095;
-      </button>
+              <Button
+                onClick={() => handleClickJoin(plan._id)}
+                className="w-full py-3 font-semibold transition duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 hover:scale-105"
+              >
+                Join Now
+              </Button>
+            </div>
+          ))
+        ) : (
+          <div className="text-center text-gray-400">No Plans Available</div>
+        )}
+      </div>
     </div>
-  );
-};
+
+    {/* Navigation buttons */}
+    <button
+      onClick={prevSlide}
+      className="absolute p-2 text-white transition-colors duration-300 transform -translate-y-1/2 bg-gray-700 rounded-full top-1/2 left-4 hover:bg-gray-600"
+    >
+      &#10094;
+    </button>
+    <button
+      onClick={nextSlide}
+      className="absolute p-2 text-white transition-colors duration-300 transform -translate-y-1/2 bg-gray-700 rounded-full top-1/2 right-4 hover:bg-gray-600"
+    >
+      &#10095;
+    </button>
+  </div>
+);
+}
 
 // Example usage
 const MembershipPlanSliderComp = () => {
@@ -204,7 +306,7 @@ const MembershipPlanSliderComp = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container p-4 mx-auto">
       <MembershipPlansSlider plans={plans} />
     </div>
   );

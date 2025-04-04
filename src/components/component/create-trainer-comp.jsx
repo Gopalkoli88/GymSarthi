@@ -1,7 +1,3 @@
- 
-
-
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +9,8 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Eye, EyeOff } from "lucide-react";
+
 import {
   Select,
   SelectTrigger,
@@ -32,6 +30,7 @@ export const CreateTrainerComp = () => {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  // const[loading,setLoading]=usestate(false);
   const [password, setPassword] = useState("");
   const [expertise, setExpertise] = useState("");
   const [experience, setExperience] = useState("");
@@ -42,6 +41,7 @@ export const CreateTrainerComp = () => {
     setShowPassword(!showPassword);
   };
 
+// create trainer :
   const handleTrainerCreation = async (e) => {
     e.preventDefault();
 
@@ -82,9 +82,9 @@ export const CreateTrainerComp = () => {
 
   return (
     <div className="flex flex-col w-full gap-6 p-6 sm:gap-8 sm:p-10 mt-[-90px]">
-      <header className="w-full ml-12 sm:mb-8">
+      <header className="w-full ml-12 sm:mb-1">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-          Create New Trainer
+          Create A New Trainer
         </h1>
         <p className="mt-1 text-gray-600 dark:text-gray-400">
           Fill out the form to add a new trainer.
@@ -122,17 +122,46 @@ export const CreateTrainerComp = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-gray-300">
+                  {/* <Label htmlFor="password" className="text-gray-300">
                     Password
                   </Label>
                   <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
+                    // id="password"
+                    // type={showPassword ? "text" : "password"}
+                    type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter a password"
                     required
-                  />
+                  /> */}
+
+                  <div className="relative">
+                    <Label htmlFor="password" className="text-gray-300">
+                      Password
+                    </Label>
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter a password"
+                      required
+                      className="w-full p-3 pr-12 text-white bg-gray-800 border border-gray-600 rounded-lg outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+
+                    {/* Eye Icon Button */}
+                    <button
+                      type="button"
+                      className="absolute p-2 text-gray-400 transition-colors duration-200 transform -translate-y-2/2 right-3 top-1/2 hover:text-white focus:outline-none"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-6 h-6" />
+                      ) : (
+                        <Eye className="w-6 h-6" />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="expertise" className="text-gray-300">

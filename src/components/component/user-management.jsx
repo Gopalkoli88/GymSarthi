@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CheckCircle, XCircle } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -54,115 +56,124 @@ export const UserManagementComp = () => {
       toast.error(`${userName} not Deleted Successfully`);
     }
   };
-  function formatDate(isoDate) {
-    if (!isoDate) return "N/A";
 
-    const date = new Date(isoDate);
-
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
-    const year = date.getFullYear();
-
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-
-    return `${day}-${month}-${year} ${hours}:${minutes}`;
-  }
-
+   
   return (
-      <div className="flex flex-col w-full sm:gap-4 sm:py-3 mt-[-80px]">
-        <main className="flex flex-col flex-1 gap-4 p-4 md:gap-8 md:p-6">
-          <div className="flex flex-col items-start gap-4 md:flex-row md:items-center">
-            <Button variant="outline" size="icon" className="md:hidden">
-              <ArrowLeftIcon className="w-4 h-4" />
-              <span className="sr-only">Back</span>
+    <div className="flex flex-col w-full sm:gap-4 sm:py-3 mt-[-80px]">
+      <main className="flex flex-col flex-1 gap-4 p-4 md:gap-8 md:p-6">
+        <div className="flex flex-col items-start gap-4 md:flex-row md:items-center">
+          {/* <Button variant="outline" size="icon" className="md:hidden">
+            <ArrowLeftIcon className="w-4 h-4" />
+            <span className="sr-only">Back</span>
+          </Button> */}
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+            Member
+          </h1>
+          <div className="flex flex-col items-start gap-2 ml-auto md:flex-row md:items-center">
+            <Button
+              variant={activeTab === "purchased" ? "" : "outline"}
+              onClick={() => setActiveTab("purchased")}
+              className="w-full md:w-auto"
+            >
+              Purchased
             </Button>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Member</h1>
-            <div className="flex flex-col items-start gap-2 ml-auto md:flex-row md:items-center">
-              <Button
-                variant={activeTab === "purchased" ? "" : "outline"}
-                onClick={() => setActiveTab("purchased")}
-                className="w-full md:w-auto"
-              >
-                Purchased
-              </Button>
-              <Button
-                variant={activeTab === "unpurchased" ? "" : "outline"}
-                onClick={() => setActiveTab("unpurchased")}
-                className="w-full md:w-auto"
-              >
-                Unpurchased
-              </Button>
-
-              {/* <QRCodeGenerator /> */}
-            </div>
+            <Button
+              variant={activeTab === "unpurchased" ? "" : "outline"}
+              onClick={() => setActiveTab("unpurchased")}
+              className="w-full md:w-auto"
+            >
+              Unpurchased
+            </Button>
           </div>
+        </div>
 
-          <div className="grid gap-6">
-          
-                <CardTitle className="text-2xl font-semibold tracking-wide text-gray-700">
-                  {activeTab === "purchased"
-                    ? "Purchased Members"
-                    : "Unpurchased Members"}
-                </CardTitle>
-            
-              
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Plan</TableHead>
-                      <TableHead>Trainer</TableHead>
-                      <TableHead>Purchase Date</TableHead>
-                      <TableHead>Total Attendance</TableHead>
-                      <TableHead>Action</TableHead>
-                      <TableHead>Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {users.map((user) => (
-                      <TableRow key={user._id}>
-                        <TableCell>{user.name}</TableCell>
-                        <TableCell>{user.email}</TableCell>
-                        <TableCell>{user.planName || "N/A"}</TableCell>
-                        <TableCell>{user.trainerName || "N/A"}</TableCell>
-                        <TableCell>
-                          {formatDate(user.purchaseDate) || "N/A"}
-                        </TableCell>
-                        <TableCell>
-                          {" "}
-                          <div className="mt-4 text-center">
-                            <p className="">
-                              Attendances: {user.attendance.length || 0}
-                              <span className="text-green-500"></span>
-                            </p>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="profile"
-                            size="icon"
-                            onClick={() =>
-                              handleDeleteUser(user._id, user.name)
-                            }
-                          >
-                            <TrashIcon className="w-4 h-4" />
-                            <span className="sr-only">Delete</span>
-                          </Button>
-                        </TableCell>
-                        <TableCell>{user.isActive ? "Active" : "InActive"}</TableCell>
-
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                <ToastContainer />
-            
-            
+        <div className="grid gap-6">
+          <div>
+            <CardTitle className="text-2xl font-semibold tracking-wide text-gray-900">
+              {activeTab === "purchased"
+                ? "Purchased Members"
+                : "Unpurchased Members"}
+            </CardTitle>
+            <p className="text-sm text-gray-800">
+              {activeTab === "purchased"
+                ? "List of members who have purchased a subscription."
+                : "List of users who haven't completed their membership purchase."}
+            </p>
           </div>
-        </main>
-      </div>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Plan</TableHead>
+                  <TableHead>Trainer</TableHead>
+                  <TableHead>Purchase Date</TableHead>
+                  <TableHead>Total Attendance</TableHead>
+                  <TableHead>Action</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {users.map((user) => (
+                  <TableRow key={user._id}>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.planName || "N/A"}</TableCell>
+                    <TableCell>{user.trainerName || "N/A"}</TableCell>
+                    <TableCell>
+                      {formatDate(user.purchaseDate) || "N/A"}
+                    </TableCell>
+                    <TableCell>
+                      {" "}
+                      <div className="mt-4 text-center">
+                        <p className="">
+                          Attendances: {user.attendance.length || 0}
+                          <span className="text-green-500"></span>
+                        </p>
+                      </div>
+                    </TableCell>
+
+                    <TableCell>
+                      <span
+                        className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg transition-all 
+      ${
+        user.isActive
+          ? "bg-gradient-to-r from-green-400 to-green-600 text-white shadow-green-500/50 hover:shadow-green-600/70"
+          : "bg-gradient-to-r from-red-400 to-red-600 text-white shadow-red-500/50 hover:shadow-red-600/70"
+      }`}
+                      >
+                        {user.isActive ? (
+                          <>
+                            <CheckCircle className="w-4 h-4" /> Active
+                          </>
+                        ) : (
+                          <>
+                            <XCircle className="w-4 h-4" /> Inactive
+                          </>
+                        )}
+                      </span>
+                    </TableCell>
+
+                    <TableCell>
+                      <div className="flex items-center justify-center">
+                        <Button
+                          variant="profile"
+                          size="icon"
+                          onClick={() => handleDeleteUser(user._id, user.name)}
+                        >
+                          <TrashIcon className="w-4 h-4" />
+                          <span className="sr-only">Delete</span>
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          <ToastContainer />
+      </main>
+    </div>
   );
 };
 
@@ -417,3 +428,18 @@ function UserIcon(props) {
     </svg>
   );
 }
+
+const formatDate = (dateString) => {
+  if (!dateString) return "N/A";
+
+  const date = new Date(dateString);
+
+  return date.toLocaleString("en-US", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true, // Enables AM/PM format
+  });
+};

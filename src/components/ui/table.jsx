@@ -1,12 +1,26 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
+// const Table = React.forwardRef(({ className, ...props }, ref) => (
+//   <div className="relative w-full p-10 overflow-auto shadow-2xl rounded-3xl bg-gradient-to-br from-gray-800 to-gray-900">
+//     <table
+//       ref={ref}
+//       className={cn(
+//         "w-full caption-bottom text-sm bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100 rounded-3xl shadow-lg border border-gray-700",
+//         className
+//       )}
+//       {...props}
+//     />
+//   </div>
+// ));
+// Table.displayName = "Table";
+
 const Table = React.forwardRef(({ className, ...props }, ref) => (
-  <div className="relative w-full p-10 overflow-auto shadow-2xl rounded-3xl bg-gradient-to-br from-gray-800 to-gray-900">
+  <div className="relative w-full p-4 overflow-auto shadow-2xl rounded-3xl bg-gradient-to-br from-gray-800 to-gray-900">
     <table
       ref={ref}
       className={cn(
-        "w-full caption-bottom text-sm bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100 rounded-3xl shadow-lg border border-gray-700",
+"w-full overflow-hidden text-sm text-gray-100 border border-gray-700 shadow-2xl rounded-3xl caption-bottom bg-gradient-to-br from-gray-800 to-gray-900",
         className
       )}
       {...props}
@@ -14,6 +28,7 @@ const Table = React.forwardRef(({ className, ...props }, ref) => (
   </div>
 ));
 Table.displayName = "Table";
+
 
 const TableHeader = React.forwardRef(({ className, ...props }, ref) => (
   <thead
@@ -72,7 +87,7 @@ const TableCell = React.forwardRef(({ className, ...props }, ref) => (
   <td
     ref={ref}
     className={cn(
-      "p-4 align-middle border-t border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900 text-gray-200 transition duration-300 hover:bg-gradient-to-r hover:from-gray-700 hover:to-gray-800 rounded-lg shadow-sm",
+      "p-4 align-middle border-t border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900 text-gray-200 transition duration-300 hover:bg-gradient-to-r hover:from-gray-700 hover:to-gray-800 rounded-lg shadow-sm ",
       className
     )}
     {...props}

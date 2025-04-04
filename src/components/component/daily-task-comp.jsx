@@ -51,9 +51,9 @@ export const DailyTaskComp = () => {
               </Card>
             ))
           ) : (
-            <div className="flex justify-center">
-              <Button className="m-4">No Tasks</Button>
-            </div>
+            <div className="p-6 text-center text-gray-400 bg-gray-900 border border-gray-700 rounded-lg">
+            No Daily Task Available
+          </div>
           )}
         </div>
         </div>
@@ -63,9 +63,17 @@ export const DailyTaskComp = () => {
     
     // Header Component
     const DailyTaskHeader = () => (
-      <h1 className="ml-10 text-3xl font-semibold text-black dark:text-white">
-Daily Tasks</h1>
-   
+      <header className="w-full px-10">
+      <h1 className="text-3xl font-semibold text-black dark:text-white">
+        Daily Tasks
+      </h1>
+      <p className="mt-1 text-black dark:text-gray-400">
+        Get in touch with your personal trainer.
+      </p>
+    </header>
+    
+    
+
     );
     
     // Generic Task Detail Component

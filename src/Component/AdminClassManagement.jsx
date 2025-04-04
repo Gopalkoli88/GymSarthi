@@ -63,7 +63,7 @@ const AdminClassManagement = () => {
   return (
     <AdminSidePanel>
       <div className="flex flex-col w-full gap-6 p-6 sm:gap-8 sm:p-10 mt-[-90px]">
-        <header className="w-full ml-12 sm:mb-8">
+        <header className="w-full ml-12 sm:mb-1">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
             Class Management
           </h1>

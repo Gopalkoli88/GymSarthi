@@ -1,21 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import {  useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
 import { Input } from "@/components/ui/input";
 
 import {
   Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
+
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
@@ -24,19 +13,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAdminInfo,
-  getPurchasedAndNonPurchased,
-  updateAdminInfo,
+   updateAdminInfo,
 } from "@/redux/adminSlice";
-import { useCallback, useEffect, useState } from "react";
+import {   useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getUserDetails, updateUser, uploadUserPhoto } from "@/redux/userSlice";
+import { getUserDetails,  uploadUserPhoto } from "@/redux/userSlice";
 
 export const AdminProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, status, error } = useSelector((state) => state.user);
+  const { user,   error } = useSelector((state) => state.user);
   const { adminInfo } = useSelector((state) => state.admin);
 
   useEffect(() => {
@@ -146,169 +134,142 @@ export const AdminProfile = () => {
   if (!adminInfo) {
     return <div>Loading...</div>;
   }
+
   return (
-   
-      <div className="flex flex-col w-full gap-6 p-6 sm:gap-8 sm:p-10 mt-[-90px]" >
-      <header className="w-full ml-12 sm:mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Admin Profile</h1>
-        <p className="mt-1 text-gray-600 dark:text-gray-400">Detailed information about the gym admin.</p>
+    <div className="flex flex-col w-full gap-6 p-6 sm:gap-8 sm:p-10 mt-[-90px]">
+      <header className="w-full ml-12 sm:mb-1">
+        <h1
+          className={`text-4xl font-bold transition duration-300 ${
+       "text-gray-900 dark:text-white"
+          }`}
+        >
+          Admin Profile
+        </h1>
+        <p className="mt-1 text-gray-600 dark:text-gray-400">
+          Detailed information about the gym admin.
+        </p>
       </header>
-
-        <main className="grid flex-1 gap-6 p-6 sm:gap-10 sm:px-12 sm:py-6 md:gap-12 lg:grid-cols-2 xl:grid-cols-3 mt-[-50px]">
-          <div className="grid gap-8 lg:col-span-2 xl:col-span-3 ">
-            <Card>
-              <CardContent>
-                <div className="flex flex-col items-center gap-8 md:flex-row">
-                  <div className="relative">
-                    {isEditMode ? (
-                      <div>
-                        <Input type="file" onChange={handleFileChange} />
-                        {error && (
-                          <p className="text-red-500">Error: {error}</p>
-                        )}
-                      </div>
-                    ) : (
-                      <div>
-                        {imageUrl ? (
-                          <img
-                            src={`${imageUrl}`}
-                            alt="user"
-                            className="object-cover w-32 h-32 border-4 border-purple-500 rounded-full shadow-md mt-[-100px]"
-                          />
-                        ) : (
-                          <p className="text-gray-300">No photo uploaded</p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="grid flex-1 gap-6 md:grid-cols-2">
+  
+      <main className="grid flex-1 gap-6 p-6 sm:gap-10 sm:px-12 sm:py-6 md:gap-12 lg:grid-cols-2 xl:grid-cols-3 mt-[-50px]">
+        <div className="grid gap-8 lg:col-span-2 xl:col-span-3">
+          <Card className={`transition duration-300 ${isEditMode ? "border-purple-500 shadow-2xl" : ""}`}>
+            <CardContent>
+              <div className="flex flex-col items-center gap-8 md:flex-row">
+                <div className="relative">
+                  {isEditMode ? (
                     <div>
-                      <Label htmlFor="name" className="text-gray-300">
-                        Name
-                      </Label>
-                      <Input
-                        id="name"
-                        type="text"
-                        value={newName}
-                        onChange={(e) => {
-                          setNewName(e.target.value);
-                          handleFieldChange();
-                        }}
-                        disabled={!isEditMode}
-                        className="mt-2 text-white bg-gray-800 border-gray-600 focus:ring-purple-500"
-                      />
+                      <Input type="file" onChange={handleFileChange} />
+                      {error && <p className="text-red-500">Error: {error}</p>}
                     </div>
+                  ) : (
                     <div>
-                      <Label htmlFor="email" className="text-gray-300">
-                        Email
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={newEmail}
-                        onChange={(e) => {
-                          setNewEmail(e.target.value);
-                          handleFieldChange();
-                        }}
-                        disabled={!isEditMode}
-                        className="mt-2 text-white bg-gray-800 border-gray-600 focus:ring-purple-500"
-                      />
+                      {imageUrl ? (
+                        <img
+                          src={`${imageUrl}`}
+                          alt="user"
+                          className="object-cover w-32 h-32 transition-transform border-4 border-purple-500 rounded-full shadow-lg hover:scale-105"
+                        />
+                      ) : (
+                        <p className="text-gray-300">No photo uploaded</p>
+                      )}
                     </div>
-                    <div>
-                      <Label htmlFor="contact" className="text-gray-300">
-                        Contact Number
-                      </Label>
-                      <Input
-                        id="contact"
-                        type="tel"
-                        value={contact}
-                        onChange={(e) => {
-                          setContact(e.target.value);
-                          handleFieldChange();
-                        }}
-                        disabled={!isEditMode}
-                        className="w-full p-3 mt-2 text-white bg-gray-800 border-gray-600 rounded-lg focus:ring-purple-500"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="address" className="text-gray-300">
-                        Gym Address
-                      </Label>
-                      <Textarea
-                        id="address"
-                        value={gymAddress}
-                        onChange={(e) => {
-                          setGymAddress(e.target.value);
-                          handleFieldChange();
-                        }}
-                        disabled={!isEditMode}
-                        className="w-full p-3 mt-2 text-white bg-gray-800 border-gray-600 rounded-lg focus:ring-purple-500 min-h-[100px]"
-                      />
-                    </div>
-                  </div>
+                  )}
                 </div>
-
-                <div className="space-y-6">
+  
+                <div className="grid flex-1 gap-6 md:grid-cols-2">
                   {[
-                    ["owner", ownerInformation, setOwnerInformation],
-                    ["achievements", achievements, setAchievements],
-                    ["experience", experience, setExperience],
-                    ["sponsors", sponsors, setSponsors],
+                    ["name", newName, setNewName],
+                    ["email", newEmail, setNewEmail],
+                    ["contact", contact, setContact],
+                    ["address", gymAddress, setGymAddress],
                   ].map(([id, value, setter]) => (
                     <div key={id}>
                       <Label htmlFor={id} className="text-gray-300 capitalize">
                         {id.replace("_", " ")}
                       </Label>
-                      <Textarea
+                      <Input
                         id={id}
+                        type={id === "email" ? "email" : id === "contact" ? "tel" : "text"}
                         value={value}
                         onChange={(e) => {
                           setter(e.target.value);
                           handleFieldChange();
                         }}
                         disabled={!isEditMode}
-                        className="w-full p-3 mt-2 text-white bg-gray-800 border-gray-600 rounded-lg focus:ring-purple-500 min-h-[100px]"
+                        className={`w-full p-3 mt-2 text-white border rounded-lg transition duration-300 ${
+                          isEditMode
+                            ? "border-purple-500 bg-gray-900 shadow-lg focus:ring-purple-500 focus:border-purple-400"
+                            : "border-gray-600 bg-gray-800"
+                        }`}
                       />
                     </div>
                   ))}
                 </div>
-              </CardContent>
-
-              <CardFooter>
-                {isEditMode ? (
-                  <div className="flex gap-4">
-                    <Button
-                      className="text-white transition-transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105"
-                      onClick={handleUpdate}
-                    >
-                      Save Changes
-                    </Button>
-                    <Button
-                      className="text-white transition-transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105"
-                      onClick={handleCancelButton}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                ) : (
-                  <Button
-                    className="text-white transition-transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105"
-                    onClick={handleEditButton}
-                  >
-                    Edit
-                  </Button>
-                )}
-              </CardFooter>
-              <ToastContainer />
-            </Card>
-          </div>
-        </main>
-      </div>
+              </div>
   
-
-
+              <div className="space-y-6">
+                {[
+                  ["owner", ownerInformation, setOwnerInformation],
+                  ["achievements", achievements, setAchievements],
+                  ["experience", experience, setExperience],
+                  ["sponsors", sponsors, setSponsors],
+                ].map(([id, value, setter]) => (
+                  <div key={id}>
+                    <Label htmlFor={id} className="text-gray-300 capitalize">
+                      {id.replace("_", " ")}
+                    </Label>
+                    <Textarea
+                      id={id}
+                      value={value}
+                      onChange={(e) => {
+                        setter(e.target.value);
+                        handleFieldChange();
+                      }}
+                      disabled={!isEditMode}
+                      className={`w-full p-3 mt-2 text-white border rounded-lg transition duration-300 ${
+                        isEditMode
+                          ? "border-purple-500 bg-gray-900 shadow-lg focus:ring-purple-500 focus:border-purple-400"
+                          : "border-gray-600 bg-gray-800"
+                      } min-h-[100px]`}
+                    />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+  
+            <CardFooter>
+              {isEditMode ? (
+                <div className="flex gap-4">
+                  <Button
+                    className="px-6 py-2 text-white transition-all duration-300 transform bg-green-600 shadow-lg hover:scale-110 hover:bg-green-700 focus:ring-2 focus:ring-green-400"
+                    onClick={handleUpdate}
+                  >
+                    ✅ Save Changes
+                  </Button>
+                  <Button
+                    className="px-6 py-2 text-white transition-all duration-300 transform shadow-lg bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:scale-110 hover:bg-red-700 focus:ring-2 focus:ring-red-400"
+                    onClick={handleCancelButton}
+                  >
+                    ❌ Cancel
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  className="px-6 py-2 text-white transition-all duration-300 transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-110 hover:bg-blue-700 focus:ring-2 focus:ring-blue-400"
+                  onClick={handleEditButton}
+                >
+                  ✏️ Edit
+                </Button>
+              )}
+            </CardFooter>
+            <ToastContainer />
+          </Card>
+        </div>
+      </main>
+    </div>
   );
+  
+  
 };
 
 export default AdminProfile;

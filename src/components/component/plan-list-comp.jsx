@@ -28,7 +28,7 @@ import { deletePlan, getAllPlans, updatePlan } from "@/redux/adminSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export function  PlanListComp() {
+export function PlanListComp() {
   const dispatch = useDispatch();
   const { plans } = useSelector((state) => state.admin);
 
@@ -41,10 +41,7 @@ export function  PlanListComp() {
     setEditingPlan(plan);
   };
 
-  
   const handleSavePlan = async () => {
-   
-
     const planData = {
       name: editingPlan.name,
       description: editingPlan.description,
@@ -52,33 +49,28 @@ export function  PlanListComp() {
       duration: editingPlan.duration,
     };
 
-    
-
     const success = await dispatch(
       updatePlan({ planId: editingPlan._id, planData })
     );
-   
-    
+
     try {
-      
       if (success) {
         setPlanList(
           planList.map((p) => (p._id === editingPlan._id ? editingPlan : p))
         );
         dispatch(getAllPlans());
         toast.success("Plan updated Successfully");
-  
       }
       setEditingPlan(null);
     } catch (error) {
-      toast.error(error.message || "an error occured");
+      toast.error(error.message || "An Error Occurred");
     }
-   
   };
 
   // working Mode :
   const handleDeletePlan = async (planId) => {
-    setPlanList(planList.filter((p) => p._id !== planId));
+    if (!window.confirm("Are you sure you want to delete this plan?"))
+      setPlanList(planList.filter((p) => p._id !== planId));
     const success = await dispatch(deletePlan(planId));
     try {
       if (success) {
@@ -90,133 +82,142 @@ export function  PlanListComp() {
     }
   };
   return (
-    <div className="flex flex-col w-full gap-6 p-6 sm:gap-8 sm:p-10 mt-[-90px]" >
+    <div className="flex flex-col w-full gap-6 p-6 sm:gap-8 sm:p-10 mt-[-50px]">
+      <header className="w-full ml-12 sm:mb-1">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+          Plans
+        </h1>
+        <p className="mt-1 text-gray-600 dark:text-gray-400">
+          View and manage all registered trainers.
+        </p>
+      </header>
 
-    <main className="flex flex-col flex-1 gap-10 md:gap-8 md:p-6">
+      <main className="flex flex-col flex-1 gap-10 md:gap-8 md:p-5 mt-[-50px]">
+        <div className="grid gap-10">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Description</TableHead>
+                <TableHead>Duration</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {plans.map((plan) => (
+                <TableRow key={plan._id}>
+                  {/* ------------- */}
+                  <TableCell>
+                    {editingPlan?._id === plan._id ? (
+                      <Input
+                        value={editingPlan.name}
+                        onChange={(e) =>
+                          setEditingPlan({
+                            ...editingPlan,
+                            name: e.target.value,
+                          })
+                        }
+                      />
+                    ) : (
+                      plan.name
+                    )}
+                  </TableCell>
 
-    <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-        Plans
-      </h1>
+                  {/* ------------------- */}
+                  <TableCell>
+                    {editingPlan?._id === plan._id ? (
+                      <Input
+                        type="number"
+                        value={editingPlan.price}
+                        onChange={(e) =>
+                          setEditingPlan({
+                            ...editingPlan,
+                            price: Number(e.target.value),
+                          })
+                        }
+                      />
+                    ) : (
+                      `₹${plan.price.toFixed(2)}`
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editingPlan?._id === plan._id ? (
+                      <Textarea
+                        value={editingPlan.description}
+                        onChange={(e) =>
+                          setEditingPlan({
+                            ...editingPlan,
+                            description: e.target.value,
+                          })
+                        }
+                      />
+                    ) : (
+                      plan.description
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editingPlan?._id === plan._id ? (
+                      <Textarea
+                        value={editingPlan.duration}
+                        onChange={(e) =>
+                          setEditingPlan({
+                            ...editingPlan,
+                            duration: e.target.value,
+                          })
+                        }
+                      />
+                    ) : (
+                      `${plan.duration} ${
+                        plan.duration === 1 ? "month" : "months"
+                      }`
+                    )}
+                  </TableCell>
 
-      <div className="grid gap-10">
-       
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Description</TableHead>
-                 
-                  <TableHead>Duration</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableCell>
+                    {editingPlan?._id === plan._id ? (
+                      <div className="flex gap-2">
+                        <Button variant="outline" onClick={handleSavePlan}>
+                          Save
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => setEditingPlan(null)}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex gap-2">
+                        <Button
+                          className="bg-green-500"
+                          variant="outline"
+                          size="icon"
+                          onClick={() => handleEditPlan(plan)}
+                        >
+                          <FilePenIcon className="w-4 h-4" />
+                          <span className="sr-only">Edit</span>
+                        </Button>
+
+                        <Button
+                          className="bg-red-600"
+                          variant="outline"
+                          size="icon"
+                          onClick={() => handleDeletePlan(plan._id)}
+                        >
+                          <TrashIcon className="w-4 h-4" />
+                          <span className="sr-only">Delete</span>
+                        </Button>
+                      </div>
+                    )}
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {plans.map((plan) => (
-                  <TableRow  key={plan._id}>
-                    <TableCell>
-                      {editingPlan?._id === plan._id ? (
-                        <Input
-                          value={editingPlan.name}
-                          onChange={(e) =>
-                            setEditingPlan({
-                              ...editingPlan,
-                              name: e.target.value,
-                            })
-                          }
-                        />
-                      ) : (
-                        plan.name
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {editingPlan?._id === plan._id ? (
-                        <Input
-                          type="number"
-                          value={editingPlan.price}
-                          onChange={(e) =>
-                            setEditingPlan({
-                              ...editingPlan,
-                              price: Number(e.target.value),
-                            })
-                          }
-                        />
-                      ) : (
-                        `$${plan.price.toFixed(2)}`
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {editingPlan?._id === plan._id ? (
-                        <Textarea
-                          value={editingPlan.description}
-                          onChange={(e) =>
-                            setEditingPlan({
-                              ...editingPlan,
-                              description: e.target.value,
-                            })
-                          }
-                        />
-                      ) : (
-                        plan.description
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {editingPlan?._id === plan._id ? (
-                        <Textarea
-                          value={editingPlan.duration}
-                          onChange={(e) =>
-                            setEditingPlan({
-                              ...editingPlan,
-                              duration: e.target.value,
-                            })
-                          }
-                        />
-                      ) : (
-                        plan.duration
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {editingPlan?._id === plan._id ? (
-                        <div className="flex gap-2">
-                          <Button variant="outline" onClick={handleSavePlan}>
-                            Save
-                          </Button>
-                          <Button
-                            variant="outline"
-                            onClick={() => setEditingPlan(null)}
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="flex gap-2">
-                          <Button className="bg-green-500"
-                            variant="outline"
-                            size="icon"
-                            onClick={() => handleEditPlan(plan)}
-                          >
-                            <FilePenIcon className="w-4 h-4" />
-                            <span className="sr-only">Edit</span>
-                          </Button>
-                          <Button className="bg-red-600"
-                            variant="outline"
-                            size="icon"
-                            onClick={() => handleDeletePlan(plan._id)}
-                          >
-                            <TrashIcon className="w-4 h-4" />
-                            <span className="sr-only">Delete</span>
-                          </Button>
-                        </div>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-    
-      </div>
-      <ToastContainer/>
-    </main>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+        <ToastContainer />
+      </main>
     </div>
   );
 }

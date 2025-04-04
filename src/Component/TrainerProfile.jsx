@@ -216,31 +216,31 @@ const TrainerProfile = () => {
             </div>
           </CardContent>
 
-          <CardFooter className="flex justify-end gap-4">
-            {isEditMode ? (
-              <>
+          <CardFooter>
+              {isEditMode ? (
+                <div className="flex gap-4">
+                  <Button
+                    className="px-6 py-2 text-white transition-all duration-300 transform bg-green-600 shadow-lg hover:scale-110 hover:bg-green-700 focus:ring-2 focus:ring-green-400"
+                    onClick={handleUpdate}
+                  >
+                    ✅ Save Changes
+                  </Button>
+                  <Button
+                    className="px-6 py-2 text-white transition-all duration-300 transform shadow-lg bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:scale-110 hover:bg-red-700 focus:ring-2 focus:ring-red-400"
+                    onClick={handleCancelButton}
+                  >
+                    ❌ Cancel
+                  </Button>
+                </div>
+              ) : (
                 <Button
-                  onClick={handleUpdate}
-                  className="text-white transition-transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105"
+                  className="px-6 py-2 text-white transition-all duration-300 transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-110 hover:bg-blue-700 focus:ring-2 focus:ring-blue-400"
+                  onClick={handleEditButton}
                 >
-                  Save Changes
+                  ✏️ Edit
                 </Button>
-                <Button
-                  onClick={handleCancelButton}
-                  className="text-white transition-colors bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700"
-                >
-                  Cancel
-                </Button>
-              </>
-            ) : (
-              <Button
-                onClick={handleEditButton}
-                className="text-white transition-transform shadow-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:scale-105"
-              >
-                Edit
-              </Button>
-            )}
-          </CardFooter>
+              )}
+            </CardFooter>
         </Card>
       </div>
     </div>

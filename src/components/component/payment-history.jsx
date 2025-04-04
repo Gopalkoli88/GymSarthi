@@ -249,7 +249,7 @@ export const PaymentHistory = () => {
                 <TableCell>
                   {formatDate(new Date(tx.paymentDate).toLocaleDateString())}
                 </TableCell>
-                <TableCell>${tx.amount.toFixed(2)}</TableCell>
+                <TableCell>₹{tx.amount.toFixed(2)}</TableCell>
                 <TableCell>{tx.paymentMethod}</TableCell>
                 <TableCell>
                   <Badge

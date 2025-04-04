@@ -4,7 +4,7 @@ import axios from "axios";
 const api = axios.create({
   baseURL: "http://localhost:5000/api",
   //  baseURL: "https://gym-house-1.onrender.com/api",
-  
+
   headers: {
     "Content-Type": "application/json",
   },
@@ -69,23 +69,24 @@ export const getTrainerInfo = createAsyncThunk(
 
 export const updateTrainerInfo = createAsyncThunk(
   "trainer/updateInfo",
-  async (trainerData, { getState, thunkAPI }) => {
+  async ({ trainerId, trainerData }) => {
     try {
-      const state = getState();
-      const trainerId = state.user.user._id;
+      // const state = getState();
+      // const trainerId = state.user.user._id;
 
+      console.log("varify update trainer information :", trainerData);
       const response = await api.put(`/trainer/${trainerId}`, trainerData);
+      console.log("trainer update : ", response);
 
       console.log("updated tariner info :", response);
 
       return response.data;
     } catch (error) {
       console.log("error from updateTrainerInfo :", error);
-      return thunkAPI.rejectWithValue(error.response.data);
+      // return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
-
 
 const trainerSlice = createSlice({
   name: "trainer",

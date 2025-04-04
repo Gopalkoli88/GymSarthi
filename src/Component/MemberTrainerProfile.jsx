@@ -71,11 +71,9 @@ const MemberTrainerProfile = () => {
                 ))}
               </div>
             ) : (
-              <div className="flex justify-center mt-4">
-                <Button className="px-4 py-2 text-sm font-medium text-white rounded-lg shadow-lg bg-gradient-to-r from-red-500 via-red-600 to-red-700 hover:scale-105 hover:shadow-xl">
-                  No Trainer Available
-                </Button>
-              </div>
+              <div className="p-6 text-center text-gray-400 bg-gray-900 border border-gray-700 rounded-lg">
+              No Trainer Available
+            </div>
             )}
           </div>
         </div>

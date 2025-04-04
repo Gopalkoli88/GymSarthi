@@ -8,6 +8,7 @@ const {
   updateTrainer,
   deleteTrainer,
   getAllPlansAssociatedWithTrainer,
+  updateTrainerAdmin,
 } = require("../controllers/trainerController");
 const authorizationMiddleware = require("../middleware/authorization");
 const authMiddleware = require("../middleware/auth");
@@ -23,11 +24,11 @@ router.post(
 router.put(
   "/:id",
 
-  updateTrainer
+  updateTrainerAdmin
 );
 router.delete(
   "/:id",
- 
+
   deleteTrainer
 );
 

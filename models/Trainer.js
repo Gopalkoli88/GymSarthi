@@ -21,7 +21,8 @@ const TrainerSchema = new mongoose.Schema(
     feedback: [{ type: mongoose.Schema.Types.ObjectId, ref: "Feedback" }],
     plans: [{ type: mongoose.Schema.Types.ObjectId, ref: "Plan" }],
     salary: { type: Number },
-    status: { type: String, default: "active" },
+    status: { type: String, default: "Active" },
+    lastLogin: { type: Date, default: Date.now }, // Track last login
     photoUrl: { type: String },
     availability: [{
       day: { type: String, enum: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },

@@ -54,6 +54,7 @@ const updatePlan = async (req, res) => {
     // if (req.user.role != "admin") {
     //   return res.status(403).json({ message: "Access denied" });
     // }
+
     const { name, description, price, duration } = req.body;
 
     console.log("updated info varify : ", name, description, price, duration);

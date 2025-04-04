@@ -5,6 +5,7 @@ const User = require("./models/User");
 const {sendEmail}=require("./utils/emailService");
 const path = require("path");
 const fs = require("fs");
+const { autoDeactivateInactiveTrainers } = require("./controllers/trainerController");
 
  
 
@@ -84,9 +85,13 @@ const checkPlanExpiry = async () => {
 
 
 // run every 30 min
-cron.schedule("*/30 * * * *", async () => {
-  await updateUserStatusAndNotify();
-  await checkPlanExpiry();
+cron.schedule("*/30 * * * *", async () => { // for every 30 min 
+// cron.schedule("* * * * *", async () => { // for every 2 min
+
+  // await updateUserStatusAndNotify();
+  // await checkPlanExpiry();
+  await autoDeactivateInactiveTrainers();
+
 });
 
 console.log("⏰ Cron job initialized...");

@@ -8,7 +8,9 @@ const { generateProfileImage } = require("./authController");
 // Get all trainers
 const getAllTrainers = async (req, res) => {
   try {
-    const trainers = await Trainer.find({ status: { $ne: "InActive" } });
+    // const trainers = await Trainer.find({ status: { $ne: "InActive" } });
+    const trainers = await Trainer.find();
+
     res.status(200).json(trainers);
   } catch (err) {
     res.status(500).json({
@@ -53,7 +55,7 @@ const createTrainer = async (req, res) => {
     }
 
     // Create user with role 'trainer'
-    const defaultPhotoUrl = await  generateProfileImage(name);
+    const defaultPhotoUrl = await generateProfileImage(name);
 
     const user = new User({
       _id: new mongoose.Types.ObjectId(), // Generate a new ObjectId
@@ -88,7 +90,6 @@ const createTrainer = async (req, res) => {
 // Update a trainer
 const updateTrainer = async (req, res) => {
   try {
-    console.log("updated infor req.body :", req.body);
     const updatedTrainer = await Trainer.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -113,39 +114,48 @@ const updateTrainer = async (req, res) => {
   }
 };
 
-// Delete a trainer
-/*const deleteTrainer = async (req, res) => {
+// Update Trainer (Admin Access Only)
+const updateTrainerAdmin = async (req, res) => {
   try {
-    const deletedTrainer = await Trainer.findById(req.params.id);
-    if (!deletedTrainer) {
-      return res.status(404).json({
-        status: "fail",
-        message: "Trainer not found",
-      });
+    const { name, email, expertise, experience, salary } = req.body;
+
+    console.log(
+      "update info varify : ",
+      name,
+      email,
+      expertise,
+      experience,
+      salary
+    );
+
+    const trainer = await Trainer.findById(req.params.id);
+    if (!trainer) {
+      return res.status(404).json({ message: "Trainer not found" });
+    }
+    // Find and update trainer
+    const updatedTrainer = await Trainer.findByIdAndUpdate(req.params.id, {
+      name,
+      email,
+      expertise,
+      experience,
+      salary,
+    });
+
+    if (!updatedTrainer) {
+      return res.status(404).json({ message: "Trainer not updated something wrong." });
     }
 
-    const trainerUser = await User.findById(req.params.id);
-    if (trainerUser) {
-      await User.findByIdAndDelete(req.params.id);
-    }
-    deletedTrainer.status = "InActive";
-    deletedTrainer.email = "";
-    // deletedTrainer.save();
-
-    await deletedTrainer.save({ validateBeforeSave: false });
-
-    res.status(204).json({
-      status: "success",
-      data: deletedTrainer,
+    res.status(200).json({
+      message: "Trainer updated successfully",
+      trainer: updatedTrainer,
     });
-  } catch (err) {
-    res.status(500).json({
-      status: "error",
-      message: err.message,
-    });
+  } catch (error) {
+    console.error("Error updating trainer:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
-*/
+
+// delete trainer
 const deleteTrainer = async (req, res) => {
   try {
     // Permanently delete the trainer by ID
@@ -166,7 +176,7 @@ const deleteTrainer = async (req, res) => {
     // Send a success response with no content
     res.status(204).json({
       status: "success",
- message: "Trainer and associated user deleted successfully",
+      message: "Trainer and associated user deleted successfully",
     });
   } catch (err) {
     // Handle errors and send a server error response
@@ -177,7 +187,7 @@ const deleteTrainer = async (req, res) => {
   }
 };
 
-
+// get all plan associated with trainer
 const getAllPlansAssociatedWithTrainer = async (req, res) => {
   try {
     const trainerId = req.params.id;
@@ -205,6 +215,27 @@ const getAllPlansAssociatedWithTrainer = async (req, res) => {
   }
 };
 
+// auto deactivate trainers
+const autoDeactivateInactiveTrainers = async () => {
+  try {
+    const twoMinutesAgo = new Date();
+    //  2 minutes ago
+    // twoMinutesAgo.setMinutes(twoMinutesAgo.getMinutes() - 2);
+    twoMinutesAgo.setDate(twoMinutesAgo.getDate() - 30); // 30 days ago
+
+    const result = await Trainer.updateMany(
+      { lastLogin: { $lte: twoMinutesAgo }, status: "Active" },
+      { $set: { status: "Non-Active" } }
+    );
+
+    console.log(
+      `✅ Auto-deactivated ${result.modifiedCount} trainers inactive for 2 minutes!`
+    );
+  } catch (error) {
+    console.error("❌ Error in autoDeactivateInactiveTrainers:", error);
+  }
+};
+
 module.exports = {
   getAllTrainers,
   getTrainerById,
@@ -212,4 +243,6 @@ module.exports = {
   updateTrainer,
   deleteTrainer,
   getAllPlansAssociatedWithTrainer,
+  autoDeactivateInactiveTrainers,
+  updateTrainerAdmin,
 };

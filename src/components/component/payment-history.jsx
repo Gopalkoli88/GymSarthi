@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { CheckCircle,Clock, XCircle } from "lucide-react";
+import { CheckCircle, Clock, XCircle } from "lucide-react";
 
 import PaymentHistoryPDF from "./PaymentHistoryPDF";
 import {
@@ -155,9 +155,15 @@ export const PaymentHistory = () => {
   return (
     <div className="container px-4 py-8 mx-auto md:px-6 mt-[-70px]">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-black">Payment History</h1>
-        
-        
+        <header className="w-full   sm:mb-1">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+            Payment History
+          </h1>
+          <p className="mt-1 text-gray-600 dark:text-gray-400">
+            List of Payment History.{" "}
+          </p>
+        </header>
+
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Label
@@ -256,8 +262,8 @@ export const PaymentHistory = () => {
                 <TableCell>₹{tx.amount.toFixed(2)}</TableCell>
                 <TableCell>{tx.paymentMethod}</TableCell>
                 <TableCell>
-  <span
-    className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg transition-all
+                  <span
+                    className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg transition-all
       ${
         tx.status.toLowerCase() === "completed"
           ? "bg-gradient-to-r from-green-400 to-green-600 text-white shadow-green-500/50 hover:shadow-green-600/70"
@@ -265,25 +271,25 @@ export const PaymentHistory = () => {
           ? "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-yellow-500/50 hover:shadow-yellow-600/70"
           : "bg-gradient-to-r from-red-400 to-red-600 text-white shadow-red-500/50 hover:shadow-red-600/70"
       }`}
-  >
-    {tx.status.toLowerCase() === "completed" ? (
-      <>
-        <CheckCircle className="w-4 h-4" />
-        Completed
-      </>
-    ) : tx.status.toLowerCase() === "pending" ? (
-      <>
-        <Clock className="w-4 h-4" />
-        Pending
-      </>
-    ) : (
-      <>
-        <XCircle className="w-4 h-4" />
-        Failed
-      </>
-    )}
-  </span>
-</TableCell>
+                  >
+                    {tx.status.toLowerCase() === "completed" ? (
+                      <>
+                        <CheckCircle className="w-4 h-4" />
+                        Completed
+                      </>
+                    ) : tx.status.toLowerCase() === "pending" ? (
+                      <>
+                        <Clock className="w-4 h-4" />
+                        Pending
+                      </>
+                    ) : (
+                      <>
+                        <XCircle className="w-4 h-4" />
+                        Failed
+                      </>
+                    )}
+                  </span>
+                </TableCell>
 
                 <TableCell>{tx.userName}</TableCell>
                 <TableCell>{tx.planName}</TableCell>

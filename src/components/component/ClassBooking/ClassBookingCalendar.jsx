@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux";
 import { bookClass, fetchClasses } from "@/redux/classSlice";
 
 // clas booking
-export function ClassBookingCalendar({ classes }) {
+export function ClassBookingCalendar({ classes, refreshClasses }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const dispatch = useDispatch();
 
@@ -29,15 +29,19 @@ export function ClassBookingCalendar({ classes }) {
 
   const prevWeek = () => setCurrentDate(subWeeks(currentDate, 1));
   const nextWeek = () => setCurrentDate(addWeeks(currentDate, 1));
+
   const bookClassSlot = async (classId) => {
     try {
       const resultAction = await dispatch(bookClass(classId));
 
       if (bookClass.fulfilled.match(resultAction)) {
         toast.success("You've successfully booked the class!");
-        await dispatch(fetchClasses());
+        // await dispatch(fetchClasses());
+        await refreshClasses(); // <-- use the parent prop to refresh Redux
       } else if (bookClass.rejected.match(resultAction)) {
         // Show the message from payload or fallback
+        await refreshClasses(); // <-- use the parent prop to refresh Redux
+
         const errorMessage =
           resultAction.payload?.message || "Booking failed. Please try again.";
         toast.error(errorMessage);

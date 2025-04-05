@@ -82,7 +82,7 @@ const Signin = () => {
             ) : (
               <>
                 <h2 className="mb-4 text-4xl font-bold text-center text-white">
-                  Welcome Back
+                  Sign In
                 </h2>
                 <p className="mt-2 text-lg text-center text-gray-400">
                   Don&apos;t have an account?{" "}

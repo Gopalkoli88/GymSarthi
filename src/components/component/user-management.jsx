@@ -67,7 +67,7 @@ export const UserManagementComp = () => {
             <span className="sr-only">Back</span>
           </Button> */}
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-            Member
+            Members
           </h1>
           <div className="flex flex-col items-start gap-2 ml-auto md:flex-row md:items-center">
             <Button
@@ -75,14 +75,14 @@ export const UserManagementComp = () => {
               onClick={() => setActiveTab("purchased")}
               className="w-full md:w-auto"
             >
-              Purchased
+            Plan Purchased
             </Button>
             <Button
               variant={activeTab === "unpurchased" ? "" : "outline"}
               onClick={() => setActiveTab("unpurchased")}
               className="w-full md:w-auto"
             >
-              Unpurchased
+              Plan Non-Purchased
             </Button>
           </div>
         </div>
@@ -91,8 +91,8 @@ export const UserManagementComp = () => {
           <div>
             <CardTitle className="text-2xl font-semibold tracking-wide text-gray-900">
               {activeTab === "purchased"
-                ? "Purchased Members"
-                : "Unpurchased Members"}
+                ? "Plan Purchased Members"
+                : "Plan Non-Purchased Members"}
             </CardTitle>
             <p className="text-sm text-gray-800">
               {activeTab === "purchased"

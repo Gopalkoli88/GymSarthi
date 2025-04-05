@@ -121,6 +121,8 @@ export function MemberClassBooking() {
     );
   };
 
+  const fetchClassesHandler = () => dispatch(fetchClasses());
+
   return (
     <MemberSidePanel>
       {/* <Card className="p-4 bg-gray-900 border-gray-800 rounded-lg shadow-lg"> */}
@@ -136,7 +138,10 @@ export function MemberClassBooking() {
           <h1 className="text-2xl md:text-3xl font-bold mb-6">
             Class Booking System
           </h1>
-          <ClassBookingCalendar classes={classes} />
+          <ClassBookingCalendar
+            classes={classes}
+            refreshClasses={fetchClassesHandler}
+          />
         </div>
       </main>
     </MemberSidePanel>

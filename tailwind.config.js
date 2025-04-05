@@ -43,6 +43,15 @@ export default {
       "blue-900": "#1E3A8A",
       "purple-600": "#7C3AED",
       "purple-700": "#6B2D92",
+      "green-100": "#D1FAE5", // Light green
+      "green-800": "#065F46", // Dark green
+      "red-100": "#FEE2E2", // Light red
+      "red-800": "#991B1B", // Dark red
+     "yellow-300": "#FCD34D", // Soft yellow - great for borders or highlights
+  "yellow-600": "#CA8A04", // Mustard yellow - deeper, used for contrast
+"yellow-500": "#EAB308",
+
+  "orange-400": "#FB923C"
 
       // Corrected missing value
     },
@@ -64,8 +73,6 @@ export default {
         // background: "#F3F4F6  ",
         background: "#FFFFFF",
 
-               
-        
         foreground: "hsl(var(--foreground))",
 
         primary: {

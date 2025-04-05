@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle } from "lucide-react";
 
-
 import {
   Table,
   TableHeader,
@@ -196,25 +195,26 @@ export function TrainerListComp() {
                   </TableCell>
 
                   <TableCell>
-  <span
-    className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg transition-all 
+                    <span
+                      className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg transition-all 
       ${
         trainer.status === "Active" || trainer.status === "active"
           ? "bg-gradient-to-r from-green-400 to-green-600 text-white shadow-green-500/50 hover:shadow-green-600/70"
           : "bg-gradient-to-r from-red-400 to-red-600 text-white shadow-red-500/50 hover:shadow-red-600/70"
       }`}
-  >
-    {trainer.status === "Active" || trainer.status === "active" ? (
-      <>
-        <CheckCircle className="w-4 h-4" /> Active
-      </>
-    ) : (
-      <>
-        <XCircle className="w-4 h-4" /> Inactive
-      </>
-    )}
-  </span>
-</TableCell>
+                    >
+                      {trainer.status === "Active" ||
+                      trainer.status === "active" ? (
+                        <>
+                          <CheckCircle className="w-4 h-4" /> Active
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="w-4 h-4" /> Inactive
+                        </>
+                      )}
+                    </span>
+                  </TableCell>
 
                   {/* --------- */}
                   <TableCell>

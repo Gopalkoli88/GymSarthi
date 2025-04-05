@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createClass, fetchClasses } from "../redux/classSlice";
-import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { Input } from "@/components/ui/input";
@@ -18,6 +17,9 @@ import {
 import { Label } from "@/components/ui/label";
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { getAllTrainers } from "@/redux/adminSlice";
+import FullCalendar from "@fullcalendar/react";
+import { ClassScheduler } from "@/components/component/Calendar/ClassScheduler";
 
 const AdminClassManagement = () => {
   const { trainers } = useSelector((state) => state.admin);
@@ -35,6 +37,7 @@ const AdminClassManagement = () => {
 
   useEffect(() => {
     dispatch(fetchClasses());
+    dispatch(getAllTrainers());
   }, [dispatch]);
 
   const handleChange = (e) => {
@@ -54,11 +57,11 @@ const AdminClassManagement = () => {
     });
   };
 
-  const events = classes.map((cls) => ({
-    title: `${cls.name} - ${cls.location}`,
-    start: cls.dateTime,
-    end: new Date(new Date(cls.dateTime).getTime() + cls.duration * 60000),
-  }));
+  // const events = classes.map((cls) => ({
+  //   title: `${cls.name} - ${cls.location}`,
+  //   start: cls.dateTime,
+  //   end: new Date(new Date(cls.dateTime).getTime() + cls.duration * 60000),
+  // }));
 
   return (
     <AdminSidePanel>
@@ -135,11 +138,14 @@ const AdminClassManagement = () => {
                           <SelectValue placeholder="Select trainer" />
                         </SelectTrigger>
                         <SelectContent>
-                          {trainers.map((t) => (
-                            <SelectItem key={t._id} value={t._id}>
-                              {t.name} - {t.expertise} ({t.experience} years)
-                            </SelectItem>
-                          ))}
+                          {trainers
+                            .filter((t) => t.status !== "Non-Active")
+                            .map((t) => (
+                              <SelectItem key={t._id} value={t._id}>
+                                {t.name} - {t.expertise} ({t.experience}{" "}
+                                {t.experience === 1 ? "year" : "years"})
+                              </SelectItem>
+                            ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -183,63 +189,63 @@ const AdminClassManagement = () => {
               </CardContent>
             </Card>
 
-            {/* <Card>
-              <CardFooter> */}
+            <div >
+              <header className="w-full ml-1 sm:mb-1">
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+                  Class Schedule
+                </h1>
+                <p className="mt-1 text-gray-600 dark:text-gray-400">
+                  Schedule your gym classes efficiently.
+                </p>
+              </header>
+            </div>
+            {/* calendar  */}
             <div className="p-6 bg-gray-900 border border-gray-700 rounded-lg shadow-xl">
               {/* <FullCalendar
-                    plugins={[dayGridPlugin, timeGridPlugin]}
-                    initialView="timeGridWeek"
-                    events={events}
-                    headerToolbar={{
-                      left: "prev,next",
-                      center: "title",
-                      right: "dayGridMonth,timeGridWeek,timeGridDay",
-                    }}
-                    eventColor="#14B8A6"
-                  /> */}
-
-              {/* <FullCalendar
-                  plugins={[dayGridPlugin, timeGridPlugin]}
-                  initialView="timeGridWeek"
-                  events={events}
-                  headerToolbar={{
-                    left: "prev,next",
-                    center: "title",
-                    right: "dayGridMonth,timeGridWeek,timeGridDay",
-                  }}
-                  eventContent={(eventInfo) => (
-                    <div className="px-2 py-1 text-white bg-blue-600 rounded-md shadow-md">
-                      {eventInfo.event.title}
-                    </div>
-                  )}
-                  height="auto"
-                  className="text-white bg-gray-900 border border-gray-700 rounded-lg shadow-xl"
-                /> */}
-              <FullCalendar
-                plugins={[dayGridPlugin, timeGridPlugin]} // Add plugins
-                initialView="timeGridWeek" // Set initial view
-                events={events} // Pass events
+                plugins={[dayGridPlugin, timeGridPlugin]}
+                initialView="timeGridWeek"
+                events={classes.map((cls) => ({
+                  title: `🏋️‍♂️ ${cls.name}\n👨‍🏫 Trainer: ${
+                    trainers.find((t) => t._id === cls.trainerId)?.name ||
+                    "Unknown"
+                  }\n📍 ${cls.location}`,
+                  start: cls.dateTime,
+                  end: new Date(
+                    new Date(cls.dateTime).getTime() + cls.duration * 60000
+                  ),
+                  backgroundColor: "bg-blue-500",
+                  borderColor: "border-blue-700",
+                  textColor: "text-white",
+                }))}
                 headerToolbar={{
-                  left: "prev,next",
+                  left: "prev,next today",
                   center: "title",
                   right: "dayGridMonth,timeGridWeek,timeGridDay",
                 }}
                 eventContent={(eventInfo) => (
-                  <div
-                    className={cn(
-                      "px-2 py-1 text-white bg-blue-600 rounded-md shadow-md",
-                      "hover:bg-blue-700 transition-colors duration-200" // Add hover effect
-                    )}
-                  >
+                  <div className="p-2 text-xs font-semibold text-white whitespace-pre-wrap transition-all bg-blue-500 rounded-lg shadow-md hover:bg-blue-700">
                     {eventInfo.event.title}
                   </div>
                 )}
-                height="auto" // Set height
-                className="text-white bg-gray-900 border border-gray-700 rounded-lg" // Add custom styles
+                height="auto"
+                className="text-white bg-gray-900 border border-gray-700 rounded-lg"
+              /> */}
+
+              <ClassScheduler
+                events={classes.map((cls) => ({
+                  id: cls._id,
+                  title: cls.name,
+                  instructor:
+                    trainers.find((t) => t._id === cls.trainerId)?.name ||
+                    "Unknown",
+                  location: cls.location,
+                  start: new Date(cls.dateTime),
+                  end: new Date(
+                    new Date(cls.dateTime).getTime() + cls.duration * 60000
+                  ),
+                  color: "bg-blue-700", // You can customize color logic
+                }))}
               />
-              {/* 
-              </CardFooter>
-            </Card> */}
             </div>
           </div>
         </main>

@@ -128,25 +128,9 @@ const TrainerPlans = () => {
             </div>
           ) : (
             // No Plans Purchased UI
-            <div className="flex flex-col items-center justify-center p-8 mt-6 text-center bg-gray-100 border-2 border-dashed rounded-lg dark:bg-gray-900 dark:border-gray-700">
-              <img
-                src="/images/no-plans.svg"
-                alt="No Plans"
-                className="w-48 h-48 mb-4"
-              />
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                No Plans Purchased Yet!
-              </h2>
-              <p className="mt-2 text-gray-600 dark:text-gray-400">
-                You haven't purchased any training plans yet. Buy a plan now to start managing your tasks efficiently.
-              </p>
-              <Button
-                onClick={() => navigate("/")}
-                className="px-6 py-2 mt-4 text-white transition-transform rounded-lg shadow-lg bg-gradient-to-r from-green-500 via-green-600 to-green-700 hover:scale-105 hover:shadow-xl"
-              >
-                🚀 Explore Plans
-              </Button>
-            </div>
+            <div className="p-6 text-center text-gray-400 bg-gray-900 border border-gray-700 rounded-lg">
+            No Trainer Plan Available
+          </div>
           )}
         </div>
       </div>

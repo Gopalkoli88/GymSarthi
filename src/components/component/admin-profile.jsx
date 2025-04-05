@@ -1,30 +1,22 @@
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import {
-  Card,
-
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAdminInfo,
-   updateAdminInfo,
-} from "@/redux/adminSlice";
-import {   useEffect, useState } from "react";
+import { getAdminInfo, updateAdminInfo } from "@/redux/adminSlice";
+import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getUserDetails,  uploadUserPhoto } from "@/redux/userSlice";
+import { getUserDetails, uploadUserPhoto } from "@/redux/userSlice";
 
 export const AdminProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user,   error } = useSelector((state) => state.user);
+  const { user, error } = useSelector((state) => state.user);
   const { adminInfo } = useSelector((state) => state.admin);
 
   useEffect(() => {
@@ -86,8 +78,6 @@ export const AdminProfile = () => {
     setPhoto(e.target.files[0]);
   };
 
-
-
   const handleUpdate = async (e) => {
     e.preventDefault();
     if (photo && user) {
@@ -139,9 +129,7 @@ export const AdminProfile = () => {
     <div className="flex flex-col w-full gap-6 p-6 sm:gap-8 sm:p-10 mt-[-90px]">
       <header className="w-full ml-12 sm:mb-1">
         <h1
-          className={`text-4xl font-bold transition duration-300 ${
-       "text-gray-900 dark:text-white"
-          }`}
+          className={`text-4xl font-bold transition duration-300 ${"text-gray-900 dark:text-white"}`}
         >
           Admin Profile
         </h1>
@@ -149,10 +137,14 @@ export const AdminProfile = () => {
           Detailed information about the gym admin.
         </p>
       </header>
-  
+
       <main className="grid flex-1 gap-6 p-6 sm:gap-10 sm:px-12 sm:py-6 md:gap-12 lg:grid-cols-2 xl:grid-cols-3 mt-[-50px]">
         <div className="grid gap-8 lg:col-span-2 xl:col-span-3">
-          <Card className={`transition duration-300 ${isEditMode ? "border-purple-500 shadow-2xl" : ""}`}>
+          <Card
+            className={`transition duration-300 ${
+              isEditMode ? "border-purple-500 shadow-2xl" : ""
+            }`}
+          >
             <CardContent>
               <div className="flex flex-col items-center gap-8 md:flex-row">
                 <div className="relative">
@@ -175,7 +167,7 @@ export const AdminProfile = () => {
                     </div>
                   )}
                 </div>
-  
+
                 <div className="grid flex-1 gap-6 md:grid-cols-2">
                   {[
                     ["name", newName, setNewName],
@@ -189,7 +181,13 @@ export const AdminProfile = () => {
                       </Label>
                       <Input
                         id={id}
-                        type={id === "email" ? "email" : id === "contact" ? "tel" : "text"}
+                        type={
+                          id === "email"
+                            ? "email"
+                            : id === "contact"
+                            ? "tel"
+                            : "text"
+                        }
                         value={value}
                         onChange={(e) => {
                           setter(e.target.value);
@@ -206,7 +204,7 @@ export const AdminProfile = () => {
                   ))}
                 </div>
               </div>
-  
+
               <div className="space-y-6">
                 {[
                   ["owner", ownerInformation, setOwnerInformation],
@@ -236,7 +234,7 @@ export const AdminProfile = () => {
                 ))}
               </div>
             </CardContent>
-  
+
             <CardFooter>
               {isEditMode ? (
                 <div className="flex gap-4">
@@ -268,8 +266,6 @@ export const AdminProfile = () => {
       </main>
     </div>
   );
-  
-  
 };
 
 export default AdminProfile;

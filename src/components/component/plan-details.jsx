@@ -43,7 +43,7 @@ export function PlanDetailsComp() {
 
   return (
     <TrainerSidePanel>
-      <div className="flex items-center justify-center min-h-screen p-6 mt-[-80 px]">
+      <div className="flex items-center justify-center min-h-screen p-6 ">
         <Card className="w-full max-w-3xl border border-gray-800 shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-[1.02]">
           <CardHeader className="p-6 border-b border-gray-800 rounded-t-lg bg-gray-950">
             <div className="flex items-center justify-between">
@@ -57,19 +57,21 @@ export function PlanDetailsComp() {
               </div>
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-1">
-                  <DollarSignIcon className="w-5 h-5 text-yellow-500" />
                   <span className="font-medium text-yellow-500">
-                    {planInfo.price}
+                    ₹{planInfo.price}
                   </span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <CalendarIcon className="w-5 h-5 text-gray-400" />
-                  <span className="text-gray-400">{planInfo.duration}</span>
+                  <span className="text-gray-400">
+                    {planInfo.duration}{" "}
+                    {planInfo.duration === 1 ? "month" : "months"}
+                  </span>
                 </div>
               </div>
             </div>
           </CardHeader>
-  
+
           <CardContent className="p-6 space-y-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
@@ -87,14 +89,14 @@ export function PlanDetailsComp() {
                 </span>
               </div>
             </div>
-  
+
             <div className="flex items-center space-x-2">
               <CalendarIcon className="w-5 h-5 text-gray-400" />
               <span className="text-gray-400">
                 Created at {convertDateTime(planInfo.createdAt)}
               </span>
             </div>
-  
+
             <div className="pt-4 border-t border-gray-700">
               <div className="flex items-center mb-3 space-x-2">
                 <UsersIcon className="w-5 h-5 text-gray-400" />
@@ -102,7 +104,7 @@ export function PlanDetailsComp() {
                   List of Users
                 </span>
               </div>
-  
+
               <div className="space-y-3">
                 {planUserDetails.map((plan, index) => (
                   <div
@@ -110,10 +112,12 @@ export function PlanDetailsComp() {
                     className="flex items-center justify-between p-3 transition-colors bg-gray-900 border border-gray-800 rounded-lg hover:bg-gray-800"
                   >
                     <div className="flex items-center space-x-2">
-                    <UserIcon className="w-5 h-5 text-gray-300 drop-shadow-md" />
-                    <div className="text-white">{plan.name}</div>
+                      <UserIcon className="w-5 h-5 text-gray-300 drop-shadow-md" />
+                      <div className="text-white">{plan.name}</div>
                     </div>
-                    <div className="font-medium text-gray-300">{plan.email}</div>
+                    <div className="font-medium text-gray-300">
+                      {plan.email}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -123,7 +127,7 @@ export function PlanDetailsComp() {
       </div>
     </TrainerSidePanel>
   );
-}  
+}
 
 function CalendarIcon(props) {
   return (

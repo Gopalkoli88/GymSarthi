@@ -186,7 +186,14 @@ const GetMemberRemainingPaymentStatusComponent = () => {
                       <p className="text-sm text-slate-400">Plan Expiry</p>
                       <p className="flex items-center text-lg font-medium text-white">
                         <Calendar className="w-4 h-4 mr-2 text-slate-400" />
-                        {new Date(payments.planExpiry).toLocaleDateString()}
+                        {new Date(payments.planExpiry).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "2-digit",
+                          }
+                        )}
                       </p>
                     </div>
                   </div>
@@ -237,7 +244,7 @@ const GetMemberRemainingPaymentStatusComponent = () => {
                           value={paymentInfo.paymentMethod}
                           onValueChange={handlePaymentMethodChange}
                         >
-                          <SelectTrigger >
+                          <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -302,48 +309,47 @@ const GetMemberRemainingPaymentStatusComponent = () => {
               {/* Payment History */}
               {payments.paymentHistory &&
                 payments.paymentHistory.length > 0 && (
-                
-                    <div>
-            <h1 className="text-3xl font-semibold text-black">Payment History
-                      </h1>
-                      <p className="mt-1 text-black dark:text-gray-400">
+                  <div>
+                    <h1 className="text-3xl font-semibold text-black">
+                      Payment History
+                    </h1>
+                    <p className="mt-1 text-black dark:text-gray-400">
                       Track your previous payment transactions
-                      </p>
-                  
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Amount Paid</TableHead>
-                            <TableHead>Remaining</TableHead>
-                            <TableHead>Status</TableHead>
+                    </p>
+
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Amount Paid</TableHead>
+                          <TableHead>Remaining</TableHead>
+                          <TableHead>Status</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {payments.paymentHistory.map((payment, index) => (
+                          <TableRow key={index}>
+                            <TableCell>
+                              {new Date(
+                                payment.paymentDate
+                              ).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell>₹{payment.amountPaid}</TableCell>
+                            <TableCell>₹{payment.remainingAmount}</TableCell>
+                            <TableCell
+                              className={`text-${
+                                payment.status === "completed"
+                                  ? "emerald"
+                                  : "yellow"
+                              }-500`}
+                            >
+                              {payment.status}
+                            </TableCell>
                           </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {payments.paymentHistory.map((payment, index) => (
-                            <TableRow key={index}>
-                              <TableCell>
-                                {new Date(
-                                  payment.paymentDate
-                                ).toLocaleDateString()}
-                              </TableCell>
-                              <TableCell>₹{payment.amountPaid}</TableCell>
-                              <TableCell>₹{payment.remainingAmount}</TableCell>
-                              <TableCell
-                                className={`text-${
-                                  payment.status === "completed"
-                                    ? "emerald"
-                                    : "yellow"
-                                }-500`}
-                              >
-                                {payment.status}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                      </div>
-              
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
                 )}
             </div>
           </main>

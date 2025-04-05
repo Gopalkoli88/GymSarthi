@@ -165,8 +165,8 @@ const MemberPaymentHistory = () => {
     };
 
     // Format the date
-    const formattedDate = `${day}${daySuffix(day)} ${
-      monthNames[month - 1]
+    const formattedDate = `${month}${daySuffix(day)} ${
+      monthNames[day - 1]
     } ${year}`;
 
     return formattedDate;
@@ -257,7 +257,7 @@ const MemberPaymentHistory = () => {
                     <TableRow key={tx._id}>
                       <TableCell>{generateCustomTransactionId(tx._id)}</TableCell>
                       <TableCell>{formatDate(new Date(tx.paymentDate).toLocaleDateString())}</TableCell>
-                      <TableCell>${tx.amount.toFixed(2)}</TableCell>
+                      <TableCell>₹{tx.amount.toFixed(2)}</TableCell>
                       <TableCell>{tx.paymentMethod}</TableCell>
                       <TableCell>{tx.userId.name}</TableCell>
                       <TableCell>{tx.planId.name}</TableCell>

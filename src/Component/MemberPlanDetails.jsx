@@ -58,13 +58,13 @@ const MemberPlanDetails = () => {
           {/* Plan Price */}
           <div>
             <div className="text-xl font-semibold">Price</div>
-            <div className="mt-2 text-sm text-gray-400">${plan.price}</div>
+            <div className="mt-2 text-sm text-gray-400">₹{plan.price}</div>
           </div>
 
           {/* Plan Duration */}
           <div>
             <div className="text-xl font-semibold">Duration</div>
-            <div className="mt-2 text-sm text-gray-400">{plan.duration}</div>
+            <div className="mt-2 text-sm text-gray-400">{plan.duration} {plan.duration===1 ? "month" : "months"}</div>
           </div>
 
           {/* Trainer Name */}

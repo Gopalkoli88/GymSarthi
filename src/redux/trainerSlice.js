@@ -88,6 +88,29 @@ export const updateTrainerInfo = createAsyncThunk(
   }
 );
 
+export const updateTrainerProfileInfo = createAsyncThunk(
+  "trainer/profileUpdateInfo",
+  async (trainerData , { getState, thunkAPI }) => {
+    try {
+      const state = getState();
+      const trainerId = state.user.user._id;
+
+      console.log("varify update trainer information :", trainerData);
+      const response = await api.put(
+        `/trainer/profile/${trainerId}`,
+        trainerData
+      );
+      console.log("trainer update : ", response);
+
+      console.log("updated tariner info :", response);
+
+      return response.data;
+    } catch (error) {
+      console.log("error from updateTrainerInfo :", error);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
 const trainerSlice = createSlice({
   name: "trainer",
   initialState: {
@@ -116,6 +139,10 @@ const trainerSlice = createSlice({
         state.trainerInfo = action.payload;
       })
       .addCase(updateTrainerInfo.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.trainerInfo = action.payload;
+      })
+      .addCase(updateTrainerProfileInfo.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.trainerInfo = action.payload;
       });

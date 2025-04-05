@@ -2,14 +2,11 @@ const { check, validationResult } = require("express-validator");
 const Payment = require("../models/Payment");
 const Plan = require("../models/Plan");
 const User = require("../models/User");
-const {sendConfirmationEmail,sendEmail} = require("../utils/emailService");
+const { sendConfirmationEmail, sendEmail } = require("../utils/emailService");
 const Trainer = require("../models/Trainer");
-const PartialPaymentSchema=require("../models/PartialPaymentSchema");
+const PartialPaymentSchema = require("../models/PartialPaymentSchema");
 
 // ------------------------------------------------------------------------------------------------
-
-
-
 
 // ------------------------------------------------------------------------------------------------
 
@@ -37,7 +34,7 @@ const validatePlanPurchase = [
     .isLength({ min: 5, max: 5 })
     .withMessage("Zip code must be 5 digits"),
 ];
- 
+
 const planPurchase = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -50,13 +47,17 @@ const planPurchase = async (req, res) => {
   try {
     const user = await User.findById(userId).populate("payments");
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     const currentDate = new Date();
     const paymentAmount = Number(amount);
     if (isNaN(paymentAmount) || paymentAmount <= 0) {
-      return res.status(400).json({ success: false, message: "Invalid payment amount" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid payment amount" });
     }
 
     let plan, planFee, expiryDate;
@@ -66,11 +67,15 @@ const planPurchase = async (req, res) => {
       // New plan purchase
       plan = await Plan.findById(planId);
       if (!plan) {
-        return res.status(404).json({ success: false, message: "Plan not found" });
+        return res
+          .status(404)
+          .json({ success: false, message: "Plan not found" });
       }
       planFee = Number(plan.price);
       if (isNaN(planFee) || planFee <= 0) {
-        return res.status(400).json({ success: false, message: "Invalid plan price" });
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid plan price" });
       }
 
       // Check if user has an active plan
@@ -79,25 +84,30 @@ const planPurchase = async (req, res) => {
         if (latestPayment && latestPayment.remainingAmount > 0) {
           return res.status(400).json({
             success: false,
-            message: `You cannot purchase a new plan until you fully pay your current plan (${user.planName}). Remaining balance: ${latestPayment.remainingAmount.toFixed(2)}`,
+            message: `You cannot purchase a new plan until you fully pay your current plan (${
+              user.planName
+            }). Remaining balance: ${latestPayment.remainingAmount.toFixed(2)}`,
           });
         }
       }
 
       expiryDate = new Date(currentDate);
-      expiryDate.setDate(currentDate.getDate() + plan.duration);
+      expiryDate.setDate(currentDate.getDate() + plan.duration * 30);
     } else if (user.isActive && user.planId && user.payments.length > 0) {
       // Remaining payment for existing plan
       plan = await Plan.findById(user.planId);
       if (!plan) {
-        return res.status(404).json({ success: false, message: "Current plan not found" });
+        return res
+          .status(404)
+          .json({ success: false, message: "Current plan not found" });
       }
       planFee = Number(plan.price);
       expiryDate = user.planExpiry;
     } else {
       return res.status(400).json({
         success: false,
-        message: "No active plan to pay remaining balance for, and no new plan specified",
+        message:
+          "No active plan to pay remaining balance for, and no new plan specified",
       });
     }
 
@@ -132,13 +142,20 @@ const planPurchase = async (req, res) => {
       user.planId = planId;
     } else {
       // Payment for existing plan
-      const latestPayment = await PartialPaymentSchema.findById(user.payments[user.payments.length - 1]);
+      const latestPayment = await PartialPaymentSchema.findById(
+        user.payments[user.payments.length - 1]
+      );
       if (!latestPayment) {
-        return res.status(500).json({ success: false, message: "Latest payment record not found" });
+        return res
+          .status(500)
+          .json({ success: false, message: "Latest payment record not found" });
       }
 
       if (latestPayment.status === "completed") {
-        return res.status(400).json({ success: false, message: "Payment already completed for this plan" });
+        return res.status(400).json({
+          success: false,
+          message: "Payment already completed for this plan",
+        });
       }
 
       if (currentDate > latestPayment.deadline) {
@@ -146,12 +163,18 @@ const planPurchase = async (req, res) => {
         user.isActive = false;
         await latestPayment.save();
         await user.save();
-        return res.status(400).json({ success: false, message: "Payment deadline exceeded, plan deactivated" });
+        return res.status(400).json({
+          success: false,
+          message: "Payment deadline exceeded, plan deactivated",
+        });
       }
 
       const prevRemaining = Number(latestPayment.remainingAmount);
       if (isNaN(prevRemaining)) {
-        return res.status(500).json({ success: false, message: "Invalid remaining amount in previous payment" });
+        return res.status(500).json({
+          success: false,
+          message: "Invalid remaining amount in previous payment",
+        });
       }
 
       const totalPaid = planFee - prevRemaining + paymentAmount;
@@ -160,7 +183,9 @@ const planPurchase = async (req, res) => {
       if (newRemainingAmount < 0) {
         return res.status(400).json({
           success: false,
-          message: `Payment amount exceeds remaining balance. Remaining amount due: ${prevRemaining.toFixed(2)}`,
+          message: `Payment amount exceeds remaining balance. Remaining amount due: ${prevRemaining.toFixed(
+            2
+          )}`,
         });
       }
 
@@ -176,7 +201,10 @@ const planPurchase = async (req, res) => {
       user.payments.push(partialPayment._id);
     }
 
-    let payment = await Payment.findOne({ userId, planId: planId || user.planId });
+    let payment = await Payment.findOne({
+      userId,
+      planId: planId || user.planId,
+    });
     if (!payment && user.payments.length === 1) {
       payment = new Payment({
         userId,
@@ -199,7 +227,11 @@ const planPurchase = async (req, res) => {
           await trainer.save();
         } catch (trainerError) {
           console.log("Trainer save error:", trainerError);
-          return res.status(500).json({ success: false, message: "Failed to update trainer", error: trainerError.message });
+          return res.status(500).json({
+            success: false,
+            message: "Failed to update trainer",
+            error: trainerError.message,
+          });
         }
         user.trainerName = trainer.name;
       }
@@ -209,7 +241,7 @@ const planPurchase = async (req, res) => {
     }
 
     await user.save();
-    const updatedUser = await User.findById(userId).populate('payments');
+    const updatedUser = await User.findById(userId).populate("payments");
 
     if (user.payments.length === 1 || partialPayment.remainingAmount === 0) {
       try {
@@ -221,9 +253,10 @@ const planPurchase = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: user.payments.length === 1
-        ? "Plan enrolled successfully!"
-        : partialPayment.remainingAmount === 0
+      message:
+        user.payments.length === 1
+          ? "Plan enrolled successfully!"
+          : partialPayment.remainingAmount === 0
           ? "Plan fully paid and active!"
           : "Partial payment recorded successfully",
       planExpiry: expiryDate,
@@ -237,14 +270,15 @@ const planPurchase = async (req, res) => {
   }
 };
 
-
-const getMemberRemainingPaymentStatus=async(req,res)=>{
+const getMemberRemainingPaymentStatus = async (req, res) => {
   try {
     const userId = req.user.id;
-    const user = await User.findById(userId).populate('payments');
+    const user = await User.findById(userId).populate("payments");
 
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     const currentDate = new Date();
@@ -254,12 +288,12 @@ const getMemberRemainingPaymentStatus=async(req,res)=>{
       const plan = user.planId ? await Plan.findById(user.planId) : null;
       return res.status(200).json({
         success: true,
-        planName: user.planName || 'No active plan',
+        planName: user.planName || "No active plan",
         totalAmount: plan ? plan.price : 0,
         amountPaid: 0,
         remainingAmount: plan ? plan.price : 0,
         deadline: null,
-        status: 'pending',
+        status: "pending",
         isActive: user.isActive,
         planExpiry: user.planExpiry,
         paymentHistory: [],
@@ -270,7 +304,10 @@ const getMemberRemainingPaymentStatus=async(req,res)=>{
     const latestPayment = user.payments[user.payments.length - 1];
     const plan = await Plan.findById(user.planId);
     const totalAmount = plan ? plan.price : 0;
-    const amountPaid = user.payments.reduce((sum, payment) => sum + payment.amountPaid, 0);
+    const amountPaid = user.payments.reduce(
+      (sum, payment) => sum + payment.amountPaid,
+      0
+    );
     const remainingAmount = latestPayment.remainingAmount;
 
     res.status(200).json({
@@ -283,7 +320,7 @@ const getMemberRemainingPaymentStatus=async(req,res)=>{
       status: latestPayment.status,
       isActive: user.isActive,
       planExpiry: user.planExpiry,
-      paymentHistory: user.payments.map(payment => ({
+      paymentHistory: user.payments.map((payment) => ({
         amountPaid: payment.amountPaid.toFixed(2),
         paymentDate: payment.paymentDate,
         remainingAmount: payment.remainingAmount.toFixed(2),
@@ -291,11 +328,10 @@ const getMemberRemainingPaymentStatus=async(req,res)=>{
       })),
     });
   } catch (error) {
-    console.log('Error fetching payment status:', error);
+    console.log("Error fetching payment status:", error);
     res.status(500).json({ success: false, error: error.message });
   }
-}
-
+};
 
 // ye wala admin payment ka hain
 const getMemberPaymentDetails = async (req, res) => {
@@ -303,8 +339,10 @@ const getMemberPaymentDetails = async (req, res) => {
   const userId = req.params.id;
 
   try {
-      // const payment = await Payment.find().limit(100).populate("userId planId");
-    const payments = await Payment.find({ userId: userId }).populate("userId").populate("planId");
+    // const payment = await Payment.find().limit(100).populate("userId planId");
+    const payments = await Payment.find({ userId: userId })
+      .populate("userId")
+      .populate("planId");
     // const planInfo = await Plan.findById(payments.planId);
 
     res.status(200).json(payments);
@@ -319,7 +357,7 @@ const getUserPaymentDetails = async (req, res) => {
   const userId = req.params.id;
 
   try {
-      // const payment = await Payment.find().limit(100).populate("userId planId");
+    // const payment = await Payment.find().limit(100).populate("userId planId");
     const payments = await Payment.find({ userId: userId }).populate("");
     const planInfo = await Plan.findById(payments.planId);
 
@@ -328,7 +366,6 @@ const getUserPaymentDetails = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
-
 
 const getAllPayments = async (req, res) => {
   try {
@@ -344,4 +381,10 @@ const getAllPayments = async (req, res) => {
   }
 };
 
-module.exports = {getMemberRemainingPaymentStatus, getMemberPaymentDetails, planPurchase, getAllPayments,getUserPaymentDetails };
+module.exports = {
+  getMemberRemainingPaymentStatus,
+  getMemberPaymentDetails,
+  planPurchase,
+  getAllPayments,
+  getUserPaymentDetails,
+};

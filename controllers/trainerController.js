@@ -90,27 +90,43 @@ const createTrainer = async (req, res) => {
 // Update a trainer
 const updateTrainer = async (req, res) => {
   try {
-    const updatedTrainer = await Trainer.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
+    const { name, email, expertise, experience, salary } = req.body;
+
+    console.log(
+      "update info varify : ",
+      name,
+      email,
+      expertise,
+      experience,
+      salary
     );
-    if (!updatedTrainer) {
-      return res.status(404).json({
-        status: "fail",
-        message: "Trainer not found",
-      });
+
+    const trainer = await Trainer.findById(req.params.id);
+    if (!trainer) {
+      return res.status(404).json({ message: "Trainer not found" });
     }
-    console.log("updated information from backend :", updatedTrainer);
-    res.status(200).json(updatedTrainer);
-  } catch (err) {
-    res.status(500).json({
-      status: "error",
-      message: err.message,
+    // Find and update trainer
+    const updatedTrainer = await Trainer.findByIdAndUpdate(req.params.id, {
+      name,
+      email,
+      expertise,
+      experience,
+      salary,
     });
+
+    if (!updatedTrainer) {
+      return res
+        .status(404)
+        .json({ message: "Trainer not updated something wrong." });
+    }
+
+    res.status(200).json({
+      message: "Trainer updated successfully",
+      trainer: updatedTrainer,
+    });
+  } catch (error) {
+    console.error("Error updating trainer:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -142,7 +158,9 @@ const updateTrainerAdmin = async (req, res) => {
     });
 
     if (!updatedTrainer) {
-      return res.status(404).json({ message: "Trainer not updated something wrong." });
+      return res
+        .status(404)
+        .json({ message: "Trainer not updated something wrong." });
     }
 
     res.status(200).json({

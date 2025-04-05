@@ -26,6 +26,11 @@ router.put(
 
   updateTrainerAdmin
 );
+router.put(
+  "/profile/:id",
+
+  updateTrainer
+);
 router.delete(
   "/:id",
 

@@ -45,6 +45,7 @@ import TrainerSchedule from "./Component/TrainerSchedule";
 import AdminClassManagement from "./Component/AdminClassManagement";
 import QrScanner from "./components/component/QRCodeGenerator";
 import GlobalLoader from "./components/component/GlobalLoader";
+import AIPlanGenerator from "./Component/AiPlanGenerator";
 const App = () => {
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -60,6 +61,9 @@ const App = () => {
         <Route path="/about" element={<AboutAs />} />
         <Route path="/contact" element={<ContactUsmain />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/generate-plan" element={<AIPlanGenerator />} />
+
+
 
         <Route element={<AuthLayout />}>
           <Route path="/admin-dashboard" element={<AdminDasboard />} />

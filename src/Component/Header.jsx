@@ -8,7 +8,7 @@ export const logoutFuncationality = () => {};
 const Header = ({ user }) => {
   const navigate = useNavigate();
   return (
-    <header className="bg-background w-full  px-4 lg:px-6 h-14 flex items-center shadow-sm mt-2 mb-2">
+    <header className="bg-gray-900 w-full  px-4 lg:px-6 h-14 flex items-center shadow-sm mt-2 mb-2">
       <Link
         to="/"
         className="flex items-center justify-center"
@@ -61,6 +61,7 @@ const Header = ({ user }) => {
         >
           Contact
         </Link>
+        
         {/* Conditional rendering based on user role */}
         {user && user.role === "member" && (
           <Link

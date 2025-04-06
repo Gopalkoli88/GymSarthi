@@ -6,6 +6,7 @@ import trainerReducer from "./trainerSlice";
 import adminReducer from "./adminSlice";
 import classReducer from "./classSlice";
 import loadingReducer from "./loadingSlice";
+import aiPlanReducer from "./aiPlanSlice";
 
 const persistConfig = {
   key: "root",
@@ -18,6 +19,7 @@ const persistedTrainerReducer = persistReducer(persistConfig, trainerReducer);
 const persistedAdminReducer = persistReducer(persistConfig, adminReducer);
 const persistedClassReducer = persistReducer(persistConfig, classReducer);
 const persistedLoadingReducer = persistReducer(persistConfig, loadingReducer);
+const persistedAiPlanReducer = persistReducer(persistConfig, aiPlanReducer);
 
 const store = configureStore({
   reducer: {
@@ -26,6 +28,7 @@ const store = configureStore({
     admin: persistedAdminReducer,
     class: persistedClassReducer,
     loading: persistedLoadingReducer,
+    aiPlan: persistedAiPlanReducer,
   },
 });
 

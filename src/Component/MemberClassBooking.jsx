@@ -123,6 +123,30 @@ export function MemberClassBooking() {
 
   const fetchClassesHandler = () => dispatch(fetchClasses());
 
+  // return (
+  //   <MemberSidePanel>
+  //     {/* <Card className="p-4 bg-gray-900 border-gray-800 rounded-lg shadow-lg"> */}
+  //     {status === "loading" && (
+  //       <div className="flex items-center justify-center p-4 text-gray-400">
+  //         <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+  //         <span>Loading classes...</span>
+  //       </div>
+  //     )}
+
+  //     <main className="min-h-screen bg-gray-900 text-white p-4 md:p-8">
+  //       <div className="max-w-7xl mx-auto">
+  //         <h1 className="text-2xl md:text-3xl font-bold mb-6">
+  //           Class Booking System
+  //         </h1>
+  //         <ClassBookingCalendar
+  //           classes={classes}
+  //           refreshClasses={fetchClassesHandler}
+  //         />
+  //       </div>
+  //     </main>
+  //   </MemberSidePanel>
+  // );
+
   return (
     <MemberSidePanel>
       {/* <Card className="p-4 bg-gray-900 border-gray-800 rounded-lg shadow-lg"> */}
@@ -133,17 +157,23 @@ export function MemberClassBooking() {
         </div>
       )}
 
-      <main className="min-h-screen bg-gray-900 text-white p-4 md:p-8">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl md:text-3xl font-bold mb-6">
-            Class Booking System
+      <div className=" items-start justify-start min-h-screen p-6 bg-white mt-[-70px]">
+        <header className="w-full px-4 mx-auto mb-6 max-w-7xl md:px-4">
+          <h1 className="text-3xl font-semibold text-black dark:text-white">
+          Welcome to Class Booking
           </h1>
-          <ClassBookingCalendar
-            classes={classes}
-            refreshClasses={fetchClassesHandler}
-          />
-        </div>
-      </main>
+          <p className="mt-1 text-black dark:text-gray-400">
+          Manage your gym classes effortlessly and stay on track with your schedule.
+          </p>
+        </header>
+
+        <main className="min-h-screen p-4 text-white bg-gray-900 md:p-8 rounded-3xl">
+          <div className="mx-auto max-w-7xl">
+         
+            <ClassBookingCalendar classes={classes} />
+          </div>
+        </main>
+      </div>
     </MemberSidePanel>
   );
 }

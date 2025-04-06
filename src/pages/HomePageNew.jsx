@@ -1,5 +1,3 @@
- 
-
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,84 +34,6 @@ export function HomePageComp() {
   const scrollToMemberPlans = () => {
     memberPlansRef.current.scrollIntoView({ behavior: "smooth" });
   };
-
-  //   return (
-  //     <div className="flex flex-col min-w-full min-h-screen text-white bg-gradient-to-br from-gray-900 to-black">
-  //       <ChatComponent />
-  //       <Header />
-  //       <main className="flex-1">
-  //         {/* Hero Section */}
-  //         <section className="w-full py-16 md:py-24 lg:py-20">
-  //           <div className="container grid gap-8 px-6 md:px-12 lg:grid-cols-2 lg:gap-12">
-  //             <div className="flex flex-col justify-center space-y-4 lg:pl-11">
-  //               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl">
-  //                 Elevate Your Fitness at GYMK
-  //               </h1>
-  //               <p className="max-w-[600px] text-gray-300 md:text-xl">
-  //                 Experience the ultimate fitness destination with top-notch equipment, expert guidance, and a supportive community.
-  //               </p>
-  //               <Button
-  //                 onClick={scrollToMemberPlans}
-  //                 className="px-6 py-3 text-white transition-all duration-300 bg-blue-600 rounded-full shadow-md hover:bg-blue-500 hover:scale-105"
-  //               >
-  //                 Join Now
-  //               </Button>
-  //             </div>
-  //             <div className="grid grid-cols-2 gap-4">
-  //               <img
-  //                 src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470"
-  //                 alt="Hero 1"
-  //                 className="w-full shadow-lg rounded-xl aspect-video"
-  //               />
-  //               <img
-  //                 src="https://images.unsplash.com/photo-1550345332-09e3ac987658?q=80&w=1374"
-  //                 alt="Hero 2"
-  //                 className="w-full shadow-lg rounded-xl aspect-square"
-  //               />
-  //               <img
-  //                 src="https://images.unsplash.com/photo-1631501700640-cfd8663b9bd7?q=80&w=1374"
-  //                 alt="Hero 3"
-  //                 className="w-full shadow-lg rounded-xl aspect-square"
-  //               />
-  //               <img
-  //                 src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1470"
-  //                 alt="Hero 4"
-  //                 className="w-full shadow-lg rounded-xl aspect-video"
-  //               />
-  //             </div>
-  //           </div>
-  //         </section>
-
-  //         {/* Membership Plans Section */}
-  //         <section ref={memberPlansRef} className="w-full py-12 bg-gradient-to-br from-gray-900 to-black md:py-24 lg:py-24">
-  //           <div className="container grid items-center justify-center gap-4 px-6 text-center md:px-12">
-  //             <h2 className="text-4xl font-bold text-white sm:text-5xl">Membership Plans</h2>
-  //             <p className="max-w-[700px] text-gray-400 md:text-xl">
-  //               Choose a plan that fits your goals and budget.
-  //             </p>
-  //             <MembershipPlanSliderComp />
-  //           </div>
-  //         </section>
-
-  //         {/* Testimonials Section */}
-  //         <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-gray-900 to-black">
-  //           <div className="container grid items-center justify-center gap-4 px-6 text-center md:px-12">
-  //             <h2 className="text-4xl font-bold text-white sm:text-5xl">What Our Members Say</h2>
-  //             <p className="max-w-[700px] text-gray-300 md:text-xl">
-  //               Hear from our members about their journey with us.
-  //             </p>
-  //             <Reviews />
-  //             <Reviewss />
-  //           </div>
-  //         </section>
-  //       </main>
-  //       <Footer />
-  //     </div>
-  //   );
-  // };
-
-  // export default HomePageComp;
-
   return (
     <div className="flex flex-col min-w-full min-h-screen text-white bg-gradient-to-br from-gray-900 to-black">
       <ChatComponent />

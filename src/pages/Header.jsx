@@ -115,8 +115,6 @@
 //   );
 // }
 
-
-
 import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/FITNESS_logo2.png";
@@ -133,12 +131,16 @@ const Header = ({ user }) => {
         className="flex items-center justify-center"
         prefetch={false}
       >
-        <img className="p-2 mt-3 ml-5 h-28 rotate-12" src={logo} alt="Gym Fitness" />
+        <img
+          className="p-2 mt-3 ml-5 h-28 rotate-12"
+          src={logo}
+          alt="Gym Fitness"
+        />
         <span className="sr-only">Gym Fitness</span>
       </Link>
 
       <nav className="flex items-center gap-6 md:gap-10 lg:gap-12">
-        {["/", "/about", "/contact"].map((path, index) => {
+        {["/", "/about", "/contact","/generate-plan"].map((path, index) => {
           const isActive = location.pathname === path;
 
           return (
@@ -166,7 +168,9 @@ const Header = ({ user }) => {
           <Link
             to={`/${user.role}-dashboard`}
             className={`relative text-lg transition duration-300 group ${
-              location.pathname === `/${user.role}-dashboard` ? "font-bold text-blue-500" : ""
+              location.pathname === `/${user.role}-dashboard`
+                ? "font-bold text-blue-500"
+                : ""
             }`}
             prefetch={false}
           >

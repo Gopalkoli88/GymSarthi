@@ -54,61 +54,124 @@ export function ClassBookingCalendar({ classes }) {
     return classes.filter((c) => isSameDay(new Date(c.dateTime), day));
   };
  
+  // return (
+  //   <div className="overflow-hidden bg-gray-800 rounded-lg shadow-xl">
+  //     <div className="flex items-center justify-between p-4 bg-gray-700">
+  //       <h2 className="text-xl font-semibold">
+  //         {format(startDate, "MMMM d")} -{" "}
+  //         {format(addDays(startDate, 6), "MMMM d, yyyy")}
+  //       </h2>
+  //       <div className="flex gap-2">
+  //         <Button variant="outline" size="icon" onClick={prevWeek}>
+  //           <ChevronLeft className="w-4 h-4" />
+  //         </Button>
+  //         <Button variant="outline" size="icon" onClick={nextWeek}>
+  //           <ChevronRight className="w-4 h-4" />
+  //         </Button>
+  //       </div>
+  //     </div>
+
+  //     <div className="flex flex-col gap-4 p-4 max-h-[90vh] overflow-y-auto">
+  //       {weekDays.map((day, dayIndex) => (
+  //         <div key={dayIndex} className="flex flex-col gap-2">
+  //           <div className="flex items-start gap-4">
+  //             {/* Day name + date vertically */}
+  //             <div className="min-w-[100px] text-center bg-gray-700 rounded-lg p-2">
+  //               <p className="font-medium">{format(day, "EEEE")}</p>
+  //               <p className="text-sm text-gray-300">{format(day, "MMM d")}</p>
+  //             </div>
+
+  //             {/* Class Cards vertically beside the day */}
+  //             {getClassesForDay(day).length > 0 ? (
+  //               <div className="flex flex-wrap w-full gap-3">
+  //                 {getClassesForDay(day).map((classItem) => (
+  //                   <div key={classItem._id} className="w-[220px]">
+  //                     <ClassCard
+  //                       classData={{
+  //                         title: classItem.name,
+  //                         date: classItem.dateTime,
+  //                         maxCapacity: classItem.maxCapacity,
+  //                         bookedCount: classItem.bookings.length,
+  //                         instructor: classItem.trainerId?.name || "TBA",
+  //                       }}
+  //                       onBook={() => bookClassSlot(classItem._id)}
+  //                     />
+  //                   </div>
+  //                 ))}
+  //               </div>
+  //             ) : (
+  //               <div className="w-full p-4 text-center rounded-lg bg-gray-700/50">
+  //                 <p className="text-gray-400">No classes</p>
+  //               </div>
+  //             )}
+  //           </div>
+  //         </div>
+  //       ))}
+  //     </div>
+
+  //     <ToastContainer />
+  //   </div>
+  // );
+
   return (
+
     <div className="overflow-hidden bg-gray-800 rounded-lg shadow-xl">
+      
       <div className="flex items-center justify-between p-4 bg-gray-700">
         <h2 className="text-xl font-semibold">
           {format(startDate, "MMMM d")} -{" "}
           {format(addDays(startDate, 6), "MMMM d, yyyy")}
         </h2>
         <div className="flex gap-2">
-          <Button variant="outline" size="icon" onClick={prevWeek}>
+          <Button className=  "text-gray-900 border shadow-sm border-input bg-background bg-accent text-accent-foreground" size="icon" onClick={prevWeek}>
             <ChevronLeft className="w-4 h-4" />
           </Button>
-          <Button variant="outline" size="icon" onClick={nextWeek}>
+          <Button className=  "text-gray-900 border shadow-sm border-input bg-background bg-accent text-accent-foreground" size="icon" onClick={nextWeek}>
             <ChevronRight className="w-4 h-4" />
           </Button>
         </div>
       </div>
-
+  
       <div className="flex flex-col gap-4 p-4 max-h-[90vh] overflow-y-auto">
-        {weekDays.map((day, dayIndex) => (
-          <div key={dayIndex} className="flex flex-col gap-2">
-            <div className="flex items-start gap-4">
-              {/* Day name + date vertically */}
-              <div className="min-w-[100px] text-center bg-gray-700 rounded-lg p-2">
-                <p className="font-medium">{format(day, "EEEE")}</p>
-                <p className="text-sm text-gray-300">{format(day, "MMM d")}</p>
-              </div>
-
-              {/* Class Cards vertically beside the day */}
-              {getClassesForDay(day).length > 0 ? (
-                <div className="flex flex-wrap w-full gap-3">
-                  {getClassesForDay(day).map((classItem) => (
-                    <div key={classItem._id} className="w-[220px]">
-                      <ClassCard
-                        classData={{
-                          title: classItem.name,
-                          date: classItem.dateTime,
-                          maxCapacity: classItem.maxCapacity,
-                          bookedCount: classItem.bookings.length,
-                          instructor: classItem.trainerId?.name || "TBA",
-                        }}
-                        onBook={() => bookClassSlot(classItem._id)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="w-full p-4 text-center rounded-lg bg-gray-700/50">
-                  <p className="text-gray-400">No classes</p>
-                </div>
-              )}
-            </div>
+    {weekDays.map((day, dayIndex) => (
+      <div key={dayIndex} className="flex flex-col gap-2">
+        <div className="flex items-start gap-4">
+          {/* Day name + date vertically */}
+          <div className="min-w-[100px] text-center bg-gray-700 rounded-lg p-2">
+            <p className="font-medium">{format(day, "EEEE")}</p>
+            <p className="text-sm text-gray-300">{format(day, "MMM d")}</p>
           </div>
-        ))}
+  
+          {/* Class Cards vertically beside the day */}
+          {getClassesForDay(day).length > 0 ? (
+            <div className="flex flex-wrap w-full gap-3">
+              {getClassesForDay(day).map((classItem) => (
+                <div key={classItem._id} className="w-[270px]">
+                  <ClassCard
+                    classData={{
+                      title: classItem.name,
+                      date: classItem.dateTime,
+                      maxCapacity: classItem.maxCapacity,
+                      bookedCount: classItem.bookings.length,
+                      instructor: classItem.trainerId?.name || "TBA",
+                    }}
+                    onBook={() => bookClassSlot(classItem._id)}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="w-full p-4 text-center rounded-lg bg-gray-700/50">
+              <p className="text-gray-400">No classes</p>
+            </div>
+          )}
+        </div>
       </div>
-
+    ))}
+  </div>
+  
+  
+  
       <ToastContainer />
     </div>
   );

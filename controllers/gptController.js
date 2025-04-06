@@ -19,7 +19,7 @@ exports.generatePlan = async (req, res) => {
     } = req.body;
 
     const prompt = `
-Generate a structured 7-day fitness workout + diet plan for:
+Generate a structured ${daysPerWeek}-day fitness workout + diet plan for:
 - Name: ${name}
 - Gender: ${gender}
 - Weight: ${weight}

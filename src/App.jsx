@@ -1,6 +1,7 @@
 import {
   Navigate,
   Route,
+  Router,
   Routes,
   useLocation,
   useNavigate,
@@ -43,75 +44,86 @@ import MemberClassBooking from "./Component/MemberClassBooking";
 import TrainerSchedule from "./Component/TrainerSchedule";
 import AdminClassManagement from "./Component/AdminClassManagement";
 import QrScanner from "./components/component/QRCodeGenerator";
+import GlobalLoader from "./components/component/GlobalLoader";
 const App = () => {
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const location = useLocation();
   const [count, setCount] = useState(0);
   return (
-    <Routes>
-      <Route path="/" element={<HomePageComp />} />
-      <Route path="/signin" element={<Signin />} />
-      <Route path="/signup" element={<SignUpTwo />} />
-      <Route path="/about" element={<AboutAs />} />
-      <Route path="/contact" element={<ContactUsmain />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      
-      <Route element={<AuthLayout />}>
-        <Route path="/admin-dashboard" element={<AdminDasboard />} />
-        <Route path="/member-dashboard" element={<MemberDashboardNew />} />
-        <Route path="/trainer-dashboard" element={<TrainerDashboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/task-form/:id" element={<TaskForm />} />
-        <Route path="/plan-details/:id" element={<PlanDetailsComp />} />
-        <Route path="/update-details" element={<TrainerUpdateForm />} />
-        <Route path="/user-management" element={<UserManagement />} />
-        <Route path="/plan-management" element={<PlanManagement />} />
-        <Route path="/trainer-management" element={<TrainerManagement />} />
-        <Route path="/paymentlist" element={<PaymentLis />} />
-        <Route path="/purchase-plan/:id" element={<PurchasePlan />} />
-        <Route
-          path="/member-dashboard/plan-details"
-          element={<MemberPlanDetails />}
-        />
-        <Route
-          path="/member-dashboard/trainer-profile"
-          element={<MemberTrainerProfile />}
-        />
-        <Route
-          path="/member-dashboard/daily-tasks"
-          element={<MemberDailyTasks />}
-        />
-        <Route
-          path="/member-dashboard/payment-history"
-          element={<MemberPaymentHistory />}
-        />
-         <Route
-        path="/member-dashboard/payment-status"
-        element={<GetMemberRemainingPaymentStatusComponent/>}
-        />
+    <>
+      <GlobalLoader />
+      <Routes>
+        <Route path="/" element={<HomePageComp />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<SignUpTwo />} />
+        <Route path="/about" element={<AboutAs />} />
+        <Route path="/contact" element={<ContactUsmain />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
-<Route
-        path="/member-dashboard/class-book"
-        element={<MemberClassBooking/>}
-        />
-        <Route
-          path="/member-dashboard/attendance-calendar"
-          element={<MemberAttendance />}
-        />
+        <Route element={<AuthLayout />}>
+          <Route path="/admin-dashboard" element={<AdminDasboard />} />
+          <Route path="/member-dashboard" element={<MemberDashboardNew />} />
+          <Route path="/trainer-dashboard" element={<TrainerDashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/task-form/:id" element={<TaskForm />} />
+          <Route path="/plan-details/:id" element={<PlanDetailsComp />} />
+          <Route path="/update-details" element={<TrainerUpdateForm />} />
+          <Route path="/user-management" element={<UserManagement />} />
+          <Route path="/plan-management" element={<PlanManagement />} />
+          <Route path="/trainer-management" element={<TrainerManagement />} />
+          <Route path="/paymentlist" element={<PaymentLis />} />
+          <Route path="/purchase-plan/:id" element={<PurchasePlan />} />
+          <Route
+            path="/member-dashboard/plan-details"
+            element={<MemberPlanDetails />}
+          />
+          <Route
+            path="/member-dashboard/trainer-profile"
+            element={<MemberTrainerProfile />}
+          />
+          <Route
+            path="/member-dashboard/daily-tasks"
+            element={<MemberDailyTasks />}
+          />
+          <Route
+            path="/member-dashboard/payment-history"
+            element={<MemberPaymentHistory />}
+          />
+          <Route
+            path="/member-dashboard/payment-status"
+            element={<GetMemberRemainingPaymentStatusComponent />}
+          />
 
-        <Route path="/trainer-dashboard/my-plans" element={<TrainerPlans />} />
-        <Route path="/trainer-dashboard/class-schedule" element={< TrainerSchedule />} />
+          <Route
+            path="/member-dashboard/class-book"
+            element={<MemberClassBooking />}
+          />
+          <Route
+            path="/member-dashboard/attendance-calendar"
+            element={<MemberAttendance />}
+          />
 
-        <Route path="/homepage" element={<HomePageComp />} />
-        <Route path="/class-management" element={<AdminClassManagement/>} />
+          <Route
+            path="/trainer-dashboard/my-plans"
+            element={<TrainerPlans />}
+          />
+          <Route
+            path="/trainer-dashboard/class-schedule"
+            element={<TrainerSchedule />}
+          />
 
-        <Route path="/membership-growth" element={<MembershipGrowthChart />} />
-        <Route path="//qrCode" element={<QrScanner />} />
+          <Route path="/homepage" element={<HomePageComp />} />
+          <Route path="/class-management" element={<AdminClassManagement />} />
 
-
-      </Route>
-    </Routes>
+          <Route
+            path="/membership-growth"
+            element={<MembershipGrowthChart />}
+          />
+          <Route path="//qrCode" element={<QrScanner />} />
+        </Route>
+      </Routes>
+    </>
   );
 };
 

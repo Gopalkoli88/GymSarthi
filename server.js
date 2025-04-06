@@ -6,10 +6,10 @@ const cors = require("cors");
 require("dotenv").config();
 const app = express();
 const path = require("path");
-const http = require("http");  // Import the HTTP module to create a server
-const socketIo = require("socket.io");  // Import Socket.IO
+const http = require("http"); // Import the HTTP module to create a server
+const socketIo = require("socket.io"); // Import Socket.IO
 const cloudinary = require("cloudinary").v2;
-const Chat = require("./models/Chat");  // Import the Chat model
+const Chat = require("./models/Chat"); // Import the Chat model
 
 // Create an HTTP server
 const server = http.createServer(app);
@@ -18,15 +18,15 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: "http://localhost:5173", // Specify the allowed origin (frontend URL)
-    methods: ["GET", "POST"]
-  }
+    methods: ["GET", "POST"],
+  },
 });
 
 // Middleware for JSON body parsing
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: "http://localhost:5173",  // fronted URL for development
+    origin: "http://localhost:5173", // fronted URL for development
   })
 );
 
@@ -38,7 +38,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
 // WhatsApp Webhook Verification
 app.get("/webhook", (req, res) => {
   let mode = req.query["hub.mode"];
@@ -46,16 +45,19 @@ app.get("/webhook", (req, res) => {
   let challenge = req.query["hub.challenge"];
 
   if (mode === "subscribe" && token === "YOUR_VERIFY_TOKEN") {
-      console.log("✅ Webhook Verified!");
-      res.status(200).send(challenge);
+    console.log("✅ Webhook Verified!");
+    res.status(200).send(challenge);
   } else {
-      res.sendStatus(403);
+    res.sendStatus(403);
   }
 });
 
 // Webhook to Receive WhatsApp Messages
 app.post("/webhook", (req, res) => {
-  console.log("📩 Received WhatsApp Message:", JSON.stringify(req.body, null, 2));
+  console.log(
+    "📩 Received WhatsApp Message:",
+    JSON.stringify(req.body, null, 2)
+  );
   res.status(200).send("EVENT_RECEIVED");
 });
 
@@ -77,10 +79,13 @@ io.on("connection", (socket) => {
     // Check if there is a media file to upload
     if (messageData.media) {
       try {
-        const uploadResult = await cloudinary.uploader.upload(messageData.media, {
-          folder: "gym",
-          transformation: [{ width: 500, height: 500, crop: "limit" }],
-        });
+        const uploadResult = await cloudinary.uploader.upload(
+          messageData.media,
+          {
+            folder: "gym",
+            transformation: [{ width: 500, height: 500, crop: "limit" }],
+          }
+        );
         media = uploadResult.secure_url; // Store the image URL
       } catch (uploadError) {
         console.error("Error uploading media to Cloudinary:", uploadError);
@@ -92,7 +97,7 @@ io.on("connection", (socket) => {
     const newChat = new Chat({
       sender: messageData.username,
       message: messageData.text,
-      media: media || null,  // Store the media URL if available
+      media: media || null, // Store the media URL if available
       photoUrl: messageData.photoUrl || null, // Don't upload profile photo to Cloudinary
     });
 
@@ -126,9 +131,10 @@ const trainerRoutes = require("./routes/trainerRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
-const classRoutes=require("./routes/classRoutes");
+const classRoutes = require("./routes/classRoutes");
 const forgotRoute = require("./routes/forgotRoute");
-const slotRoutes=require("./routes/slotRoutes");
+const slotRoutes = require("./routes/slotRoutes");
+const gptRoutes = require("./routes/gptRoutes");
 
 app.get("/", (req, res) => res.send("API Running"));
 app.use("/api/auth", authRoutes);
@@ -142,10 +148,10 @@ app.use("/api/task", taskRoutes);
 app.use("/api/payment", paymentRoutes);
 const chatRoutes = require("./routes/chatRoutes");
 app.use("/chat", chatRoutes);
-app.use("/api/class",classRoutes);
-app.use("/api/slots",slotRoutes);
- require("./cronJobs"); // Import cron jobs to automate tasks
-
+app.use("/api/class", classRoutes);
+app.use("/api/slots", slotRoutes);
+app.use("/api/generate-plan", gptRoutes);
+require("./cronJobs"); // Import cron jobs to automate tasks
 
 // Start the server (HTTP and WebSocket)
 const PORT = process.env.PORT || 5000;

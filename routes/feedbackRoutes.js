@@ -15,7 +15,7 @@ router.post(
 
   submitFeedback
 );
-router.get("/user", authMiddleware, getUserFeedback);
-router.get("/trainer", authMiddleware, getTrainerFeedback);
+router.get("/user", getUserFeedback);
+router.get("/trainer", getTrainerFeedback);
 
 module.exports = router;

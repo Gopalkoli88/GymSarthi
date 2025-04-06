@@ -1,35 +1,57 @@
 const Feedback = require("../models/Feedback");
 const User = require("../models/User");
 // Submit feedback
-const submitFeedback = async (req, res) => {
-  const { userName, content } = req.body;
 
-  
+const submitFeedback = async (req, res) => {
+  const { user, content } = req.body;
+
   try {
-    const feedback = await Feedback.create({ userName, content });
-    res.status(200).json({
+    // Create feedback
+    const feedback = await Feedback.create({ user, content });
+
+    // Populate user image from User model
+    const populatedFeedback = await Feedback.findById(feedback._id).populate(
+      "user"
+    );
+
+    return res.status(201).json({
       status: "success",
+      message: "Feedback submitted successfully!",
       data: {
-        feedback,
+        feedback: {
+          _id: populatedFeedback._id,
+          content: populatedFeedback.content,
+          createdAt: populatedFeedback.createdAt,
+        },
+        User: {
+          name: populatedFeedback.user.name,
+          photoUrl: populatedFeedback.user.photoUrl,
+          email: populatedFeedback.user.email,
+          role: populatedFeedback.user.role,
+        },
       },
     });
   } catch (error) {
-    res.status(400).json({
-      status: "fail",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
-      message: error.message,
+    console.error("Feedback submission error:", error.message);
+    return res.status(500).json({
+      status: "fail",
+      message: "Something went wrong. Please try again later.",
     });
   }
 };
 
-// Get feedback for a specific user
+// Get feedback where user field is NOT null (i.e., valid users submitted)
 const getUserFeedback = async (req, res) => {
   try {
-    const feedback = await Feedback.find({ user: req.user.id });
+    const populatedFeedback = await Feedback.find({
+      user: { $ne: null },
+    }).populate("user"); // only fetch name and image of user
+
     res.status(200).json({
       status: "success",
-      results: feedback.length,
+      results: populatedFeedback.length,
       data: {
-        feedback,
+        populatedFeedback,
       },
     });
   } catch (error) {

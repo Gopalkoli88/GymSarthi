@@ -9,14 +9,6 @@ const api = axios.create({
   },
 });
 
-// export const setAuthToken = (token) => {
-//   if (token) {
-//     api.defaults.headers.common["Authorization"] = "Bearer ${token}";
-//   } else {
-//     delete api.defaults.headers.common["Authorization"];
-//   }
-// };
-
 // Async thunk for user login :
 export const signupUser = createAsyncThunk(
   "user/signupUser",
@@ -81,35 +73,41 @@ export const purchasePlan = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log("error from purchase plan  :", error);
-      return rejectWithValue(error.response?.data || {
-        message: 'An unexpected error occurred'
-      });
+      return rejectWithValue(
+        error.response?.data || {
+          message: "An unexpected error occurred",
+        }
+      );
     }
   }
 );
 
-export const getMemberReaminingPaymentStatus=createAsyncThunk(
-  
+export const getMemberReaminingPaymentStatus = createAsyncThunk(
   "member/payment-status",
-  async(_, {getState,rejectWithValue})=>{
-   try {
-    const state = getState();
-    const token = state.user.token;
-    const id = state.user.user._id;
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const token = state.user.token;
+      const id = state.user.user._id;
 
-    const response = await api.get(`/payment/payment-status`,{
-      headers:{
-        Authorization:`Bearer ${token}`,
-      },
-    });
+      const response = await api.get(`/payment/payment-status`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    return response.data;
-   } catch (error) {
-    console.log("Error fetching payment status:",error.response?.data || error);
-    return rejectWithValue(error.response?.data || {
-      message: 'Failed to fetch payment status'
-    });
-   }
+      return response.data;
+    } catch (error) {
+      console.log(
+        "Error fetching payment status:",
+        error.response?.data || error
+      );
+      return rejectWithValue(
+        error.response?.data || {
+          message: "Failed to fetch payment status",
+        }
+      );
+    }
   }
 );
 
@@ -193,16 +191,15 @@ export const getUserDetails = createAsyncThunk(
   }
 );
 
-
 export const markAttendance = createAsyncThunk(
-  'user/markAttendance',
+  "user/markAttendance",
   async (date, { getState, rejectWithValue }) => {
-    const state = getState();  // Get the current Redux state
-    const token = state.user.token;  // Retrieve token from the Redux state
+    const state = getState(); // Get the current Redux state
+    const token = state.user.token; // Retrieve token from the Redux state
 
     try {
       const response = await api.post(
-        '/user/mark-attendance',
+        "/user/mark-attendance",
         { date },
         {
           headers: {
@@ -217,9 +214,6 @@ export const markAttendance = createAsyncThunk(
   }
 );
 
-
-
-
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -231,11 +225,11 @@ const userSlice = createSlice({
     tasks: [],
     trainers: [],
     payments: [],
-    paymentStatus:[],
+    paymentStatus: [],
     feedbacks: [],
     status: "idle",
     error: null,
-    tempUser:null,
+    tempUser: null,
   },
   reducers: {
     logout: (state) => {
@@ -314,35 +308,35 @@ const userSlice = createSlice({
       .addCase(getUserDetails.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.user = action.payload;
-        state.tempUser=action.payload;
+        state.tempUser = action.payload;
       })
-
 
       // Handle the markAttendance action states
       .addCase(markAttendance.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(markAttendance.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = "succeeded";
         state.user = action.payload;
         // Optionally update the user data with the attendance information if needed
         alert(action.payload.message); // Show a success message from the response
       })
       .addCase(markAttendance.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload.error || 'Failed to mark attendance';
+        state.status = "failed";
+        state.error = action.payload.error || "Failed to mark attendance";
         alert(state.error); // Show an error message if the attendance marking failed
       })
       // .addCase(getMemberReaminingPaymentStatus.pending, (state) => {
       //   state.status = 'loading';
       // })
       .addCase(getMemberReaminingPaymentStatus.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = "succeeded";
         state.payments = action.payload; // Store the full payment status object
       })
       .addCase(getMemberReaminingPaymentStatus.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload?.message || 'Failed to fetch payment status';
+        state.status = "failed";
+        state.error =
+          action.payload?.message || "Failed to fetch payment status";
       });
   },
 });

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createClass, fetchClasses } from "../redux/classSlice";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import AdminSidePanel from "./AdminSidePanel";
-import { cn } from "@/lib/utils";
 import {
   Select,
   SelectTrigger,
@@ -16,9 +14,8 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { getAllTrainers } from "@/redux/adminSlice";
-import FullCalendar from "@fullcalendar/react";
 import { ClassScheduler } from "@/components/component/Calendar/ClassScheduler";
 
 const AdminClassManagement = () => {
@@ -189,7 +186,7 @@ const AdminClassManagement = () => {
               </CardContent>
             </Card>
 
-            <div >
+            <div>
               <header className="w-full ml-1 sm:mb-1">
                 <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
                   Class Schedule

@@ -136,14 +136,13 @@ export const deleteSlot = createAsyncThunk(
 
 export const updateSlotByMember = createAsyncThunk(
   "slot/updateByMember",
-  async ({ oldSlotId,newSlotId }, { getState, rejectWithValue }) => {
+  async ({ oldSlotId, newSlotId }, { getState, rejectWithValue }) => {
     const { token } = getState().user;
     try {
-
-        console.log( "varify old and new slot id : ",oldSlotId, newSlotId);
+      console.log("varify old and new slot id : ", oldSlotId, newSlotId);
       const response = await api.put(
         `/slots/update`,
-        { slotId:oldSlotId,newSlotId},
+        { slotId: oldSlotId, newSlotId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       return response.data;

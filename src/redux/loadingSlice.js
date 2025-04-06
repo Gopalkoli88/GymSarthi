@@ -1,18 +1,24 @@
 // redux/loadingSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
+ 
+
 const loadingSlice = createSlice({
   name: "loading",
   initialState: {
-    loadingCount: 0,
+    isLoading: false,
   },
-  reducers: {},
+  reducers: {
+    resetLoading: (state) => {
+      state.isLoading = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(
         (action) => action.type.endsWith("/pending"),
         (state) => {
-          state.loadingCount += 1;
+          state.isLoading = true;
         }
       )
       .addMatcher(
@@ -20,10 +26,11 @@ const loadingSlice = createSlice({
           action.type.endsWith("/fulfilled") ||
           action.type.endsWith("/rejected"),
         (state) => {
-          state.loadingCount = Math.max(0, state.loadingCount - 1);
+          state.isLoading = false;
         }
       );
   },
 });
 
+export const { resetLoading } = loadingSlice.actions;
 export default loadingSlice.reducer;

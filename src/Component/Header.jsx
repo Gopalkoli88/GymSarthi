@@ -1,12 +1,8 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../assets/FITNESS_logo.png";
-import { Button } from "@/components/ui/button";
-
-export const logoutFuncationality = () => {};
 
 const Header = ({ user }) => {
-  const navigate = useNavigate();
   return (
     <header className="bg-gray-900 w-full  px-4 lg:px-6 h-14 flex items-center shadow-sm mt-2 mb-2">
       <Link
@@ -61,7 +57,7 @@ const Header = ({ user }) => {
         >
           Contact
         </Link>
-        
+
         {/* Conditional rendering based on user role */}
         {user && user.role === "member" && (
           <Link
@@ -90,8 +86,6 @@ const Header = ({ user }) => {
             Admin Dashboard
           </Link>
         )}
-
-         
       </nav>
     </header>
   );

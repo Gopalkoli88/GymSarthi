@@ -11,194 +11,172 @@ const api = axios.create({
 
 export const getAdminInfo = createAsyncThunk(
   "admin/getInfo",
-  async (_, { getState }) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
       const state = getState();
       const adminId = state.user.user._id;
-      console.log("adminid from adminslice :", adminId);
       const response = await api.get(`/admin/${adminId}`);
-
       return response.data;
     } catch (error) {
-      console.log("error from getAdminInfo", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const updateAdminInfo = createAsyncThunk(
   "admin/updateInfo",
-  async (adminData, { getState }) => {
+  async (adminData, { getState, rejectWithValue }) => {
     try {
-      console.log("previous amdin info :", adminData);
       const state = getState();
       const adminId = state.user.user._id;
       const response = await api.put(`/admin/update/${adminId}`, adminData);
-      console.log("after update amdin info :", adminData);
       return response.data;
     } catch (error) {
-      console.log("error from updateAdminInfo :", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const getPurchasedAndNonPurchased = createAsyncThunk(
   "admin/purchased&nonPurchased",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/admin");
-
       return response.data;
     } catch (error) {
-      console.log("error from getpurchasedAndNonPurchased ", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const deleteMember = createAsyncThunk(
   "admin/userDelete",
-  async (userId, { getState }) => {
+  async (userId, { rejectWithValue }) => {
     try {
-      const state = getState();
-      const token = state.user.token;
-
-      const response = await api.delete(`/user/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
+      const response = await api.delete(`/user/${userId}`);
       return response.data;
     } catch (error) {
-      console.log("error from deleteMember :", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
-export const getAllPlans = createAsyncThunk("admin/allPlans", async () => {
-  try {
-    const response = await api.get("/plan/");
-
-    return response.data;
-  } catch (error) {
-    console.log("error from getAllPlans :", error);
+export const getAllPlans = createAsyncThunk(
+  "admin/allPlans",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/plan/");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
   }
-});
+);
 
 export const getAllTrainers = createAsyncThunk(
   "admin/getAllTrainers",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/trainer/");
       return response.data;
     } catch (error) {
-      console.log("error from getAllTrainers :", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const createPlan = createAsyncThunk(
   "admin/createPlan",
-  async (planData) => {
+  async (planData, { rejectWithValue }) => {
     try {
       const response = await api.post("/plan/", planData);
 
       return response.data;
     } catch (error) {
-      console.log("error from createPlan :", error);
-      return false;
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const deletePlan = createAsyncThunk(
   "admin/deletePlan",
-  async (planId) => {
+  async (planId, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/plan/${planId}`);
-      console.log("delete plan :", response);
       return true;
     } catch (error) {
-      console.log("error from deletePlan :", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const updatePlan = createAsyncThunk(
   "admin/updatePlan",
-  async ({ planId, planData }) => {
-    console.log("varify update data :", planData);
+  async ({ planId, planData }, { rejectWithValue }) => {
     try {
       const response = await api.put(`/plan/${planId}`, planData);
-      console.log("plan update :", response);
-
       return response.data;
     } catch (error) {
-      console.log("Error from updatePlan :", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const createTrainer = createAsyncThunk(
   "admin/createTrainer",
-  async (trainerData, thunkAPI) => {
-    console.log("Validate data of trainer :", trainerData);
+  async (trainerData, { rejectWithValue }) => {
     try {
       const response = await api.post("/trainer/", trainerData);
-
       return response.data;
     } catch (error) {
-      console.log("error from create trainer :", error);
-      return thunkAPI.rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const deleteTrainer = createAsyncThunk(
   "admin/deleteTrainer",
-  async (trainerId) => {
+  async (trainerId, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/trainer/${trainerId}`);
-      console.log("deleted trainer data:", response);
       return true;
     } catch (error) {
-      console.log("error from delete trianer :", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const getAllPayments = createAsyncThunk(
   "admin/getAllPayments",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/payment/payments");
-
       return response.data;
     } catch (error) {
-      console.log("error from getAllPayments :", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const getUserInfo = createAsyncThunk(
   "admin/getUserInfo",
-  async (userId) => {
+  async (userId, { rejectWithValue }) => {
     try {
-      console.log("user id checking", userId);
       const response = await api.get(`/user/userinfo/${userId}`);
       return response.data;
     } catch (error) {
-      console.log("error from getUserinfo from adminslice", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 export const getPlanInfo = createAsyncThunk(
   "admin/getPlanInfo",
-  async (planId) => {
+  async (planId, { rejectWithValue }) => {
     try {
       const response = await api.get(`/plan/${planId}`);
       return response.data;
     } catch (error) {
-      console.log("error from getUserinfo from adminslice", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -225,21 +203,19 @@ export const uploadPlanPhoto = createAsyncThunk(
 
 export const getAllFeedbacks = createAsyncThunk(
   "admin/getAllFeedbacks",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/feedback/");
-
-      console.log("response feedback data :", response);
       return response.data;
     } catch (error) {
-      console.log("error from get all feedbacks admin.");
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const submitFeedback = createAsyncThunk(
   "admin/submitFeedback",
-  async ({ comment }) => {
+  async ({ comment }, { rejectWithValue }) => {
     try {
       const response = await api.post("/feedback/", comment, {
         headers: {
@@ -247,50 +223,46 @@ export const submitFeedback = createAsyncThunk(
         },
       });
 
-      console.log("response feedback data :", response);
       return response.data;
     } catch (error) {
-      console.log("error from submit feedbacks admin.");
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const fetchMembershipGrowthByMonth = createAsyncThunk(
   "admin/fetchMembershipGrowthByMonth",
-  async (year) => {
+  async (year, { rejectWithValue }) => {
     try {
       const response = await api.get(`admin/membership-growth/${year}`);
 
       return response.data;
     } catch (error) {
-      console.log(
-        "error fom admin slice fetch memmbership growth by month :",
-        error
-      );
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const fetchPlanPurchaseByMonth = createAsyncThunk(
   "admin/fetchPlanPurchaseByMonth",
-  async (year) => {
+  async (year, { rejectWithValue }) => {
     try {
       const response = await api.get(`admin/plan-purchases/${year}`);
       return response.data;
     } catch (error) {
-      console.log("error from adminslice fetch plan purchase by month");
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const fetchMonthlyRevenue = createAsyncThunk(
   "admin/fetchMonthlyRevenue",
-  async (year) => {
+  async (year, { rejectWithValue }) => {
     try {
       const response = await api.get(`admin/monthly-revenue/${year}`);
       return response.data;
     } catch (error) {
-      console.log("error come from adminslice fetchmontlyrevenue", error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );

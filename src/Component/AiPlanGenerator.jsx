@@ -1,9 +1,9 @@
 import { clearPlan, generateAIPlan } from "@/redux/aiPlanSlice";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
 import Header from "@/pages/Header";
- 
+
 const AIPlanGenerator = () => {
   const dispatch = useDispatch();
   const { loading, data, error } = useSelector((state) => state.aiPlan);
@@ -44,8 +44,8 @@ const AIPlanGenerator = () => {
 
   return (
     <div className="min-w-[80dvw] flex flex-col min-h-[100dvh] bg-gradient-to-br from-gray-900 to-black text-white">
-       <Header user={user} />
- 
+      <Header user={user} />
+
       <div className="min-h-screen bg-gray-900 text-white py-10 px-4">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold mb-8 text-center text-blue-400">

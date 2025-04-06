@@ -211,7 +211,6 @@
 //   );
 // }
 
-
 import TrainerSidePanel from "@/Component/TrainerSidePanel";
 import {
   Card,
@@ -258,9 +257,8 @@ export function PlanDetailsComp() {
   return (
     <TrainerSidePanel>
       <div className=" items-start justify-start min-h-screen p-6 bg-white mt-[-70px]">
-      <div className="w-full max-w-4xl ml-12 space-y-6">
-
-      <header className="w-full">
+        <div className="w-full max-w-4xl ml-12 space-y-6">
+          <header className="w-full">
             <h1 className="text-3xl font-semibold text-black dark:text-white">
               My Plans
             </h1>
@@ -268,84 +266,90 @@ export function PlanDetailsComp() {
               View and manage the plans you are responsible for.
             </p>
           </header>
-      </div>
-      <div className="flex items-start justify-start min-h-screen p-6 ml-6 ">
-     
-        <Card className="w-full max-w-3xl border border-gray-800 shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-[1.02]">
-          <CardHeader className="p-6 border-b border-gray-800 rounded-t-lg bg-gray-950">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-xl font-semibold text-white">
-                  {planInfo.name}
-                </CardTitle>
-                <CardDescription className="text-gray-400">
-                  {planInfo.description}
-                </CardDescription>
+        </div>
+        <div className="flex items-start justify-start min-h-screen p-6 ml-6 ">
+          <Card className="w-full max-w-3xl border border-gray-800 shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-[1.02]">
+            <CardHeader className="p-6 border-b border-gray-800 rounded-t-lg bg-gray-950">
+              <div className="flex items-center justify-between">
+                <div className="mr-7">
+                  {" "}
+                  {/* Added margin-right */}
+                  <CardTitle className="text-xl font-semibold text-white ml-[-1rem]">
+                  {planInfo.name.charAt(0).toUpperCase() + planInfo.name.slice(1)}
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    {planInfo.description}
+                  </CardDescription>
+                </div>
+
+                <div className="flex items-center space-x-4 ">
+                  <div className="flex items-center space-x-1 mr-1">
+                    <span className="font-medium text-yellow-500">
+                      ₹{planInfo.price}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <CalendarIcon className="w-5 h-5 text-gray-400" />
+                    <span className="text-gray-400">
+                      {planInfo.duration}{" "}
+                      {planInfo.duration === 1 ? "month" : "months"}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-1">
-                  <DollarSignIcon className="w-5 h-5 text-yellow-500" />
-                  <span className="font-medium text-yellow-500">
-                    {planInfo.price}
+            </CardHeader>
+
+            <CardContent className="p-6 space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <UserIcon className="w-5 h-5 text-gray-400" />
+                  <span className="text-gray-400">
+                    {planInfo.users.length} Users
                   </span>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <CalendarIcon className="w-5 h-5 text-gray-400" />
-                  <span className="text-gray-400">{planInfo.duration}</span>
+                <div className="flex items-center space-x-2">
+                  {planInfo.status === "active" && (
+                    <CircleCheckIcon className="w-5 h-5 text-green-500" />
+                  )}
+                  <span className="font-medium text-green-500">
+                    {planInfo.status}
+                  </span>
                 </div>
               </div>
-            </div>
-          </CardHeader>
-  
-          <CardContent className="p-6 space-y-6">
-            <div className="flex items-center justify-between">
+
               <div className="flex items-center space-x-2">
-                <UserIcon className="w-5 h-5 text-gray-400" />
+                <CalendarIcon className="w-5 h-5 text-gray-400" />
                 <span className="text-gray-400">
-                  {planInfo.users.length} Users
+                  Created at {convertDateTime(planInfo.createdAt)}
                 </span>
               </div>
-              <div className="flex items-center space-x-2">
-                {planInfo.status === "active" && (
-                  <CircleCheckIcon className="w-5 h-5 text-green-500" />
-                )}
-                <span className="font-medium text-green-500">
-                  {planInfo.status}
-                </span>
-              </div>
-            </div>
-  
-            <div className="flex items-center space-x-2">
-              <CalendarIcon className="w-5 h-5 text-gray-400" />
-              <span className="text-gray-400">
-                Created at {convertDateTime(planInfo.createdAt)}
-              </span>
-            </div>
-  
-            <div className="pt-4 border-t border-gray-700">
-              <div className="flex items-center mb-3 space-x-2">
-                <UsersIcon className="w-5 h-5 text-gray-400" />
-                <span className="font-semibold text-gray-400">
-                  List of Users
-                </span>
-              </div>
-  
-              <div className="space-y-3">
-                {planUserDetails.map((plan, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 transition-colors bg-gray-900 border border-gray-800 rounded-lg hover:bg-gray-800"
-                  >
-                    <div className="flex items-center space-x-2">
-                    <UserIcon className="w-5 h-5 text-gray-300 drop-shadow-md" />
-                    <div className="text-white">{plan.name}</div>
+
+              <div className="pt-4 border-t border-gray-700">
+                <div className="flex items-center mb-3 space-x-2">
+                  <UsersIcon className="w-5 h-5 text-gray-400" />
+                  <span className="font-semibold text-gray-400">
+                    List of Users
+                  </span>
+                </div>
+
+                <div className="space-y-3">
+                  {planUserDetails.map((plan, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 transition-colors bg-gray-900 border border-gray-800 rounded-lg hover:bg-gray-800"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <UserIcon className="w-5 h-5 text-gray-300 drop-shadow-md" />
+                        <div className="text-white">{plan.name}</div>
+                      </div>
+                      <div className="font-medium text-gray-300">
+                        {plan.email}
+                      </div>
                     </div>
-                    <div className="font-medium text-gray-300">{plan.email}</div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="pt-6 border-t border-gray-700">
+                  ))}
+                </div>
+
+                <div className="pt-6 border-t border-gray-700">
                   <div className="flex justify-start">
                     <button
                       onClick={() => window.history.back()}
@@ -368,15 +372,14 @@ export function PlanDetailsComp() {
                     </button>
                   </div>
                 </div>
-             
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </TrainerSidePanel>
   );
-}  
+}
 
 function CalendarIcon(props) {
   return (

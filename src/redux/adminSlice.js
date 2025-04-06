@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
- export const api = axios.create({
+export const api = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   headers: {
     "Content-Type": "application/json",
@@ -199,35 +199,6 @@ export const uploadPlanPhoto = createAsyncThunk(
   }
 );
 
-export const getAllFeedbacks = createAsyncThunk(
-  "admin/getAllFeedbacks",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await api.get("/feedback/");
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-export const submitFeedback = createAsyncThunk(
-  "admin/submitFeedback",
-  async ({ comment }, { rejectWithValue }) => {
-    try {
-      const response = await api.post("/feedback/", comment, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
 export const fetchMembershipGrowthByMonth = createAsyncThunk(
   "admin/fetchMembershipGrowthByMonth",
   async (year, { rejectWithValue }) => {
@@ -276,11 +247,7 @@ const adminSlice = createSlice({
     plans: [],
     trainers: [],
     payments: [],
-    feedbacks: {
-      plans: [],
-      trainers: [],
-      all: [],
-    },
+
     membershipGrowth: [],
     planPurchaseGrowth: [],
     monthlyRevenue: [],
@@ -340,13 +307,7 @@ const adminSlice = createSlice({
         state.status = "succeeded";
         state.plan = action.payload;
       })
-      .addCase(getAllFeedbacks.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.feedbacks.all = action.payload;
-      })
-      .addCase(submitFeedback.fulfilled, (state) => {
-        state.status = "succeeded";
-      })
+
       .addCase(fetchMembershipGrowthByMonth.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.membershipGrowth = action.payload;

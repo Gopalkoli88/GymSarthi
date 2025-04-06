@@ -1,11 +1,10 @@
- 
-
 //! swapnil makes :
 // export default Reviews;
-import { submitFeedback } from "@/redux/adminSlice";
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Reviewss from "./Reviewss";
+import { getAllUserFeedbacks, submitFeedback } from "@/redux/feedbackSlice";
+import { toast, ToastContainer } from "react-toastify";
 
 const reviews = [
   {
@@ -80,27 +79,6 @@ const Reviews = () => {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (carouselRef.current) {
-  //       const scrollLeft = carouselRef.current.scrollLeft;
-  //       const maxScrollLeft =
-  //         carouselRef.current.scrollWidth - carouselRef.current.clientWidth;
-
-  //       if (scrollLeft >= maxScrollLeft) {
-  //         carouselRef.current.scrollTo({ left: 0, behavior: "smooth" });
-  //       } else {
-  //         carouselRef.current.scrollBy({
-  //           left: carouselRef.current.clientWidth,
-  //           behavior: "smooth",
-  //         });
-  //       }
-  //     }
-  //   }, 3000);
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
   useEffect(() => {
     const interval = setInterval(() => {
       if (!isHovered && carouselRef.current) {
@@ -134,164 +112,73 @@ const Reviews = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Submitted comment:", comment);
+    // Trim whitespace and validate input
+    if (!comment.trim()) {
+      console.warn("Cannot submit empty comment.");
+      return;
+    }
 
     const commentData = {
-      userName: user.name,
       user: user._id,
-      comment,
+      content: comment.trim(),
     };
 
-    const result = await dispatch(submitFeedback(commentData));
-    if (result) {
-      setComment("");
+    try {
+      const resultAction = await dispatch(submitFeedback(commentData));
+
+      // Optional: Check if the thunk was fulfilled
+      if (submitFeedback.fulfilled.match(resultAction)) {
+        dispatch(getAllUserFeedbacks());
+        toast.success("Feedback submitted!");
+        setComment("");
+      } else {
+        console.error("Failed to submit feedback:", resultAction.error);
+        toast.error("Failed to submit feedback.");
+      }
+    } catch (error) {
+      toast.error("Something went wrong.", error.message);
     }
   };
 
-//   return (
-//     <div className="w-full max-w-3xl mx-auto overflow-hidden text-white">
-//       {/* <div
-//         ref={carouselRef}
-//         className="flex space-x-4 overflow-x-auto hide-scrollbar"
-//       > */}
-//       <div
-//         ref={carouselRef}
-//         className="flex space-x-4 overflow-x-auto hide-scrollbar"
-//         onMouseEnter={() => setIsHovered(true)}
-//         onMouseLeave={() => setIsHovered(false)}
-//       >
-//         {reviews.map((review, index) => (
-//           <div
-//             key={index}
-//             // className="flex-shrink-0 w-full p-6 bg-black rounded-lg"
-//             className="flex-shrink-0 w-full p-6 bg-black rounded-lg min-h-[150px]" // Added min height
-//           >
-//             <div className="flex items-center justify-between gap-4">
-//               <div className="flex items-center gap-4">
-//                 <div className="flex items-center justify-center w-10 h-10 text-white bg-gray-800 border rounded-full">
-//                   {review.name.charAt(0)}
-//                   {review.name.charAt(review.name.indexOf(" ") + 1)}
-//                 </div>
-//                 <div>
-//                   <h4 className="font-semibold">{review.name}</h4>
-//                   <p className="text-sm text-muted-foreground">{review.date}</p>
-//                 </div>
-//               </div>
-//               <StarRating
-//                 rating={ratings[index]}
-//                 setRating={(rating) => handleRatingChange(index, rating)}
-//               />
-//             </div>
-//             <p className="mt-4 text-muted-foreground">{review.review}</p>
-//           </div>
-//         ))}
-//       </div>
-//       {/* Comment Section */}
-//       <form onSubmit={handleSubmit} className="mt-8">
-//         {/* <h4 className="mb-2 font-semibold">Write a Review</h4> */}
+  return (
+    <div className="w-full max-w-3xl mx-auto overflow-hidden text-white">
+      <Reviewss className="mb-5 mt-5" />
 
-//         <textarea
-//           value={comment}
-//           onChange={handleCommentChange}
-//           className="w-full p-3 rounded-lg bg-[#000000] border-2 border-blue-600 text-white hover:border-blue-600 focus:outline-none"
-//           placeholder="Write your comment here..."
-//           rows="4"
-//         />
+      {/* Comment Section */}
+      <form onSubmit={handleSubmit} className="p-4 mt-10  rounded-lg shadow-md">
+        <h4 className="mb-2 text-lg font-semibold text-gray-300">
+          Write a Review
+        </h4>
 
-//         <button
-//           type="submit"
-//           className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg"
-//         >
-//           Submit
-//         </button>
-//       </form>
-//       <style jsx>{`
-//         .hide-scrollbar::-webkit-scrollbar {
-//           display: none;
-//           overflow-x: auto;
-//         }
-//         .hide-scrollbar {
-//           -ms-overflow-style: none; /* IE and Edge */
-//           scrollbar-width: none; /* Firefox */
-//         }
-//       `}</style>
-//     </div>
-//   );
-// };
+        <textarea
+          value={comment}
+          onChange={handleCommentChange}
+          className="w-full p-3 text-white transition-all duration-300 bg-black border-2 border-gray-700 rounded-lg outline-none hover:border-blue-500 focus:border-blue-600 focus:ring-2 focus:ring-blue-500"
+          placeholder="Write your comment here..."
+          rows="4"
+        />
 
-// export default Reviews;
-
-return (
-  <div className="w-full max-w-3xl mx-auto overflow-hidden text-white">
-    <Reviewss className="mb-5 mt-5"/>
-    {/* Reviews Section */} 
-     {/* <div
-      ref={carouselRef}
-      className="flex px-2 py-4 space-x-6 overflow-x-auto hide-scrollbar"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {reviews.map((review, index) => (
-        <div
-          key={index}
-          className="flex-shrink-0 w-full p-6 bg-gradient-to-br from-gray-900 to-black rounded-lg shadow-lg min-h-[160px] border-2 border-transparent hover:border-blue-500 transition-all duration-300 "
+        <button
+          type="submit"
+          className="w-[80%] py-3 font-semibold transition duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 hover:scale-105 mt-5"
+          onClick={handleSubmit}
         >
-          <div className="flex items-center justify-between">
-            
-            <div className="flex items-center gap-4">
-              <div className="flex items-center justify-center w-12 h-12 text-lg font-bold text-white bg-gray-800 border-2 border-blue-500 rounded-full shadow-md">
-                {review.name.charAt(0)}
-                {review.name.charAt(review.name.indexOf(" ") + 1)}
-              </div>
-              <div>
-                <h4 className="text-lg font-semibold">{review.name}</h4>
-                <p className="text-sm text-gray-400">{review.date}</p>
-              </div>
-            </div>
+          Submit
+        </button>
+      </form>
 
-            <StarRating
-              rating={ratings[index]}
-              setRating={(rating) => handleRatingChange(index, rating)}
-            />
-          </div>
-
-          
-          <p className="mt-4 leading-relaxed text-gray-300">{review.review}</p>
-        </div>
-      ))}
-    </div> */}
-
-    {/* Comment Section */}
-    <form onSubmit={handleSubmit} className="p-4 mt-10  rounded-lg shadow-md">
-      <h4 className="mb-2 text-lg font-semibold text-gray-300">Write a Review</h4>
-
-      <textarea
-        value={comment}
-        onChange={handleCommentChange}
-        className="w-full p-3 text-white transition-all duration-300 bg-black border-2 border-gray-700 rounded-lg outline-none hover:border-blue-500 focus:border-blue-600 focus:ring-2 focus:ring-blue-500"
-        placeholder="Write your comment here..."
-        rows="4"
-      />
-
-      <button
-        type="submit"
-        className="w-[80%] py-3 font-semibold transition duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 hover:scale-105 mt-5"
-      >
-        Submit
-      </button>
-    </form>
-
-    {/* Custom Scrollbar Hide */}
-    <style jsx>{`
-      .hide-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .hide-scrollbar {
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox */
-      }
-    `}</style>
-  </div>
-);
+      {/* Custom Scrollbar Hide */}
+      <style jsx>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none; /* IE and Edge */
+          scrollbar-width: none; /* Firefox */
+        }
+      `}</style>
+      <ToastContainer />
+    </div>
+  );
 };
- export default Reviews;
+export default Reviews;

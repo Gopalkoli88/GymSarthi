@@ -11,7 +11,8 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Header from "@/pages/Header";
-import ForgotPassword from "@/Component/forgatePassword"; // Import Forgot Password Component
+import ForgotPassword from "@/Component/forgatePassword";
+import { toast, ToastContainer } from "react-toastify";
 
 const CLIENT_ID =
   "904448913509-jng79u6cad83a7ij4cseejn7s92t334i.apps.googleusercontent.com";
@@ -19,25 +20,48 @@ const CLIENT_ID =
 const Signin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { status, error, user } = useSelector((state) => state.user);
+  const { status } = useSelector((state) => state.user);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [validationError, setValidationError] = useState({});
 
-  useEffect(() => {
-    if (user) navigate("/");
-  }, [user, navigate]);
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!email.trim()) newErrors.email = "Email is required.";
+    if (!password.trim()) newErrors.password = "Password is required.";
+    return newErrors;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) return;
+
+    setLoading(true);
     try {
-      const response = await dispatch(loginUser({ email, password }));
-      if (response.payload?.user) navigate("/");
+      const userData = await dispatch(loginUser({ email, password })).unwrap();
+      toast.success(`Welcome, ${userData.user.name}!`);
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
     } catch (err) {
-      console.error("Sign-in error:", err);
+      let errorMessage = err?.msg;
+
+      if (typeof errorMessage === "object") {
+        errorMessage = JSON.stringify(errorMessage); // or extract key
+      }
+
+      toast.error(errorMessage || "Login failed. Please try again.");
+      setErrors({ form: errorMessage || "Login failed. Please try again." });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,6 +69,7 @@ const Signin = () => {
     setGoogleLoading(true);
     try {
       const decoded = jwtDecode(res.credential);
+      console.log("password : ", decoded);
       const googleUser = {
         email: decoded.email,
         name: decoded.name,
@@ -54,9 +79,20 @@ const Signin = () => {
       };
 
       const response = await dispatch(loginUser(googleUser));
-      if (response.payload?.user) navigate("/");
+      toast.success(`Welcome, ${response.user.name}!`);
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
     } catch (err) {
-      console.error("Google Sign-In Error:", err);
+      let errorMessage = err?.msg;
+
+      if (typeof errorMessage === "object") {
+        errorMessage = JSON.stringify(errorMessage); // or extract key
+      }
+
+      toast.error(errorMessage || "Login failed. Please try again.");
+      setErrors({ form: errorMessage || "Login failed. Please try again." });
     } finally {
       setGoogleLoading(false);
     }
@@ -109,8 +145,12 @@ const Signin = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full p-3 mt-2 text-white transition-all duration-300 bg-gray-800 border border-gray-700 rounded-lg"
-                      required
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.email}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -129,7 +169,6 @@ const Signin = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full p-3 pr-10 mt-2 text-white transition-all duration-300 bg-gray-800 border border-gray-700 rounded-lg"
-                        required
                       />
                       <button
                         type="button"
@@ -143,6 +182,11 @@ const Signin = () => {
                         )}
                       </button>
                     </div>
+                    {errors.password && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.password}
+                      </p>
+                    )}
                   </div>
 
                   {/* Forgot Password Link */}
@@ -161,13 +205,15 @@ const Signin = () => {
                     className="w-full py-3 font-semibold transition duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 hover:scale-105"
                     disabled={status === "loading"}
                   >
-                    {status === "loading" ? "Logging in..." : "Login"}
+                    {loading ? "Logging in..." : "Login"}
                   </Button>
 
-                  {error && (
-                    <p className="mt-2 text-sm text-center text-red-500">
-                      {error}
-                    </p>
+                  {Object.values(errors).length > 0 && (
+                    <div className="text-sm text-red-500 text-center space-y-1">
+                      {Object.values(errors).map((msg, i) => (
+                        <p key={i}>{msg}</p>
+                      ))}
+                    </div>
                   )}
 
                   <div className="flex items-center my-4">
@@ -208,6 +254,7 @@ const Signin = () => {
             />
           </div>
         </div>
+        <ToastContainer />
       </div>
     </>
   );

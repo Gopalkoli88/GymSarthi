@@ -3,8 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 import {
-  getAllFeedbacks,
-  getAllPlans,
+   getAllPlans,
   getAllTrainers,
 } from "@/redux/adminSlice";
 import Footer from "./Footer";
@@ -14,6 +13,7 @@ import Header from "./Header";
 import MembershipPlanSliderComp from "./MembershipPlansSlider";
 import Reviewss from "./Reviewss";
 import ChatComponent from "./ChatComponent";
+import { getAllUserFeedbacks } from "@/redux/feedbackSlice";
 
 export function HomePageComp() {
   const { user } = useSelector((state) => state.user);
@@ -23,6 +23,7 @@ export function HomePageComp() {
   useEffect(() => {
     dispatch(getAllPlans());
     dispatch(getAllTrainers());
+    dispatch(getAllUserFeedbacks());
   }, [dispatch]);
 
   const handleClickJoin = (planId) => {

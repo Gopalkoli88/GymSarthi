@@ -7,12 +7,10 @@ export const signupUser = createAsyncThunk(
   "user/signupUser",
   async (userData, thunkAPI) => {
     try {
-      console.log("singup data :", userData);
       const response = await api.post("/auth/signup", userData);
 
       return response.data;
     } catch (error) {
-      console.log("error from signup user :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -20,9 +18,15 @@ export const signupUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
-  async (userData) => {
-    const response = await api.post("/auth/login", userData);
-    return response.data;
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await api.post("/auth/login", userData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: "Network error" }
+      );
+    }
   }
 );
 

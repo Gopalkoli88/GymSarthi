@@ -7,6 +7,7 @@ import adminReducer from "./adminSlice";
 import classReducer from "./classSlice";
 import loadingReducer from "./loadingSlice";
 import aiPlanReducer from "./aiPlanSlice";
+import feedbackReducer from "./feedbackSlice";
 
 const persistConfig = {
   key: "root",
@@ -20,6 +21,7 @@ const persistedAdminReducer = persistReducer(persistConfig, adminReducer);
 const persistedClassReducer = persistReducer(persistConfig, classReducer);
 const persistedLoadingReducer = persistReducer(persistConfig, loadingReducer);
 const persistedAiPlanReducer = persistReducer(persistConfig, aiPlanReducer);
+const persistedFeedbackReducer = persistReducer(persistConfig, feedbackReducer);
 
 const store = configureStore({
   reducer: {
@@ -29,6 +31,7 @@ const store = configureStore({
     class: persistedClassReducer,
     loading: persistedLoadingReducer,
     aiPlan: persistedAiPlanReducer,
+    feedback: persistedFeedbackReducer,
   },
 });
 

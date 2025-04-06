@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { api } from "./classSlice";
-
+import { api } from "./adminSlice";
+ 
 // 👉 Async Thunk
 export const generateAIPlan = createAsyncThunk(
   "aiPlan/generate",

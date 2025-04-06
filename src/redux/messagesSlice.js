@@ -1,13 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// API request setup for chat messages
-const api = axios.create({
-  baseURL: "http://localhost:5000/api", // Replace with your backend URL
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import { api } from "./adminSlice";
 
 // Async thunk for fetching messages
 export const fetchMessages = createAsyncThunk(

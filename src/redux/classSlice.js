@@ -2,13 +2,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const api = axios.create({
-  baseURL: "http://localhost:5000/api",
-  // baseURL: "https://gym-house-1.onrender.com/api",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import { api } from "./adminSlice";
 
 export const createClass = createAsyncThunk(
   "class/create",

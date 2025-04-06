@@ -1,13 +1,18 @@
 import { clearPlan, generateAIPlan } from "@/redux/aiPlanSlice";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ReactMarkdown from "react-markdown";
 import Header from "@/pages/Header";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm"; // GitHub Flavored Markdown
+import rehypeHighlight from "rehype-highlight"; // For syntax highlighting
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const AIPlanGenerator = () => {
   const dispatch = useDispatch();
   const { loading, data, error } = useSelector((state) => state.aiPlan);
   const { user } = useSelector((state) => state.user);
+  const planRef = useRef(null); // PDF section reference
 
   const [form, setForm] = useState({
     name: "",
@@ -42,6 +47,48 @@ const AIPlanGenerator = () => {
     dietPreference: ["Vegetarian", "Non-Vegetarian", "Vegan", "Keto"],
   };
 
+  const handleExportPDF = async () => {
+    const element = planRef.current;
+    if (!element) return;
+  
+    const originalScroll = window.scrollY;
+  
+    // Ensure everything is visible before rendering
+    window.scrollTo(0, 0);
+  
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: null,
+      scrollY: -window.scrollY,
+      windowWidth: document.body.scrollWidth,
+      windowHeight: document.body.scrollHeight,
+    });
+  
+    window.scrollTo(0, originalScroll); // Reset scroll after rendering
+  
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  
+    let heightLeft = pdfHeight;
+    let position = 0;
+  
+    // For multipage PDF support
+    pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+    heightLeft -= pdf.internal.pageSize.getHeight();
+  
+    while (heightLeft > 0) {
+      position -= pdf.internal.pageSize.getHeight();
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pdf.internal.pageSize.getHeight();
+    }
+  
+    pdf.save("AI_Fitness_Plan.pdf");
+  };
+  
   return (
     <div className="min-w-[80dvw] flex flex-col min-h-[100dvh] bg-gradient-to-br from-gray-900 to-black text-white">
       <Header user={user} />
@@ -102,19 +149,33 @@ const AIPlanGenerator = () => {
           {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
 
           {data && (
-            <div className="mt-8 bg-gray-800 p-6 rounded-xl shadow-lg">
+            <div
+              ref={planRef}
+              className="mt-8 bg-gray-800 p-6 rounded-xl shadow-lg"
+            >
               <h2 className="text-xl font-semibold text-green-400 mb-4">
-                ✅ Your 7-Day Plan
+                ✅ Your fitness Plan
               </h2>
               <div className="prose prose-invert prose-p:leading-relaxed prose-li:my-1 max-w-none">
-                <ReactMarkdown>{data}</ReactMarkdown>
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeHighlight]}
+                >
+                  {data}
+                </ReactMarkdown>
               </div>
               <div className="flex justify-end mt-4">
                 <button
                   onClick={() => dispatch(clearPlan())}
-                  className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white"
+                  className="bg-red-600 hover:bg-red-700 px-4 py-2 mr-3 rounded text-white"
                 >
                   Clear
+                </button>
+                <button
+                  onClick={handleExportPDF}
+                  className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white"
+                >
+                  Export as PDF 📄
                 </button>
               </div>
             </div>

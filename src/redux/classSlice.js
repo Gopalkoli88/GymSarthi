@@ -31,10 +31,10 @@ export const fetchClasses = createAsyncThunk('class/fetch', async (_, { getState
 });
 
 export const bookClass = createAsyncThunk('class/book', async (classId, { getState, rejectWithValue }) => {
-  const { token } = getState().user;
+  const { token,user } = getState().user;
   try {
     const response = await api.post(`/class/classes/${classId}/book`, {}, { headers: { Authorization: `Bearer ${token}` } });
-    return { classId, ...response.data };
+    return { classId,userId:user._id, ...response.data };
   } catch (error) {
     return rejectWithValue(error.response?.data || { message: 'Failed to book class' });
   }
@@ -89,8 +89,9 @@ const classSlice = createSlice({
       })
       .addCase(bookClass.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        const cls = state.classes.find(c => c._id === action.payload.classId);
-        if (cls) cls.bookings.push(getState().user.user._id);
+        const{userId, classId}=action.payload;
+        const cls = state.classes.find(c => c._id === classId);
+        if (cls && !cls.bookings.includes(userId)) cls.bookings.push(userId);
       })
       .addCase(bookClass.rejected, (state, action) => {
         state.status = 'failed';

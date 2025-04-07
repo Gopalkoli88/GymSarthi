@@ -53,7 +53,7 @@ const MemberPaymentHistory = () => {
   useEffect(() => {
     const fetchUserAndPlanDetails = async () => {
       const updatedTransactions = await Promise.all(
-        payments.map(async (tx) => {
+        payments?.map(async (tx) => {
           let userName = "N/A";
           let planName = "N/A";
 

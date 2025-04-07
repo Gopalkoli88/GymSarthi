@@ -541,14 +541,14 @@ const GetMemberRemainingPaymentStatusComponent = () => {
                             : "text-yellow-500"
                         }`}
                       >
-                        {payments.status}
+                        {payments.remainingAmount >0 ?  payments.status.charAt(0).toUpperCase() + payments.status.slice(1) : "N/A"}
                       </p>
                     </div>
                     <div>
                       <p className="text-sm text-slate-400">Plan Expiry</p>
                       <p className="flex items-center text-lg font-medium text-white">
                         <Calendar className="w-4 h-4 mr-2 text-slate-400" />
-                        {new Date(payments.planExpiry).toLocaleDateString()}
+                        {payments.planExpiry ? new Date(payments.planExpiry).toLocaleDateString(): "N/A"}
                       </p>
                     </div>
                   </div>

@@ -9,16 +9,16 @@ const path = require("path");
 async function generateInvoice(user, plan, trainerInfo) {
   const html = fs
     .readFileSync(path.join(__dirname, "invoiceTemplate.html"), "utf8")
-    .replace("${user.name}", user.name)
-    .replace("${user.email}", user.email)
-    .replace("${plan.name}", plan.name)
-    .replace("${plan.description}", plan.description)
-    .replace("${plan.price}", plan.price)
-    .replace("${plan.duration}", plan.duration)
-    .replace("${trainerInfo.name}", trainerInfo.name)
-    .replace("${trainerInfo.email}", trainerInfo.email)
-    .replace("${trainerInfo.expertise}", trainerInfo.expertise)
-    .replace("${trainerInfo.experience}", trainerInfo.experience);
+    .replaceAll("${user.name}", user.name)
+    .replaceAll("${user.email}", user.email)
+    .replaceAll("${plan.name}", plan.name)
+    .replaceAll("${plan.description}", plan.description)
+    .replaceAll("${plan.price}", plan.price)
+    .replaceAll("${plan.duration}", plan.duration)
+    .replaceAll("${trainerInfo.name}", trainerInfo.name)
+    .replaceAll("${trainerInfo.email}", trainerInfo.email)
+    .replaceAll("${trainerInfo.expertise}", trainerInfo.expertise)
+    .replaceAll("${trainerInfo.experience}", trainerInfo.experience);
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
